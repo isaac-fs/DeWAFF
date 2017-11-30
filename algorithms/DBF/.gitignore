@@ -1,0 +1,4 @@
+*.o
+*.d
+Release/ParallelDeWAFF
+Release/src/
