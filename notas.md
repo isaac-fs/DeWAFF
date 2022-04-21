@@ -1,8 +1,9 @@
 # Pasos seguidos
 
 Esta sección sirve como referencia para la metodología del trabajo escrito.
-- Leer el material de <https://www.opencv-srf.com/p/introduction.html>
-- Seguir la guía de instalación de <https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html>
+- Configurar una VM con Ubuntu 20.04 LTS
+- Leer el material de [Open CV introduction](https://www.opencv-srf.com/p/introduction.html)
+- Seguir la guía de instalación de [Instalation tutorial - Linux](https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
 - Instalar VSCODE y las extensiones para C++
 <br>
 
