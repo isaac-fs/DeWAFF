@@ -5,7 +5,7 @@
  *      Author: davidp
  */
 
-#include "Laplacian.hpp"
+#include "laplacian.hpp"
 
 //Regular non adaptive unsharped masking with laplacian filter
 Mat Laplacian::noAdaptive(const Mat& A, const Mat& mask, const int lambda){

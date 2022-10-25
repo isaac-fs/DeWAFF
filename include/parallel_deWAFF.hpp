@@ -1,5 +1,5 @@
 /*
- * ParallelDeWAFF.hpp
+ * Parallel_deWAFF.hpp
  *
  *  Created on: Nov 5, 2015
  *      Author: davidp
@@ -10,14 +10,15 @@
 
 #include <string>
 #include <unistd.h>
-#include "DeWAFF.hpp"
-#include "Laplacian.hpp"
-#include "Timer.h"
+#include "deWAFF.hpp"
+#include "laplacian.hpp"
+#include "timer.hpp"
+
 using namespace std;
 
-class ParallelDeWAFF{
+class Parallel_deWAFF{
 public:
-	ParallelDeWAFF(int argc, char* argv[]);
+	Parallel_deWAFF(int argc, char** argv);
 	int start();
 
 private:

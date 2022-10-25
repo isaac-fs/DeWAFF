@@ -5,7 +5,7 @@
  *      Author: davidp
  */
 
-#include "Tools.hpp"
+#include "tools.hpp"
 
 void Tools::meshgrid(const Range &xgv, const Range &ygv, Mat &X, Mat &Y){
 	vector<int> t_x, t_y;

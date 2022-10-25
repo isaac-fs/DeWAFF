@@ -5,9 +5,9 @@
  *      Author: davidp
  */
 
-#include "DeWAFF.hpp"
+#include "deWAFF.hpp"
 
-Mat DeWAFF::filter(const Mat& A, const Mat& Laplacian, int w, double sigma_d, int sigma_r){
+Mat deWAFF::filter(const Mat& A, const Mat& Laplacian, int w, double sigma_d, int sigma_r){
     //Pre-compute Gaussian domain weights.
     Mat1i X,Y;
     Tools::meshgrid(Range(-w,w),Range(-w,w),X,Y);

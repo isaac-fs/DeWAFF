@@ -4,14 +4,12 @@
  *  Created on: Oct 27, 2015
  *      Author: davidp
  */
-#include "ParallelDeWAFF.hpp"
 
-int main(int argc, char* argv[]){
-	ParallelDeWAFF deWAFF(argc,argv);
-    return deWAFF.start();
-}
+#include "parallel_deWAFF.hpp"
 
-ParallelDeWAFF::ParallelDeWAFF(int argc, char* argv[]){
+using namespace cv;
+
+Parallel_deWAFF::Parallel_deWAFF(int argc, char** argv){
 	this->mode = 0x0;
 	this->numIter = 0;
 	this->progName = argv[0];
@@ -55,7 +53,7 @@ ParallelDeWAFF::ParallelDeWAFF(int argc, char* argv[]){
     	errHelpExit("Required option or argument missing. Check syntax");
 }
 
-int ParallelDeWAFF::start(){
+int Parallel_deWAFF::start(){
 	int success = -1;
 
 	if(this->mode & 0x1)
@@ -66,7 +64,7 @@ int ParallelDeWAFF::start(){
 	return success;
 }
 
-void ParallelDeWAFF::help(){
+void Parallel_deWAFF::help(){
 	cout<< "------------------------------------------------------------------------------" << endl
 		<< "Usage:"                                                                         << endl
 		<< this->progName << " [-b N] <-v|-i> inputFile"                                    << endl
@@ -77,18 +75,18 @@ void ParallelDeWAFF::help(){
 		<< endl;
 }
 
-void ParallelDeWAFF::errExit(string msg){
+void Parallel_deWAFF::errExit(string msg){
 	cerr << "ERROR: " << msg << endl;
 	exit(-1);
 }
 
-void ParallelDeWAFF::errHelpExit(string msg){
+void Parallel_deWAFF::errHelpExit(string msg){
 	cerr << "ERROR: " << msg << endl;
 	this->help();
 	exit(-1);
 }
 
-int ParallelDeWAFF::processVideo(){
+int Parallel_deWAFF::processVideo(){
 
 	//Open input video file
 	VideoCapture iVideo = VideoCapture(inputFile);
@@ -96,10 +94,10 @@ int ParallelDeWAFF::processVideo(){
 		errExit("ERROR: Could not open the input video for read: " + inputFile);
 
     // Acquire input information: frame rate, number of frames, codec and size
-	int iRate = static_cast<int>(iVideo.get(CV_CAP_PROP_FPS));
-    int iFrameCount = static_cast<int>(iVideo.get(CV_CAP_PROP_FRAME_COUNT));
-    int iCodec = static_cast<int>(iVideo.get(CV_CAP_PROP_FOURCC));
-    Size iSize = Size((int) iVideo.get(CV_CAP_PROP_FRAME_WIDTH),(int) iVideo.get(CV_CAP_PROP_FRAME_HEIGHT));
+	int iRate = static_cast<int>(iVideo.get(cv::CAP_PROP_FPS));
+    int iFrameCount = static_cast<int>(iVideo.get(cv::CAP_PROP_FRAME_COUNT));
+    int iCodec = static_cast<int>(iVideo.get(cv::CAP_PROP_FOURCC));
+    Size iSize = Size((int) iVideo.get(cv::CAP_PROP_FRAME_WIDTH),(int) iVideo.get(cv::CAP_PROP_FRAME_HEIGHT));
 
     // Transform from int to char via Bitwise operators
     char EXT[] = {(char)(iCodec & 0XFF) , (char)((iCodec & 0XFF00) >> 8),(char)((iCodec & 0XFF0000) >> 16),(char)((iCodec & 0XFF000000) >> 24), 0};
@@ -114,7 +112,7 @@ int ParallelDeWAFF::processVideo(){
 
 	//Define output file name
 	string::size_type pAt = this->inputFile.find_last_of('.');
-	this->outputFile = this->inputFile.substr(0, pAt) + "_DeWAFF.avi";
+	this->outputFile = this->inputFile.substr(0, pAt) + "_deWAFF.avi";
 
 	//Open output video
 	VideoWriter oVideo(outputFile, iCodec, iRate , iSize, true);
@@ -152,7 +150,7 @@ int ParallelDeWAFF::processVideo(){
 	return 0;
 }
 
-int ParallelDeWAFF::processImage(){
+int Parallel_deWAFF::processImage(){
 	Mat iFrame = imread(inputFile);
 	if(iFrame.data==NULL)
 		errExit("ERROR: Could not open the input file for read: " + inputFile);
@@ -177,7 +175,7 @@ int ParallelDeWAFF::processImage(){
 
 	//Define output file name
 	string::size_type pAt = this->inputFile.find_last_of('.');
-	this->outputFile = this->inputFile.substr(0, pAt) + "_DeWAFF.jpg";
+	this->outputFile = this->inputFile.substr(0, pAt) + "_deWAFF.jpg";
 
 	if(!imwrite(outputFile, oFrame))
 		errExit("ERROR: Could not open the output file for write: " + outputFile);
@@ -186,7 +184,7 @@ int ParallelDeWAFF::processImage(){
 }
 
 //Input image must be BGR from 0 to 255
-Mat ParallelDeWAFF::processFrame(const Mat& F){
+Mat Parallel_deWAFF::processFrame(const Mat& F){
     //Set parameters for processing
     int wRSize = 21;
     double sigma_s = wRSize/1.5;
@@ -203,13 +201,13 @@ Mat ParallelDeWAFF::processFrame(const Mat& F){
     //Converto to CIELab color space
     Mat N;
     F.convertTo(N,CV_32F,1.0/255.0); 	//The image has to to have values from 0 to 1 before convertion to CIELab
-	cvtColor(N,N,CV_BGR2Lab);			//Convert normalized BGR image to CIELab color space.
+	cvtColor(N,N,cv::COLOR_BGR2Lab);			//Convert normalized BGR image to CIELab color space.
 
 	Mat L = Laplacian::noAdaptive(N, this->mask, lambda);
-	N = DeWAFF::filter(N, L, wRSize, sigma_s,sigma_r);
+	N = deWAFF::filter(N, L, wRSize, sigma_s,sigma_r);
 
 	//Convert filtered image back to BGR color space.
-	cvtColor(N,N,CV_Lab2BGR);
+	cvtColor(N,N,cv::COLOR_Lab2BGR);
     N.convertTo(N,CV_8U,255);			//Scale back to [0,255] range
 
     return N;

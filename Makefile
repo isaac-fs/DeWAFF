@@ -117,24 +117,72 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named Proyecto
+# Target rules for targets named deWAFF
 
 # Build rule for target.
-Proyecto: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Proyecto
-.PHONY : Proyecto
+deWAFF: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 deWAFF
+.PHONY : deWAFF
 
 # fast build rule for target.
-Proyecto/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Proyecto.dir/build.make CMakeFiles/Proyecto.dir/build
-.PHONY : Proyecto/fast
+deWAFF/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/build
+.PHONY : deWAFF/fast
+
+src/deWAFF.o: src/deWAFF.cpp.o
+.PHONY : src/deWAFF.o
+
+# target to build an object file
+src/deWAFF.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/deWAFF.cpp.o
+.PHONY : src/deWAFF.cpp.o
+
+src/deWAFF.i: src/deWAFF.cpp.i
+.PHONY : src/deWAFF.i
+
+# target to preprocess a source file
+src/deWAFF.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/deWAFF.cpp.i
+.PHONY : src/deWAFF.cpp.i
+
+src/deWAFF.s: src/deWAFF.cpp.s
+.PHONY : src/deWAFF.s
+
+# target to generate assembly for a file
+src/deWAFF.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/deWAFF.cpp.s
+.PHONY : src/deWAFF.cpp.s
+
+src/laplacian.o: src/laplacian.cpp.o
+.PHONY : src/laplacian.o
+
+# target to build an object file
+src/laplacian.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/laplacian.cpp.o
+.PHONY : src/laplacian.cpp.o
+
+src/laplacian.i: src/laplacian.cpp.i
+.PHONY : src/laplacian.i
+
+# target to preprocess a source file
+src/laplacian.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/laplacian.cpp.i
+.PHONY : src/laplacian.cpp.i
+
+src/laplacian.s: src/laplacian.cpp.s
+.PHONY : src/laplacian.s
+
+# target to generate assembly for a file
+src/laplacian.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/laplacian.cpp.s
+.PHONY : src/laplacian.cpp.s
 
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
 # target to build an object file
 src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Proyecto.dir/build.make CMakeFiles/Proyecto.dir/src/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/main.cpp.o
 .PHONY : src/main.cpp.o
 
 src/main.i: src/main.cpp.i
@@ -142,7 +190,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Proyecto.dir/build.make CMakeFiles/Proyecto.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -150,8 +198,80 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Proyecto.dir/build.make CMakeFiles/Proyecto.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
+
+src/parallel_deWAFF.o: src/parallel_deWAFF.cpp.o
+.PHONY : src/parallel_deWAFF.o
+
+# target to build an object file
+src/parallel_deWAFF.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/parallel_deWAFF.cpp.o
+.PHONY : src/parallel_deWAFF.cpp.o
+
+src/parallel_deWAFF.i: src/parallel_deWAFF.cpp.i
+.PHONY : src/parallel_deWAFF.i
+
+# target to preprocess a source file
+src/parallel_deWAFF.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/parallel_deWAFF.cpp.i
+.PHONY : src/parallel_deWAFF.cpp.i
+
+src/parallel_deWAFF.s: src/parallel_deWAFF.cpp.s
+.PHONY : src/parallel_deWAFF.s
+
+# target to generate assembly for a file
+src/parallel_deWAFF.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/parallel_deWAFF.cpp.s
+.PHONY : src/parallel_deWAFF.cpp.s
+
+src/timer.o: src/timer.cpp.o
+.PHONY : src/timer.o
+
+# target to build an object file
+src/timer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/timer.cpp.o
+.PHONY : src/timer.cpp.o
+
+src/timer.i: src/timer.cpp.i
+.PHONY : src/timer.i
+
+# target to preprocess a source file
+src/timer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/timer.cpp.i
+.PHONY : src/timer.cpp.i
+
+src/timer.s: src/timer.cpp.s
+.PHONY : src/timer.s
+
+# target to generate assembly for a file
+src/timer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/timer.cpp.s
+.PHONY : src/timer.cpp.s
+
+src/tools.o: src/tools.cpp.o
+.PHONY : src/tools.o
+
+# target to build an object file
+src/tools.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/tools.cpp.o
+.PHONY : src/tools.cpp.o
+
+src/tools.i: src/tools.cpp.i
+.PHONY : src/tools.i
+
+# target to preprocess a source file
+src/tools.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/tools.cpp.i
+.PHONY : src/tools.cpp.i
+
+src/tools.s: src/tools.cpp.s
+.PHONY : src/tools.s
+
+# target to generate assembly for a file
+src/tools.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/deWAFF.dir/build.make CMakeFiles/deWAFF.dir/src/tools.cpp.s
+.PHONY : src/tools.cpp.s
 
 # Help Target
 help:
@@ -161,10 +281,25 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... Proyecto"
+	@echo "... deWAFF"
+	@echo "... src/deWAFF.o"
+	@echo "... src/deWAFF.i"
+	@echo "... src/deWAFF.s"
+	@echo "... src/laplacian.o"
+	@echo "... src/laplacian.i"
+	@echo "... src/laplacian.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/parallel_deWAFF.o"
+	@echo "... src/parallel_deWAFF.i"
+	@echo "... src/parallel_deWAFF.s"
+	@echo "... src/timer.o"
+	@echo "... src/timer.i"
+	@echo "... src/timer.s"
+	@echo "... src/tools.o"
+	@echo "... src/tools.i"
+	@echo "... src/tools.s"
 .PHONY : help
 
 

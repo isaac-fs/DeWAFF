@@ -10,13 +10,13 @@
 
 #include <iostream>
 #include <omp.h>
-#include "Tools.hpp"
+#include "tools.hpp"
 
 using namespace std;
 
-class DeWAFF{
-
+class deWAFF{
 public:
 	static Mat filter(const Mat& A, const Mat& L, int w, double sigma_s, int sigma_r);
 };
+
 #endif /* DEWAFF_H_ */
