@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/isaac/Desktop/Proyecto-Electrico-B52786/build",
+  "command": "/usr/bin/g++  -I/home/isaac/Desktop/Proyecto-Electrico-B52786/include -isystem /usr/local/include/opencv4  -Wall -g -std=gnu++11 -o CMakeFiles/DeWAFF.dir/src/main.cpp.o -c /home/isaac/Desktop/Proyecto-Electrico-B52786/src/main.cpp",
+  "file": "/home/isaac/Desktop/Proyecto-Electrico-B52786/src/main.cpp"
+},
+{
+  "directory": "/home/isaac/Desktop/Proyecto-Electrico-B52786/build",
+  "command": "/usr/bin/g++  -I/home/isaac/Desktop/Proyecto-Electrico-B52786/include -isystem /usr/local/include/opencv4  -Wall -g -std=gnu++11 -o CMakeFiles/DeWAFF.dir/src/DeWAFF.cpp.o -c /home/isaac/Desktop/Proyecto-Electrico-B52786/src/DeWAFF.cpp",
+  "file": "/home/isaac/Desktop/Proyecto-Electrico-B52786/src/DeWAFF.cpp"
+},
+{
+  "directory": "/home/isaac/Desktop/Proyecto-Electrico-B52786/build",
+  "command": "/usr/bin/g++  -I/home/isaac/Desktop/Proyecto-Electrico-B52786/include -isystem /usr/local/include/opencv4  -Wall -g -std=gnu++11 -o CMakeFiles/DeWAFF.dir/src/NonAdaptiveUSM.cpp.o -c /home/isaac/Desktop/Proyecto-Electrico-B52786/src/NonAdaptiveUSM.cpp",
+  "file": "/home/isaac/Desktop/Proyecto-Electrico-B52786/src/NonAdaptiveUSM.cpp"
+},
+{
+  "directory": "/home/isaac/Desktop/Proyecto-Electrico-B52786/build",
+  "command": "/usr/bin/g++  -I/home/isaac/Desktop/Proyecto-Electrico-B52786/include -isystem /usr/local/include/opencv4  -Wall -g -std=gnu++11 -o CMakeFiles/DeWAFF.dir/src/ParallelDeWAFF.cpp.o -c /home/isaac/Desktop/Proyecto-Electrico-B52786/src/ParallelDeWAFF.cpp",
+  "file": "/home/isaac/Desktop/Proyecto-Electrico-B52786/src/ParallelDeWAFF.cpp"
+},
+{
+  "directory": "/home/isaac/Desktop/Proyecto-Electrico-B52786/build",
+  "command": "/usr/bin/g++  -I/home/isaac/Desktop/Proyecto-Electrico-B52786/include -isystem /usr/local/include/opencv4  -Wall -g -std=gnu++11 -o CMakeFiles/DeWAFF.dir/src/Timer.cpp.o -c /home/isaac/Desktop/Proyecto-Electrico-B52786/src/Timer.cpp",
+  "file": "/home/isaac/Desktop/Proyecto-Electrico-B52786/src/Timer.cpp"
+},
+{
+  "directory": "/home/isaac/Desktop/Proyecto-Electrico-B52786/build",
+  "command": "/usr/bin/g++  -I/home/isaac/Desktop/Proyecto-Electrico-B52786/include -isystem /usr/local/include/opencv4  -Wall -g -std=gnu++11 -o CMakeFiles/DeWAFF.dir/src/Tools.cpp.o -c /home/isaac/Desktop/Proyecto-Electrico-B52786/src/Tools.cpp",
+  "file": "/home/isaac/Desktop/Proyecto-Electrico-B52786/src/Tools.cpp"
+}
+]

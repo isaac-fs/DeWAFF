@@ -6,7 +6,7 @@
  * Timing operations.
  */
 
-#include "timer.hpp"
+#include "Timer.hpp"
 
 double startTime;
 

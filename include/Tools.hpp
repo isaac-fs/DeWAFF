@@ -14,12 +14,11 @@
 #include "opencv2/highgui/highgui.hpp"
 
 using namespace cv;
-using namespace std;
 
 class Tools {
 public:
-	static void meshgrid(const Range &xgv, const Range &ygv, Mat &X, Mat &Y);
-	static void minMax(const Mat& A, double* minA, double* maxA);
+	static void meshGrid(const Range &xgv, const Range &ygv, Mat &X, Mat &Y);
+	static void getMinMax(const Mat& A, double* minA, double* maxA);
 };
 
 #endif /* TOOLS_HPP_ */
