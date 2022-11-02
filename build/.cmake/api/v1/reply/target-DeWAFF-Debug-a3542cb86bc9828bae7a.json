@@ -55,7 +55,7 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : " -Wall -g"
+					"fragment" : " -Wall -fopenmp -g"
 				},
 				{
 					"fragment" : "-std=gnu++11"
@@ -99,7 +99,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "-Wall -g",
+				"fragment" : "-Wall -fopenmp -g",
 				"role" : "flags"
 			},
 			{

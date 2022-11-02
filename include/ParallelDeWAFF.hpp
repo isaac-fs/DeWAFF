@@ -1,8 +1,10 @@
-/*
- * ParallelDeWAFF.hpp
- *
- *  Created on: Nov 5, 2015
- *      Author: davidp
+/**
+ * @file ParallelDeWAFF.hpp
+ * @brief
+ * @author David Prado {davidp}
+ * @date 11/27/2015
+ * @author Isaac Fonseca Segura {isaac-fs}
+ * @date 10/28/2022
  */
 
 #ifndef PARALLELDEWAFF_HPP_
@@ -17,14 +19,15 @@
 class ParallelDeWAFF{
 public:
 	ParallelDeWAFF(int argc, char** argv);
-	int start();
+	int execute();
 
 private:
-	unsigned int mode;		//Processing mode 00000001 = Video, 00000010 = Image,  00000101 = Video Benchmark, 00000110 = Image Benchmark
-	int numIter;			//Number of iterations for benchmark
-	std::string programName;		//This program name
-	std::string inputFile;
-	std::string outputFile;
+	enum modes : unsigned int {start = 0, image = 1, video = 2, benchmark = 3}; //Processing modes
+	unsigned int mode;
+	int numIter; //Number of iterations for benchmark mode
+	std::string programName;
+	std::string inputFileName;
+	std::string outputFileName;
 
 	void help();
 	void errExit(std::string msg);
@@ -33,6 +36,6 @@ private:
 	int processVideo();
 	int processImage();
 	Mat processFrame(const Mat & frame);
-	void display_img(const Mat &input, const Mat &output);
+	void displayImage(const Mat &input, const Mat &output);
 };
 #endif /* PARALLELDEWAFF_HPP_ */

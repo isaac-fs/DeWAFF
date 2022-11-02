@@ -1,39 +1,52 @@
-/*
- * main.cpp
- *
- *  Created on: Oct 27, 2015
- *      Author: davidp
+/**
+ * @file NonAdaptiveUSM.cpp
+ * @brief Runner code for the Parallel DeWAFF implementation
+ * @author David Prado {davidp}
+ * @date 10/27/2015
+ * @author Isaac Fonseca Segura {isaac-fs}
+ * @date 10/29/2022
  */
 
 #include "ParallelDeWAFF.hpp"
 
 using namespace cv;
 
+/**
+ * @brief Constructor for the ParallelDeWAFF class
+ * @param argc argument count from the terminal
+ * @param argv arguments from the terminal
+ */
 ParallelDeWAFF::ParallelDeWAFF(int argc, char** argv){
-	this->mode = 0x0;
+	this->mode = start;
 	this->numIter = 0;
 	this->programName = argv[0];
 
     int c;
-    while ((c = getopt(argc,argv,"hb:v:i:")) != -1){
+    while ((c = getopt(argc,argv,"hb:i:v:")) != -1){
 		switch(c){
-			case 'v': //Process a video
-				if(this->mode & 0x2)//Check if flag for image enabled
-					errHelpExit("Options -v and -i are mutually exclusive");
-				this->mode |= 0x1;
-				this->inputFile = optarg;
+			case 'i': // Process an image
+				if(this->mode & video){ // Check if flag for video enabled
+					errExit("Options -v and -i are mutually exclusive");
+					this->help();
+				}
+				this->mode |= image;
+				this->inputFileName = optarg;
 				break;
-			case 'i': //Process an image
-				if(this->mode & 0x1)//Check if flag for video enabled
-					errHelpExit("Options -v and -i are mutually exclusive");
-				this->mode |= 0x2;
-				this->inputFile = optarg;
+			case 'v': // Process a video
+				if(this->mode & image){ //Check if flag for image enabled
+					errExit("Options -v and -i are mutually exclusive");
+					this->help();
+				}
+				this->mode |= video;
+				this->inputFileName = optarg;
 				break;
-			case 'b'://Enable benchmarking
-				this->mode |= 0x4;
+			case 'b': // Enable benchmark mode
+				this->mode |= benchmark;
 				this->numIter = atoi(optarg);
-				if(this->numIter<=0)
-					errHelpExit("Number of benchmark iterations must be >= 1");
+				if(this->numIter <= 0){
+					errExit("Number of benchmark iterations must be >= 1");
+					this->help();
+				}
 				break;
 			case 'h':
 				this->help();
@@ -47,26 +60,27 @@ ParallelDeWAFF::ParallelDeWAFF(int argc, char** argv){
 				abort();
 		}
     }
-
-    if(!(mode & 0x3) || this->inputFile.empty())
-    	errHelpExit("Required option or argument missing. Check syntax");
 }
 
-int ParallelDeWAFF::start(){
+/**
+ * @brief Start program execution
+ */
+int ParallelDeWAFF::execute(){
 	int success = -1;
-
-	if(this->mode & 0x1)
-		success = this->processVideo();
-	else if (this->mode & 0x2)
+	if(this->mode & image)
 		success = this->processImage();
-
+	else if (this->mode & video)
+		success = this->processVideo();
 	return success;
 }
 
+/**
+ * @brief Display program help
+ */
 void ParallelDeWAFF::help(){
 	std::cout<< "------------------------------------------------------------------------------" 	<< std::endl
 		<< "Usage:"                                                                         		<< std::endl
-		<< this->programName << " [-b N] <-v|-i> inputFile"                                    		<< std::endl
+		<< this->programName << " [-b N] <-v|-i> inputFileName"                                    		<< std::endl
 		<< "-v:\tProcess a video"                                                           		<< std::endl
 		<< "-i:\tProcess an image"                                                          		<< std::endl
 		<< "-b:\tRun benchmark. Process image N times. Only for images"                     		<< std::endl
@@ -74,92 +88,30 @@ void ParallelDeWAFF::help(){
 		<< std::endl;
 }
 
+/**
+ * @brief Display an error message
+ * @param msg Error message
+ */
 void ParallelDeWAFF::errExit(std::string msg){
 	std::cerr << "ERROR: " << msg << std::endl;
 	exit(-1);
 }
 
-void ParallelDeWAFF::errHelpExit(std::string msg){
-	std::cerr << "ERROR: " << msg << std::endl;
-	this->help();
-	exit(-1);
-}
-
-int ParallelDeWAFF::processVideo(){
-
-	//Open input video file
-	VideoCapture iVideo = VideoCapture(inputFile);
-	if (!iVideo.isOpened())
-		errExit("ERROR: Could not open the input video for read: " + inputFile);
-
-    // Acquire input information: frame rate, number of frames, codec and size
-	int iRate = static_cast<int>(iVideo.get(cv::CAP_PROP_FPS));
-    int iFrameCount = static_cast<int>(iVideo.get(cv::CAP_PROP_FRAME_COUNT));
-    int iCodec = static_cast<int>(iVideo.get(cv::CAP_PROP_FOURCC));
-    Size iSize = Size((int) iVideo.get(cv::CAP_PROP_FRAME_WIDTH),(int) iVideo.get(cv::CAP_PROP_FRAME_HEIGHT));
-
-    // Transform from int to char via Bitwise operators
-    char EXT[] = {(char)(iCodec & 0XFF) , (char)((iCodec & 0XFF00) >> 8),(char)((iCodec & 0XFF0000) >> 16),(char)((iCodec & 0XFF000000) >> 24), 0};
-    std::string iCodecName = EXT;
-
-    std::cout << "### Input Video Information ###" 					<< std::endl
-    	 << "Resolution: " << iSize.width << "x" << iSize.height 	<< std::endl
-         << "Number of frames: " << iFrameCount 					<< std::endl
-         << "Frame rate: " << iRate << "fps"						<< std::endl
-         << "Codec type: " << iCodecName 							<< std::endl
-         << std::endl;
-
-	//Define output file name
-	std::string::size_type pAt = this->inputFile.find_last_of('.');
-	this->outputFile = this->inputFile.substr(0, pAt) + "_deWAFF.avi";
-
-	//Open output video
-	VideoWriter oVideo(outputFile, iCodec, iRate , iSize, true);
-    if (!oVideo.isOpened())
-        errExit("ERROR: Could not open the output video for write: " + outputFile);
-
-    std::cout << "Processing video..." << std::endl;
-	Mat inputFrame,outputFrame;
-	double elapsedSeconds = 0.0;
-	for(int frame = 1;frame<=iFrameCount;frame++){
-
-		//Read one frame from input video
-		if(!iVideo.read(inputFrame)){
-			std::cerr << "ERROR: Could not read current frame from video, skipping." << std::endl;
-			break;
-		}
-
-		timerStart();
-
-		//Process current frame
-		outputFrame = this->processFrame(inputFrame);
-
-		elapsedSeconds += timerStop();
-
-		//Write frame to output video
-		oVideo.write(outputFrame);
-	}
-	if(0x4 & this->mode)//Benchmark mode?
-		std::cout << "Processing time = " << elapsedSeconds << " seconds." << std::endl;
-
-	//Release video resources
-	iVideo.release();
-	oVideo.release();
-
-	return 0;
-}
-
+/**
+ * @brief Process an image file
+ * @return return status
+ */
 int ParallelDeWAFF::processImage(){
-	Mat inputFrame = imread(inputFile);
+	Mat inputFrame = imread(inputFileName);
 	if(inputFrame.empty())
-		errExit("ERROR: Could not open the input file for read: " + inputFile);
+		errExit("ERROR: Could not open the input file for read: " + inputFileName);
 
 	//Process image
 	std::cout << "Processing image..." << std::endl;
 	Mat outputFrame;
 	if(0x4 & this->mode){ //Benchmark mode?
 		double elapsedSeconds;
-		for(int i = 1; i<=this->numIter; i++){
+		for(int i = 1; i <= this->numIter; i++){
 			std::cout << "Iteration " << i << std::endl;
 			timerStart();
 
@@ -172,24 +124,111 @@ int ParallelDeWAFF::processImage(){
 	else
 		outputFrame = this->processFrame(inputFrame);
 
-	//Define output file name
-	std::string::size_type pAt = this->inputFile.find_last_of('.');
-	this->outputFile = this->inputFile.substr(0, pAt) + "_deWAFF.jpg";
+	//Define the output file name
+	std::string::size_type pAt = this->inputFileName.find_last_of('.');
+	this->outputFileName = this->inputFileName.substr(0, pAt) + "_deWAFF.jpg";
 
-	if(!imwrite(outputFile, outputFrame))
-		errExit("ERROR: Could not open the output file for write: " + outputFile);
+	if(!imwrite(outputFileName, outputFrame))
+		errExit("ERROR: Could not open the output file for write: " + outputFileName);
 
-	display_img(inputFrame, outputFrame);
+	//Display the results
+	displayImage(inputFrame, outputFrame);
 
 	return 0;
 }
 
-//Input image must be BGR from 0 to 255
+/**
+ * @brief Process a video file
+ * @return return status
+ */
+int ParallelDeWAFF::processVideo(){
+	//Open input video file
+	VideoCapture inputVideo = VideoCapture(inputFileName);
+	if (!inputVideo.isOpened())
+		errExit("ERROR: Could not open the input video for read: " + inputFileName);
+
+    // Acquire input video information: 
+	int frameRate = static_cast<int>(inputVideo.get(cv::CAP_PROP_FPS));
+    int frameCount = static_cast<int>(inputVideo.get(cv::CAP_PROP_FRAME_COUNT));
+    int codec = static_cast<int>(inputVideo.get(cv::CAP_PROP_FOURCC));
+    Size videoSize = Size((int) inputVideo.get(cv::CAP_PROP_FRAME_WIDTH),(int) inputVideo.get(cv::CAP_PROP_FRAME_HEIGHT));
+
+    // Transform from int to char via Bitwise operators
+    char EXT[] = {	(char)((codec & 0XFF)),
+					(char)((codec & 0XFF00) >> 8),
+					(char)((codec & 0XFF0000) >> 16),
+					(char)((codec & 0XFF000000) >> 24),
+					0
+				};
+    std::string codecType = EXT;
+
+    std::cout 	<< "### Input Video Information ###" 							<< std::endl
+    	 		<< "Resolution: " << videoSize.width << "x" << videoSize.height << std::endl
+         		<< "Number of frames: " << frameCount 							<< std::endl
+         		<< "Frame rate: " << frameRate << "fps"							<< std::endl
+         		<< "Codec type: " << codecType 									<< std::endl
+         		<< std::endl;
+
+	//Define output file name
+	std::string::size_type pAt = this->inputFileName.find_last_of('.');
+	this->outputFileName = this->inputFileName.substr(0, pAt) + "_deWAFF.avi";
+
+	//Open output video
+	VideoWriter outputVideo(outputFileName, codec, frameRate , videoSize, true);
+    if (!outputVideo.isOpened())
+        errExit("ERROR: Could not open the output video for write: " + outputFileName);
+
+    std::cout << "Processing video..." << std::endl;
+	Mat inputFrame, outputFrame;
+	double elapsedSeconds = 0.0;
+	if(0x4 & this->mode){ //Benchmark mode?
+		for(int frame = 1; frame <= frameCount; frame++){
+			//Read one frame from input video
+			if(!inputVideo.read(inputFrame)){
+				std::cerr << "ERROR: Could not read current frame from video, skipping." << std::endl;
+				break;
+			}
+			timerStart();
+
+			//Process current frame
+			outputFrame = this->processFrame(inputFrame);
+			//Write frame to output video
+			outputVideo.write(outputFrame);
+
+			elapsedSeconds += timerStop();
+		}
+		std::cout << "Processing time = " << elapsedSeconds << " seconds." << std::endl;
+	} else {
+		for(int frame = 1; frame <= frameCount; frame++){
+			//Read one frame from input video
+			if(!inputVideo.read(inputFrame)){
+				std::cerr << "ERROR: Could not read current frame from video, skipping." << std::endl;
+				break;
+			}
+			//Process current frame
+			outputFrame = this->processFrame(inputFrame);
+			//Write frame to output video
+			outputVideo.write(outputFrame);
+		}
+	}
+
+	//Release video resources
+	inputVideo.release();
+	outputVideo.release();
+
+	return 0;
+}
+
+/**
+ * @brief Process a frame from an image or a video. Input frame must be BGR from 0 to 255
+ * @param inputFrame Input frame
+ * @return Processed frame
+ */
 Mat ParallelDeWAFF::processFrame(const Mat& inputFrame){
     //Set parameters for processing
-    int wRSize = 21;
-    int sigma_r = 10;
-    double sigma_s = wRSize/1.5;
+    int wSize = 21;
+    int sigmaR = 10;
+    double sigmaS = wSize/1.5;
     int lambda = 2;
 
     //Input checking
@@ -200,25 +239,27 @@ Mat ParallelDeWAFF::processFrame(const Mat& inputFrame){
 	   errExit("Input frame must be a Grayscale or RGB unsigned integer matrix of size NxMx1 or NxMx3 on the closed interval [0,255].");
 
     //Converto to CIELab color space
-    Mat convertedFrame;
-    inputFrame.convertTo(convertedFrame,CV_32F,1.0/255.0); //The image has to to have values from 0 to 1 before convertion to CIELab
-	cvtColor(convertedFrame, convertedFrame, cv::COLOR_BGR2Lab); //Convert normalized BGR image to CIELab color space.
+    Mat frame;
+	//The image has to to have values from 0 to 1 before convertion to CIELab
+    inputFrame.convertTo(frame, CV_32F, 1.0/255.0); 
+	//Convert normalized BGR image to CIELab color space.
+	cvtColor(frame, frame, cv::COLOR_BGR2Lab); 
 
-	Mat USMFrame = NonAdaptiveUSM::nonAdaptiveUSM(convertedFrame, lambda);
-	Mat outputFrame = deWAFF::filter(convertedFrame, USMFrame, wRSize, sigma_s,sigma_r);
+	Mat maskedFrame = NonAdaptiveUSM::nonAdaptiveUSM(frame, lambda);
+	Mat outputFrame = deWAFF::filter(frame, maskedFrame, wSize, sigmaS,sigmaR);
 
 	//Convert filtered image back to BGR color space.
-	cvtColor(outputFrame,outputFrame,cv::COLOR_Lab2BGR);
-    outputFrame.convertTo(outputFrame,CV_8U,255); //Scale back to [0,255] range
+	cvtColor(outputFrame, outputFrame, cv::COLOR_Lab2BGR);
+    outputFrame.convertTo(outputFrame, CV_8U, 255); //Scale back to [0,255] range
     return outputFrame;
 }
 
-void ParallelDeWAFF::display_img(const Mat &input, const Mat &output){
+void ParallelDeWAFF::displayImage(const Mat &input, const Mat &output){
 	// Load the image into a matrix
 	Mat image;
     hconcat(input, output, image);
 
-    // Present the image
+    // Display the image
     namedWindow("deWAFF result", WINDOW_AUTOSIZE);
     imshow("deWAFF result", image);
 

@@ -14,7 +14,7 @@
 
 class deWAFF{
 public:
-	static Mat filter(const Mat& originalImage, const Mat& USMFilteredImage, int w, double sigma_s, int sigma_r);
+	static Mat filter(const Mat& originalImage, const Mat& USMFilteredImage, int ws, double sigma_s, int sigma_r);
 };
 
 #endif /* DEWAFF_H_ */

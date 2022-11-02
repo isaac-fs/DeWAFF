@@ -1,8 +1,9 @@
-/*
- * NonAdaptiveUSM.h
- *
- *  Created on: Nov 1, 2015
- *      Author: davidp
+/**
+ * @file NonAdaptiveUSM.h
+ * @author David Prado{davidp}
+ * @date 11/1/2015
+ * @author Isaac Fonseca Segura {isaac-fs}
+ * @date 10/28/2022
  */
 
 #ifndef NON_ADAPTIVE_USM_HPP_
@@ -18,7 +19,7 @@ using namespace cv;
 class NonAdaptiveUSM{
 
 public:
-	static Mat LoGkernel(int size, double sigma);
 	static Mat nonAdaptiveUSM(const Mat& A, const int lambda);
+	static Mat LoGkernel(int size, double sigma);
 };
 #endif /* NON_ADAPTIVE_USM_HPP */
