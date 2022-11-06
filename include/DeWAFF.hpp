@@ -1,8 +1,12 @@
-/*
- * bfilterDeceived.h
- *
- *  Created on: Oct 30, 2015
- *      Author: davidp
+/**
+ * @file DeWAFF.cpp
+ * @author David Prado (davidp)
+ * @date 2015-08-29
+ * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
+ * @date 2022-11-06
+ * @brief 
+ * @copyright Copyright (c) 2022
+ * 
  */
 
 #ifndef DEWAFF_H_

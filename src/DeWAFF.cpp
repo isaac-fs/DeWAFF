@@ -1,10 +1,3 @@
-/*
- * bfilterDeceived.cpp
- *
- *  Created on: Oct 29, 2015
- *      Author: davidp
- */
-
 #include "DeWAFF.hpp"
 
 Mat deWAFF::filter(const Mat& originalImage, const Mat& USMImage, int ws, double sigma_s, int sigma_r){
@@ -13,7 +6,7 @@ Mat deWAFF::filter(const Mat& originalImage, const Mat& USMImage, int ws, double
     Tools::meshGrid(Range(-ws,ws),Range(-ws,ws),X,Y);
     pow(X-Y,2,XY2); // (X-Y)^2
     double std2 = pow(sigma_s,2);
-    XY2.convertTo(G,CV_32F,-1/(2*std2)); // -(1/2*std)(X-Y)^2
+    XY2.convertTo(G,CV_32F,-1/(2*std2)); //-(1/2*std)(X-Y)^2
     exp(G,G); // e^(-(1/2*std)(X-Y)^2)
 
     // Apply bilateral filter.

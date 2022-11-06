@@ -1,10 +1,3 @@
-/*
- * tools.cpp
- *
- *  Created on: Nov 5, 2015
- *      Author: davidp
- */
-
 #include "Tools.hpp"
 
 /**

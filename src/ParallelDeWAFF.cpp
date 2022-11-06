@@ -1,12 +1,3 @@
-/**
- * @file NonAdaptiveUSM.cpp
- * @brief Runner code for the Parallel DeWAFF implementation
- * @author David Prado {davidp}
- * @date 10/27/2015
- * @author Isaac Fonseca Segura {isaac-fs}
- * @date 10/29/2022
- */
-
 #include "ParallelDeWAFF.hpp"
 
 using namespace cv;
@@ -24,33 +15,29 @@ ParallelDeWAFF::ParallelDeWAFF(int argc, char** argv){
     int c;
     while ((c = getopt(argc,argv,"hb:i:v:")) != -1){
 		switch(c){
-			case 'i': // Process an image
-				if(this->mode & video){ // Check if flag for video enabled
-					errExit("Options -v and -i are mutually exclusive");
-					this->help();
-				}
+			case 'i': //Process an image
+				if(this->mode & video) // Check if flag for video enabled
+					this->errExit("Options -v and -i are mutually exclusive");
+				if(this->mode & benchmark && this->numIter <= 0)
+						this->errExit("Number of benchmark iterations for "
+								"image mode has to be greater than 1");
 				this->mode |= image;
 				this->inputFileName = optarg;
 				break;
-			case 'v': // Process a video
-				if(this->mode & image){ //Check if flag for image enabled
-					errExit("Options -v and -i are mutually exclusive");
-					this->help();
-				}
+			case 'v': //Process a video
+				if(this->mode & image) //Check if flag for image enabled
+					this->errExit("Options -v and -i are mutually exclusive");
 				this->mode |= video;
 				this->inputFileName = optarg;
 				break;
 			case 'b': // Enable benchmark mode
 				this->mode |= benchmark;
-				this->numIter = atoi(optarg);
-				if(this->numIter <= 0){
-					errExit("Number of benchmark iterations must be >= 1");
-					this->help();
-				}
+				if(optarg)
+					this->numIter = atoi(optarg);
 				break;
 			case 'h':
 				this->help();
-				exit(0);
+				exit(-1);
 				break;
 			case '?':
 				this->help();
@@ -60,6 +47,10 @@ ParallelDeWAFF::ParallelDeWAFF(int argc, char** argv){
 				abort();
 		}
     }
+	if (argc == 1) 
+		this->help();
+	else if((this->mode & benchmark) && argc == 3)
+		this->errExit("Incomplete command. Use the -h flag to see the options");
 }
 
 /**
@@ -79,11 +70,14 @@ int ParallelDeWAFF::execute(){
  */
 void ParallelDeWAFF::help(){
 	std::cout<< "------------------------------------------------------------------------------" 	<< std::endl
-		<< "Usage:"                                                                         		<< std::endl
-		<< this->programName << " [-b N] <-v|-i> inputFileName"                                    		<< std::endl
-		<< "-v:\tProcess a video"                                                           		<< std::endl
-		<< "-i:\tProcess an image"                                                          		<< std::endl
-		<< "-b:\tRun benchmark. Process image N times. Only for images"                     		<< std::endl
+		<< "Use:"                                                                         			<< std::endl
+		<< this->programName << " -i|-v <input file> [-b [N]]"										<< std::endl
+		<< std::endl
+		<< "Options:"                                                                         		<< std::endl
+		<< "\t -i:\tProcess an image"                                                          		<< std::endl
+		<< "\t -v:\tProcess a video"                                                           		<< std::endl
+		<< "\t -b:\tRun a benchmark. In image mode the number of times to run"						<< std::endl
+		<< "\t\tthe benchmark <N> is required"														<< std::endl
 		<< "------------------------------------------------------------------------------" 		<< std::endl
 		<< std::endl;
 }
@@ -93,7 +87,7 @@ void ParallelDeWAFF::help(){
  * @param msg Error message
  */
 void ParallelDeWAFF::errExit(std::string msg){
-	std::cerr << "ERROR: " << msg << std::endl;
+	std::cerr << "Error: " << msg << std::endl;
 	exit(-1);
 }
 
@@ -109,15 +103,15 @@ int ParallelDeWAFF::processImage(){
 	//Process image
 	std::cout << "Processing image..." << std::endl;
 	Mat outputFrame;
-	if(0x4 & this->mode){ //Benchmark mode?
+	if(this->mode & benchmark){ //Benchmark mode?
 		double elapsedSeconds;
 		for(int i = 1; i <= this->numIter; i++){
 			std::cout << "Iteration " << i << std::endl;
-			timerStart();
+			this->timer.start();
 
 			outputFrame = this->processFrame(inputFrame);
 
-			elapsedSeconds = timerStop();
+			elapsedSeconds = this->timer.stop();
 			std::cout << "Processing time = " << elapsedSeconds << " seconds." << std::endl;
 		}
 	}
@@ -181,21 +175,21 @@ int ParallelDeWAFF::processVideo(){
     std::cout << "Processing video..." << std::endl;
 	Mat inputFrame, outputFrame;
 	double elapsedSeconds = 0.0;
-	if(0x4 & this->mode){ //Benchmark mode?
+	if(this->mode & benchmark){ //Benchmark mode?
 		for(int frame = 1; frame <= frameCount; frame++){
 			//Read one frame from input video
 			if(!inputVideo.read(inputFrame)){
 				std::cerr << "ERROR: Could not read current frame from video, skipping." << std::endl;
 				break;
 			}
-			timerStart();
+			this->timer.start();
 
 			//Process current frame
 			outputFrame = this->processFrame(inputFrame);
 			//Write frame to output video
 			outputVideo.write(outputFrame);
 
-			elapsedSeconds += timerStop();
+			elapsedSeconds += this->timer.stop();
 		}
 		std::cout << "Processing time = " << elapsedSeconds << " seconds." << std::endl;
 	} else {

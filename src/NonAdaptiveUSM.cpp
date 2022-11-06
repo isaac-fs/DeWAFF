@@ -1,12 +1,3 @@
-/**
- * @file NonAdaptiveUSM.cpp
- * @brief Non adaptive unnsharped maskingg filter implementation
- * @author David Prado{davidp}
- * @date 10/28/2015
- * @author Isaac Fonseca Segura {isaac-fs}
- * @date 10/28/2022
- */
-
 #include "NonAdaptiveUSM.hpp"
 
 /**

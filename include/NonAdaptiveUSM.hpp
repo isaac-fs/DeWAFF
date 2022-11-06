@@ -1,9 +1,12 @@
 /**
- * @file NonAdaptiveUSM.h
- * @author David Prado{davidp}
- * @date 11/1/2015
- * @author Isaac Fonseca Segura {isaac-fs}
- * @date 10/28/2022
+ * @file NonAdaptiveUSM.hpp
+ * @author David Prado (davidp)
+ * @date 2015-11-01
+ * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
+ * @date 2022-11-06
+ * @brief 
+ * @copyright Copyright (c) 2022
+ * 
  */
 
 #ifndef NON_ADAPTIVE_USM_HPP_

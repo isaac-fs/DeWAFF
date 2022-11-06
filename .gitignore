@@ -38,3 +38,12 @@
 CMakeCache.txt
 CMakeFiles/
 cmake*
+build/
+Makefile
+
+# Doxygen
+doxygen/html/*
+doxygen/latex/*
+
+# Binary
+DeWAFF

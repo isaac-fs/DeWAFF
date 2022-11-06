@@ -1,8 +1,12 @@
-/*
- * tools.hpp
- *
- *  Created on: Nov 5, 2015
- *      Author: davidp
+/**
+ * @file Tools.hpp
+ * @author David Prado (davidp)
+ * @date 2015-11-05
+ * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
+ * @date 2022-11-06
+ * @brief 
+ * @copyright Copyright (c) 2022
+ * 
  */
 
 #ifndef TOOLS_HPP_
