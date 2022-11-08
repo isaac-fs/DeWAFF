@@ -1,8 +1,8 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
-#include "ParallelDeWAFF.hpp"
+#include "ProgramInterface.hpp"
 
 int main(int argc, char** argv) {
-    ParallelDeWAFF deWAFF(argc,argv);
-    return deWAFF.execute();
+    ProgramInterface Interface(argc,argv);
+    return Interface.run();
 }

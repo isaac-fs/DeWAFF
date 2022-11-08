@@ -22,7 +22,7 @@ using namespace cv;
 class NonAdaptiveUSM{
 
 public:
-	static Mat nonAdaptiveUSM(const Mat& A, const int lambda);
-	static Mat LoGkernel(int size, double sigma);
+	static Mat Filter(const Mat& A, const int lambda);
+	static Mat LaplacianKernel(int size, double sigma);
 };
 #endif /* NON_ADAPTIVE_USM_HPP */

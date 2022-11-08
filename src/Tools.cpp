@@ -6,8 +6,10 @@
  */
 void Tools::meshGrid(const Range &xRange, const Range &yRange, Mat &X, Mat &Y){
 	std::vector<int> xVector, yVector;
-	for (int i = xRange.start; i <= xRange.end; i++) xVector.push_back(i);
-	for (int i = yRange.start; i <= yRange.end; i++) yVector.push_back(i);
+	for (int i = xRange.start; i <= xRange.end; i++)
+		xVector.push_back(i);
+	for (int i = yRange.start; i <= yRange.end; i++)
+		yVector.push_back(i);
 
 	repeat(Mat(xVector).reshape(1,1), yRange.size()+1, 1, X);
 	repeat(Mat(yVector).reshape(1,1).t(), 1, xRange.size()+1, Y);

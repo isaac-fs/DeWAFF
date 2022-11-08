@@ -12,13 +12,21 @@
 #ifndef DEWAFF_H_
 #define DEWAFF_H_
 
-#include <iostream>
 #include <omp.h>
+#include "NonAdaptiveUSM.hpp"
 #include "Tools.hpp"
 
-class deWAFF{
-public:
-	static Mat filter(const Mat& originalImage, const Mat& USMFilteredImage, int ws, double sigma_s, int sigma_r);
+using namespace cv;
+
+class DeWAFF{
+	private:
+		enum LAB : int {L, a, b};
+		int lambda; ///< lambda value for the USM 
+		const Mat &originalImage;
+		Mat USMFilteredImage;
+	public:
+		DeWAFF(const Mat &image);
+		Mat deceivedBilateralFilter(int windowSize, double spatialSigma, int rangeSigma);
 };
 
 #endif /* DEWAFF_H_ */

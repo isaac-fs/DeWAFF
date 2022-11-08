@@ -12,6 +12,7 @@
 #ifndef TOOLS_HPP_
 #define TOOLS_HPP_
 
+#include <iostream>
 #include <algorithm>
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
