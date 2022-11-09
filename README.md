@@ -100,6 +100,7 @@ Después se debe abrir el enlace símbolico en el directorio raíz `DeWAFF-B5278
 ## Compilación del proyecto
 La compliación de este proyecto se realiza de manera automatizada con `cmake` y `make`. Para crear un ejecutable debe seguir los siguientes pasos en el directorio raíz `DeWAFF-B52786/`
 ```bash
+    cmake .
     cmake --build .
 ```
 Si hace cambios al código podrá actualizar el proyecto con `make`.
