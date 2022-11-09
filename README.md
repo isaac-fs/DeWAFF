@@ -26,7 +26,7 @@ Repositorio dedicado a avances del proyecto elétctrico.<br>
 Esta sección sirve como referencia para la metodología del trabajo escrito.
 - Configurar una VM con Ubuntu 22.04 LTS
 - Leer el material de [Open CV introduction](https://www.opencv-srf.com/p/introduction.html)
-- Seguir la guía de instalación de [Instalation tutorial - Linux](https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
+- Seguir la guía de instalación [OpenCV Instalation tutorial - Linux](https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
 - Instalar VSCode y las extensiones necesarias para C++. Además de extensiones para soporte de CMake y Doxygen
 - Investigar sobre el framework DeWAFF
 - Comenzar implementación en C++
