@@ -18,12 +18,16 @@
 
 using namespace cv;
 
+/**
+ * @brief Deceived Weighted Averaged Filter Framework class.
+ * It applies filter using the deceived weighted averaged values of an image
+ */
 class DeWAFF{
 	private:
-		enum LAB : int {L, a, b};
-		int lambda; ///< lambda value for the USM 
-		const Mat &originalImage;
-		Mat USMFilteredImage;
+		enum CIELab : int {L, a, b}; // CIELab channels
+		int lambda; // lambda value for the USM
+		const Mat &originalImage; // Reference to the image to process
+		Mat USMFilteredImage; // Laplacian of Gaussian filtered image
 	public:
 		DeWAFF(const Mat &image);
 		Mat deceivedBilateralFilter(int windowSize, double spatialSigma, int rangeSigma);

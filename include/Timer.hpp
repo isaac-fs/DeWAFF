@@ -12,6 +12,10 @@
 #define TIMER_HPP_
 #include <sys/time.h>
 
+/**
+ * @brief Class containing the timer methods for the benchmarking of file processing
+ * 
+ */
 class Timer {
     private:
         double startTime;

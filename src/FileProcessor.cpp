@@ -34,8 +34,8 @@ int FileProcessor::processImage(){
 	if(!imwrite(outputFileName, outputFrame))
 		errorExit("ERROR: Could not open the output file for write: " + outputFileName);
 
-	// Display the results
-	displayImage(inputFrame, outputFrame);
+	// Display the results (For continuous testing)
+	// displayImage(inputFrame, outputFrame);
 
 	return 0;
 }
@@ -156,6 +156,12 @@ Mat FileProcessor::processFrame(const Mat &inputFrame){
     return outputFrame;
 }
 
+/**
+ * @brief Display the original image and the resulting image side by side. Used for continuous testing
+ * 
+ * @param input original image
+ * @param output resulting image
+ */
 void FileProcessor::displayImage(const Mat &input, const Mat &output){
 	// Load the image into a matrix
 	Mat image;

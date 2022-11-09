@@ -19,8 +19,11 @@
 
 using namespace cv;
 
-class NonAdaptiveUSM{
-
+/**
+ * @brief Filters an image with a non adaptive UnSharp Mask
+ * For the kernel it uses a Laplacian kernel (a.k.a Laplacian of Gaussian kernel)
+ */
+class NonAdaptiveUSM {
 public:
 	static Mat Filter(const Mat& A, const int lambda);
 	static Mat LaplacianKernel(int size, double sigma);

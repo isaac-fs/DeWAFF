@@ -1,9 +1,23 @@
+/**
+ * @file FileProcessor.hpp
+ * @author David Prado (davidp)
+ * @date 2015-11-05
+ * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
+ * @date 2022-11-06
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
 #ifndef FILE_PROCESSOR_HPP_
 #define FILE_PROCESSOR_HPP_
 
 #include "DeWAFF.hpp"
 #include "Timer.hpp"
 
+/**
+ * @brief Class in charge of al the file processing, may it be a an image or a video.
+ * This class also allows for benchmarking of the processing
+ */
 class FileProcessor {
     protected:
         std::string inputFileName;

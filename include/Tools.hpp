@@ -20,6 +20,10 @@
 
 using namespace cv;
 
+/**
+ * @brief Useful tools for the file processing
+ * 
+ */
 class Tools {
 public:
 	static void meshGrid(const Range &xgv, const Range &ygv, Mat &X, Mat &Y);

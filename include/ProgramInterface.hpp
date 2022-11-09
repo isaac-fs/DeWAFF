@@ -17,6 +17,11 @@
 #include <iostream>
 #include "FileProcessor.hpp"
 
+/**
+ * @brief In charge of displaying the CLI of the program, including the help commands.
+ * It takes the CLI instructions to process the file. This is why this class inherits from
+ * the FileProcessor class.
+ */
 class ProgramInterface : protected FileProcessor {
 public:
 	ProgramInterface(int argc, char** argv);

@@ -1,16 +1,21 @@
 #include "Timer.hpp"
 
-// Starts timer and resets the elapsed time
+/**
+ * @brief Starts timer and resets the elapsed time
+ */
 void Timer::start(){
-	struct timeval tod;
-	gettimeofday(&tod, nullptr);
-	this->startTime = (double)tod.tv_sec + ((double)tod.tv_usec * 1.0e-6); 
+	struct timeval timeOfDay;
+	gettimeofday(&timeOfDay, nullptr);
+	this->startTime = (double)timeOfDay.tv_sec + ((double)timeOfDay.tv_usec * 1.0e-6); 
 }
 
-// Stops the timer and returns the elapsed time
+/**
+ * @brief Stops the timer and returns the elapsed time
+ * @return Elapsed time in seconds
+ */
 double Timer::stop(){
-	struct timeval tod;
-	gettimeofday(&tod, nullptr);
-	return ((double)tod.tv_sec + ((double)tod.tv_usec * 1.0e-6)) - this->startTime;
+	struct timeval timeOfDay;
+	gettimeofday(&timeOfDay, nullptr);
+	return ((double)timeOfDay.tv_sec + ((double)timeOfDay.tv_usec * 1.0e-6)) - this->startTime;
 }
 
