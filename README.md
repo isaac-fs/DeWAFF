@@ -12,7 +12,7 @@ Repositorio dedicado a avances del proyecto elétctrico.<br>
     - [Métodos](#métodos)
     - [Funciones](#funciones)
   - [Pruebas](#pruebas)
-- [Implementación actual](#implementación-actual)
+  - [Implementación actual](#implementación-actual)
   - [Clases](#clases)
   - [Generación de la documentación](#generación-de-la-documentación)
   - [Compilación del proyecto](#compilación-del-proyecto)
@@ -61,7 +61,7 @@ Con imágenes de formato FHD o HD se debe probar cada configuración del framewo
 
 Como pruebas finales se planea procesar imágenes de gran tamaño obtenidas de microoscopios u otros dispositivos.
 
-# Implementación actual
+## Implementación actual
 En la implementación actual se cuenta no sólo con la clase DeWAFF, pero también con clases que asisten al procesado de la imagen como la clase NonAdaptiveUSM. Además se incluyen clases que se encargan del preprocesado de la imagen y la presentación del programa en la terminal. Finalmente hay clases con métodos de asistencia como Timer y Tools.
 
 ## Clases
