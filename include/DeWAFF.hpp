@@ -30,7 +30,7 @@ class DeWAFF{
 		Mat USMFilteredImage; // Laplacian of Gaussian filtered image
 	public:
 		DeWAFF(const Mat &image);
-		Mat deceivedBilateralFilter(int windowSize, double spatialSigma, int rangeSigma);
+		Mat DeceivedBilateralFilter(int windowSize, double spatialSigma, int rangeSigma);
 };
 
 #endif /* DEWAFF_H_ */

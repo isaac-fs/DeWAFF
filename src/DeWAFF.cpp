@@ -22,7 +22,7 @@ DeWAFF::DeWAFF(const Mat &image):
  * @param rangeSigma Same as a BF range sigma. Is the standard deviation for the range (or radiometric) kernel
  * @return Mat A deceived Bilateral Filter processed image
  */
-Mat DeWAFF::deceivedBilateralFilter(int windowSize, double spatialSigma, int rangeSigma){
+Mat DeWAFF::DeceivedBilateralFilter(int windowSize, double spatialSigma, int rangeSigma){
     /**
      * Compute a Gaussian kernel with the spatial values (pixel positions) of the window
      * \f$ G_{\text spatial}(m, p) = \exp\left(-\frac{X^2 - Y^2}{2{\sigma_s^2}}\right) \f$ \n

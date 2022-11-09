@@ -147,7 +147,7 @@ Mat FileProcessor::processFrame(const Mat &inputFrame){
 	
 	// Process image
 	DeWAFF DeWAFF(outputFrame);
-	outputFrame = DeWAFF.deceivedBilateralFilter(windowSize, spatialSigma, rangeSigma);
+	outputFrame = DeWAFF.DeceivedBilateralFilter(windowSize, spatialSigma, rangeSigma);
 
 	// Convert filtered image back to BGR color space.
 	cvtColor(outputFrame, outputFrame, cv::COLOR_Lab2BGR);
