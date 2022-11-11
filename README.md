@@ -7,11 +7,6 @@ Repositorio dedicado a avances del proyecto elétctrico.<br>
 - [Implementación y validación de un algoritmo de abstracción de imagen en C++](#implementación-y-validación-de-un-algoritmo-de-abstracción-de-imagen-en-c)
   - [Tabla de contenidos](#tabla-de-contenidos)
   - [Pasos seguidos](#pasos-seguidos)
-  - [Idea de implementación](#idea-de-implementación)
-  - [Clase DEWAFF](#clase-dewaff)
-    - [Métodos](#métodos)
-    - [Funciones](#funciones)
-  - [Pruebas](#pruebas)
   - [Implementación actual](#implementación-actual)
   - [Clases](#clases)
   - [Generación de la documentación](#generación-de-la-documentación)
@@ -21,6 +16,11 @@ Repositorio dedicado a avances del proyecto elétctrico.<br>
     - [Procesar imagen y hacer benchmark](#procesar-imagen-y-hacer-benchmark)
     - [Procesar vídeo](#procesar-vídeo)
     - [Procesar vídeo y hacer benchmark](#procesar-vídeo-y-hacer-benchmark)
+  - [Idea inicial de implementación](#idea-inicial-de-implementación)
+  - [Clase DEWAFF](#clase-dewaff)
+    - [Métodos](#métodos)
+    - [Funciones](#funciones)
+    - [Pruebas](#pruebas)
 
 ## Pasos seguidos
 Esta sección sirve como referencia para la metodología del trabajo escrito.
@@ -39,28 +39,6 @@ Esta sección sirve como referencia para la metodología del trabajo escrito.
 - Elaboración del trabajo escrito
 <br>
 
-## Idea de implementación
-La idea original era crear desde cero una implementación de DeWAFF. Más adelante se esperaba partir de una implementación del algoritmo en Matlab, lamentablemente esta se perdió, por lo que se comenzó a implementar el framework desde cero. A medio camino se dio con una implementación de código abierto. Se hizo un fork de esta y se comenzó a trabajar con esto como nueva base. A pesar de tener ciertas inconsistencias tenía las bases necesarias y una implementación del filtro bilateral funcional.
-
-A continuación se muestran las ideas originales del proyecto, las cuales terminaron siendo consistentes con la implementación actual.
-## Clase DEWAFF
-La clase DEWAFF debe contar con un constructor que inicialice los valores necesarios para iniciar el filtrado de una imagen.
-
-### Métodos
-La clase DEWAFF debe contar con métodos que realicen los siguientes pasos:
-
-- Un método que permita cargar una imágen desde una ruta local. Adquirir el tamaño de la imagen y guardar otros parámetros que sean relevantes. Y finalmente definir el formato de la imágen (color, densidad de pixeles).
-
-- Un método que permita escoger el tipo de filtrado del framework utilizar (es posible pasar un string como parámetro). Este debe llamar a las funciones de filtrado necesarias y pasarles los parámetros que estas necesiten. Una vez terminado debe guardar la imágen con sufijo, ej: "imagen_\<BF>_\<DEWAFF>.png" si se utiliza el filtro bilateral.
-
-### Funciones
-Se debe implementar una función por cada tipo de operación que el framework implemente. Por ejemplo, se deben implementar los filtros y las funciones que estos requieran.
-
-### Pruebas
-Con imágenes de formato FHD o HD se debe probar cada configuración del framework para asegurar el correcto funcionamiento del mismo. Se pretende usar imágenes en estas resoluciones para evaluar los tiempos de funcionamiento del framework y verificar visualmente los resultados. 
-
-Como pruebas finales se planea procesar imágenes de gran tamaño obtenidas de microoscopios u otros dispositivos.
-
 ## Implementación actual
 En la implementación actual se cuenta no sólo con la clase DeWAFF, pero también con clases que asisten al procesado de la imagen como la clase NonAdaptiveUSM. Además se incluyen clases que se encargan del preprocesado de la imagen y la presentación del programa en la terminal. Finalmente hay clases con métodos de asistencia como Timer y Tools.
 
@@ -68,16 +46,17 @@ En la implementación actual se cuenta no sólo con la clase DeWAFF, pero tambi�
 Las clases implementadas y/o adaptadas y sus métodos son las siguientes:
 - DeWAFF
     - DeceivedBilateralFilter
-- NonAdaptiveUSM
-    - Filter
+    - NonAdaptiveUSMFilter
     - LaplacianKernel
+    - GaussianKernel
+    - GaussianExponentialFactor
 - FileProcessor
     - processImage
     - processVideo
     - processFrame
     - errorExit
-    - displayImage
-- ProgramInterface
+    - displayResults
+- CLI
     - run
     - help
 - Timer
@@ -133,3 +112,25 @@ Para correr el programa use el siguiente comando en el directorio raíz `DeWAFF-
 El resultado se generará en la `ruta del archivo` escogido y se le agregará el sufijo DeWAFF de forma que el resultado se mostrará de la forma `<nombre_del_archivo>_DeWAFF.<ext>`. En el directorio raíz se encuentran un par de ejemplos en el directorio `img/`.
 
 A los vídeos se les agrega la extensión `.avi` y las imágenes la extensión `.jpg` por defecto.
+
+## Idea inicial de implementación
+La idea original era crear desde cero una implementación de DeWAFF. Más adelante se esperaba partir de una implementación del algoritmo en Matlab, lamentablemente esta se perdió, por lo que se comenzó a implementar el framework desde cero. A medio camino se dio con una implementación de código abierto. Se hizo un fork de esta y se comenzó a trabajar con esto como nueva base. A pesar de tener ciertas inconsistencias tenía las bases necesarias y una implementación del filtro bilateral funcional.
+
+A continuación se muestran las ideas originales del proyecto, las cuales terminaron siendo consistentes con la implementación actual.
+## Clase DEWAFF
+La clase DEWAFF debe contar con un constructor que inicialice los valores necesarios para iniciar el filtrado de una imagen.
+
+### Métodos
+La clase DEWAFF debe contar con métodos que realicen los siguientes pasos:
+
+- Un método que permita cargar una imágen desde una ruta local. Adquirir el tamaño de la imagen y guardar otros parámetros que sean relevantes. Y finalmente definir el formato de la imágen (color, densidad de pixeles).
+
+- Un método que permita escoger el tipo de filtrado del framework utilizar (es posible pasar un string como parámetro). Este debe llamar a las funciones de filtrado necesarias y pasarles los parámetros que estas necesiten. Una vez terminado debe guardar la imágen con sufijo, ej: "imagen_\<BF>_\<DEWAFF>.png" si se utiliza el filtro bilateral.
+
+### Funciones
+Se debe implementar una función por cada tipo de operación que el framework implemente. Por ejemplo, se deben implementar los filtros y las funciones que estos requieran.
+
+### Pruebas
+Con imágenes de formato FHD o HD se debe probar cada configuración del framework para asegurar el correcto funcionamiento del mismo. Se pretende usar imágenes en estas resoluciones para evaluar los tiempos de funcionamiento del framework y verificar visualmente los resultados. 
+
+Como pruebas finales se planea procesar imágenes de gran tamaño obtenidas de microoscopios u otros dispositivos.
