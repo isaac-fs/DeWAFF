@@ -2,103 +2,212 @@
 
 /**
  * @brief Construct a new DeWAFF::DeWAFF object
+ * Initializes all relevant variables for the chosen filtering method
  * 
- * @param image A CIELab image to be processed by the framework
- * 
- * This constructor initializes a reference to the image and starts the USM filtering
- * processing on it. It sets the lambda value for the Laplacian mask.
  */
-DeWAFF::DeWAFF(const Mat &image):
-    originalImage(image){
-    lambda = 2;
-    USMFilteredImage = NonAdaptiveUSM::Filter(originalImage, this->lambda);
+DeWAFF::DeWAFF(){
+    // Initial values. These are the three main parameters for the DeWAFF
+    this->windowSize = 14;
+    this->spatialSigma = windowSize/1.5;
+    this->rangeSigma = 15;
+    this->lambda = 2; // Lambda value for the USM
+
+    // Variance calculations
+    this->spatialVariance = pow(spatialSigma, 2);
+    this->rangeVariance = pow(rangeSigma, 2);
+
+    // Pre computation of meshgrid values
+    this->range = Range(-(windowSize/2), (windowSize/2) + windowSize%2);
+    Tools::meshGrid(range, this->X, this->Y);
+    this->XY = X + Y;
+
+    // Pre computation of the range (intensity) independant gaussian kernel values
+    this->exponentialFactor = GaussianExponentialFactor();
+    this->gaussianKernel = GaussianKernel();
 };
 
 /**
  * @brief A deceived Bilateral Filter implementatio for the DeWAFF
- * 
- * @param windowSize Window size for Gaussian kernels and the image region to process
- * @param spatialSigma Same as a BF spatial sigma. Is the standard deviation for the spatial kernel
- * @param rangeSigma Same as a BF range sigma. Is the standard deviation for the range (or radiometric) kernel
+ * @param inputImage A CIELab image to be processed by the framework
  * @return Mat A deceived Bilateral Filter processed image
+ * 
  */
-Mat DeWAFF::DeceivedBilateralFilter(int windowSize, double spatialSigma, int rangeSigma){
+Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage){
+    // Pre-process the laplacian masked image
+    this->inputImage = inputImage;
+    laplacianFilteredImage = NonAdaptiveUSMFilter(inputImage);
+
     /**
-     * Compute a Gaussian kernel with the spatial values (pixel positions) of the window
-     * \f$ G_{\text spatial}(m, p) = \exp\left(-\frac{X^2 - Y^2}{2{\sigma_s^2}}\right) \f$ \n
-     * where \f$ m = (X, Y) \f$ is a pixel matrix with all the window pixels positions such that \f$ X = \{x_i, ..., x_n\} \text{ for each } 
-     * n \in X \f$ and \f$ Y = \{y_i, ..., y_n\} \text{ for each } n \in Y \f$ contain the coordinates of each \f$ p = \{ x_i, y_i\}\f$ pixel
-     * in \f$ m \f$
-     */
-    Mat1f X, Y, XYdiffSquared, spatialGaussianKernel;
-    double spatialVariance = pow(spatialSigma, 2); // The variance is the squared standard deviation
-    Tools::meshGrid(Range(-windowSize, windowSize), Range(-windowSize, windowSize), X, Y); // Generate mesh grid X and Y coordinates
-    pow(X-Y, 2, XYdiffSquared);
-    exp(XYdiffSquared * (-1 / (2 * spatialVariance)), spatialGaussianKernel);
+    * Compute a spatial Gaussian kernel \f$ G_{\text{spatial}}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \f$ 
+    * with the spatial values (pixel positions) from an image region \f$ \Omega \in U \f$.
+    * The spatial kernel uses the \f$ m_i \in \Omega \f$ pixels coordinates as weighting values for the pixel \f$ p = (x, y) \f$
+    * 
+    */
+    Mat1f spatialGaussianKernel = gaussianKernel;
 
-    // Apply the bilateral filter
-    Mat BFImage = Mat(originalImage.size(), originalImage.type());
-    Mat BilateralFilterKernel, rangeGaussianKernel, localRegion, LaplacianImageRegion, dL, da, db;
-    double rangeVariance = pow(rangeSigma, 2);
+    // Prepare variables for the bilateral filtering
+    Mat outputImage = Mat(inputImage.size(), inputImage.type());
+    Mat bilateralFilterKernel, rangeGaussianKernel, localRegion, laplacianImageRegion, dL, da, db;
+	double bilateralFilterNorm;
     int iMin, iMax, jMin, jMax;
-    std::vector<Mat> channels(3), LaplacianChannels(3);
+    Range xRange, yRange;
 	Vec3f pixel;
-	double normBF;
+    std::vector<Mat> channels(3), laplacianChannels(3);
 
-    // Set the parallelization pragma
+    // Set the parallelization pragma for OpenMP
     #pragma omp parallel for\
-    private(localRegion, iMin, iMax, jMin, jMax, pixel, channels, LaplacianChannels, dL, da, db, rangeGaussianKernel, BilateralFilterKernel, normBF, LaplacianImageRegion)\
-	shared(originalImage, USMFilteredImage, BFImage, spatialGaussianKernel, windowSize, spatialSigma, rangeSigma)
-    for(int i = 0; i < originalImage.rows; i++){
-        for(int j = 0; j < originalImage.cols; j++){
+    private(iMin, iMax, jMin, jMax,\
+            xRange, yRange,\
+            localRegion,\
+            pixel,\
+            channels, dL, da, db,\
+            rangeGaussianKernel, bilateralFilterKernel,\
+            bilateralFilterNorm,\
+            laplacianImageRegion, laplacianChannels)\
+	shared( inputImage,\
+            windowSize, \
+            spatialSigma,\
+            rangeSigma,\
+            laplacianFilteredImage,\
+            outputImage)
+    for(int i = 0; i < inputImage.rows; i++){
+        for(int j = 0; j < inputImage.cols; j++){
             // Extract local region based on the window size
-            iMin = max(i - windowSize, 0);
-            iMax = min(i + windowSize, originalImage.rows-1);
-            jMin = max(j - windowSize, 0);
-            jMax = min(j + windowSize, originalImage.cols-1);
-            localRegion = originalImage(Range(iMin, iMax), Range(jMin, jMax));
-            
+            iMin = max(i - windowSize, i);
+            iMax = min(i + windowSize, inputImage.rows);
+            jMin = max(j - windowSize, j);
+            jMax = min(j + windowSize, inputImage.cols);
+
+            xRange = Range(iMin, iMax);
+            yRange = Range(jMin, jMax);
+
+            if(xRange.size() != windowSize || yRange.size() != windowSize) break;
+            else localRegion = inputImage(xRange, yRange);
+
             /**
-            * Compute a Gaussian kernel with the range values (pixel intensities) of the image channels
-            * \f$ G_{\text range}(U, m, p) = \exp\left(-\frac{U(X)^2 - U(Y)^2}{2{\sigma_r^2}}\right) \f$
-            * where \f$ U(m) \f$ is the image region of image U.
-            * In this case a pair of \f$ X_{\text channel} \f$ and \f$ Y_{\text channel} \f$ is computed for each
-            * CIELab channel
+            * Compute a range Gaussian kernel \f$ G_{\text{range}}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
+            * with the range values (pixel intensities) from an image region \f$ \Omega \in U \f$.
+            * The range kernel uses the \f$ m_i \in \Omega \f$ pixels intensities as weighting values for the pixel \f$ p = (x, y) \f$ instead of their
+            * locations as in the spatial kernel computation. In this case a the image \f$ U \f$ is separated into the three CIELab channels and each 
+            * channel is processed as an individual image \f$ U_{\text{channel}} \f$
             */
-            pixel = originalImage.at<Vec3f>(i, j);
             split(localRegion, channels);
+            pixel = inputImage.at<Vec3f>(i, j);
             pow(channels[L] - pixel.val[L], 2, dL);
             pow(channels[a] - pixel.val[a], 2, da);
             pow(channels[b] - pixel.val[b], 2, db);
             exp((dL + da + db) / (-2 * rangeVariance), rangeGaussianKernel);
+            rangeGaussianKernel *= 1 / (2 * CV_PI * rangeVariance);
             
             /**
-            * Apply the bilateral filter kernel
-            * \f$ \varphi_{\text BF}(U, m, p) = \sum_{m \in \Omega} G_{\text spatial}(m, p) \, G_{\text range}(U, m, p) \f$
-            * where \f$ \Omega \f$ is the selected window
+            * Convolute the spatial and range gaussian kernels to obtain the bilateral filter kernel
+            * \f$ \phi_{\text{BF}}(U, m, p) = G_{\text{spatial}}(|| m-p ||) \, G_{\text{range}}(|| U(m)-U(p) ||) \f$
+            *
             */
-            BilateralFilterKernel = rangeGaussianKernel.mul(spatialGaussianKernel(
-            Range((iMin-i)+windowSize, iMax-i+windowSize),
-            Range((jMin-j)+windowSize, (jMax-j)+windowSize))
-            );
-
+            bilateralFilterKernel = spatialGaussianKernel.mul(rangeGaussianKernel);
+            
             /**
-            * Calculate the Bilateral filter norm
-            * \f$ \frac{1}{\varphi_{\text BF}} \f$
+            * Calculate the Bilateral filter's norm
+            * \f$ \left( \sum_{m \in \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \f$
             */
-            normBF = sum(BilateralFilterKernel).val[0];
+            bilateralFilterNorm = sum(bilateralFilterKernel).val[0];
 
-            /** The Laplacian deceive consists on weighting the Bilateral Filter kernel with the
-            * original image values, but the image that is used in the filter is the Laplacian image (previously USM filtered)
-            * \f$ Y_{\varphi_{\text BF}}(p) = \sum_{m \in \Omega} \varphi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \f$ 
+            /** 
+             * Apply the bilateral filter kernel to the laplacian image. The Laplacian deceive consists on weighting the Bilateral Filter kernel with the
+            * original image and use the USM image as input for the filter
+            * \f$ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \in \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1}
+            * \left( \sum_{m \in \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
-            LaplacianImageRegion = USMFilteredImage(Range(iMin, iMax), Range(jMin, jMax));
-            split(LaplacianImageRegion, LaplacianChannels);
-            BFImage.at<Vec3f>(i,j)[L] = (1/normBF) * sum(BilateralFilterKernel.mul(LaplacianChannels[L])).val[0];
-            BFImage.at<Vec3f>(i,j)[a] = (1/normBF) * sum(BilateralFilterKernel.mul(LaplacianChannels[a])).val[0];
-            BFImage.at<Vec3f>(i,j)[b] = (1/normBF) * sum(BilateralFilterKernel.mul(LaplacianChannels[b])).val[0];
+            laplacianImageRegion = laplacianFilteredImage(xRange, yRange);
+            split(laplacianImageRegion, laplacianChannels);
+            outputImage.at<Vec3f>(i,j)[L] = (1/bilateralFilterNorm) * sum(bilateralFilterKernel.mul(laplacianChannels[L])).val[0];
+            outputImage.at<Vec3f>(i,j)[a] = (1/bilateralFilterNorm) * sum(bilateralFilterKernel.mul(laplacianChannels[a])).val[0];
+            outputImage.at<Vec3f>(i,j)[b] = (1/bilateralFilterNorm) * sum(bilateralFilterKernel.mul(laplacianChannels[b])).val[0];
         }
     }
 
-    return BFImage;
+    return outputImage;
 }
+
+/**
+ * @brief Applies a regular non adaptive UnSharp mask (USM) with a Laplacian of Gaussian kernel
+ * \f$ \hat{f}_{\text USM} = U + \lambda \, \mathcal{L} \text{ where } \mathcal{L} = l \, g\f$. 
+ * Here \f$ g \f$ is a Gaussian kernel and \f$ l \f$ a Laplacian kernel, hence the name "Laplacian of Gaussian"
+ * @param inputImage Image to apply the mask
+ * @return Filtered image
+ * 
+ */
+Mat DeWAFF::NonAdaptiveUSMFilter(const Mat &inputImage){
+	// Generate the Laplacian kernel
+	Mat laplacianKernel = -1 * DeWAFF::LaplacianKernel();
+    
+	// Create a new image with the size and type of the input image
+	Mat laplacianImage(inputImage.size(), inputImage.type());
+
+	// Apply the Laplacian filter
+	Point anchor(-1, -1);
+	double delta = 0.0;
+	int ddepth = -1;
+	filter2D(inputImage, laplacianImage, ddepth, laplacianKernel, anchor, delta, BORDER_DEFAULT);
+
+	// Normalize the Laplacian filtered image
+	double minL, maxL;
+	Tools::getMinMax(abs(laplacianImage), &minL, &maxL);
+	double minI, maxI;
+	Tools::getMinMax(inputImage, &minI, &maxI);
+	laplacianImage = maxI * (laplacianImage / maxL);
+
+	return (inputImage + lambda * laplacianImage);
+}
+
+/**
+ * @brief Creates a Laplacian of Gaussian kernel. Same as fspecial('log',..) in Matlab.
+ * Calculates the Laplacian of the Gaussian kernel
+ * \f$ LoG_{\text kernel} = - \frac{\exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) - \frac{X^2 + Y^2}{2 \pi \sigma^2} \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right)}{\pi \sigma^4} \f$
+ * which reduces to 
+ * \f$ LoG_{\text kernel} = - \frac{1}{\pi \sigma^4} \left[ 1 - \frac{X^2 + Y^2}{2 \sigma^2} \right] \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \f$
+ *
+ * @return Laplacian of Gaussian kernel matrix
+ * 
+ */
+Mat1f DeWAFF::LaplacianKernel(){
+    // Calculate the laplacian kernel
+	Mat1f laplacianKernel = (-1 / (CV_PI * pow(spatialVariance, 2))) * (exponentialFactor - gaussianKernel.mul(XY));
+
+	// Scale the kernel so it sums to zero (High pass behavior of the derivative)
+    double deltaFactor = sum(laplacianKernel).val[0] / pow(windowSize, 2);
+	laplacianKernel = laplacianKernel - deltaFactor;
+
+	return laplacianKernel;
+};
+
+/**
+ * @brief Calculates the Gaussian kernel \f$ G_{\text kernel} = \frac{1}{2 \pi \sigma^2} \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \f$
+ * @return Mat1f 
+ * 
+ */
+Mat1f DeWAFF::GaussianKernel(){
+    // Calculate the kernel
+	Mat1f gaussianKernel = (1 / (2 * CV_PI * spatialVariance)) * exponentialFactor;
+
+	// Normalize the kernel
+	gaussianKernel /= sum(gaussianKernel).val[0];
+
+    return gaussianKernel;
+};
+
+/**
+ * @brief Calculate the exponential factor for the Gaussian kernel
+ * \f$ e_{\text{Gaussian}} = \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \f$
+ * @return Mat1f
+ * 
+ */
+Mat1f DeWAFF::GaussianExponentialFactor(){
+    Mat1f exponentialFactor, x, y, xy;
+	pow(X, 2, x);
+	pow(Y, 2, y);
+	xy = x + y;
+	exp(xy * (-1 / (2 * spatialVariance)), exponentialFactor);
+
+    return exponentialFactor;
+};

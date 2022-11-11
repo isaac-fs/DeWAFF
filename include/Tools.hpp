@@ -26,7 +26,7 @@ using namespace cv;
  */
 class Tools {
 public:
-	static void meshGrid(const Range &xgv, const Range &ygv, Mat &X, Mat &Y);
+	static void meshGrid(const Range &range, Mat &X, Mat &Y);
 	static void getMinMax(const Mat& A, double* minA, double* maxA);
 };
 

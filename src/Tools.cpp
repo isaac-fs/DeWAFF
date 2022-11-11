@@ -3,34 +3,35 @@
 /**
  * @brief Generate a meshgrid from X and Y unidimensional coordinates
  * Example:
- * xRange = [0,1,2] and yRange = [0,1,2] will return the following X and Y coordinates
+ * xRange = [0,3[ and yRange = [0,3[ will return the following X and Y coordinates
  * 
  * X = \n
- * 		[0, 1, 2; \n
- * 		 0, 1, 2; \n
- * 		 0, 1, 2] \n
+ * 		[0, 0, 0;	\n
+ *		 1, 1, 1;	\n
+ *		 2, 2, 2]	\n
  * 
  * Y = \n
- * 		[0, 0, 0; \n
- * 		 1, 1, 1; \n
- * 		 2, 2, 2] \n
+ * 		[0, 1, 2;	\n
+ *		 0, 1, 2;	\n
+ *		 0, 1, 2]	\n
+ * 					\n
+ * Wich would form the following mesh grid
  * 
- * Wich forms the mesh grid
- * 
- * XY = \n
- * 		[(0,0) (1,0), (2,0); \n
+ * (X,Y) = \n
+ * 		[(0,0) (0,1), (0,2); \n
  * 		 (0,1) (1,1), (2,1); \n
- * 		 (0,2) (1,2), (2,2)]
+ * 		 (2,0) (2,1), (2,2)]
+ * 
+ * @param xRange X OpenCV Range variable
+ * @param yRange Y OpenCV Range variable
+ * @param X x axis values matrix
+ * @param Y y axis values matrix
  */
-void Tools::meshGrid(const Range &xRange, const Range &yRange, Mat &X, Mat &Y){
-	std::vector<int> xVector, yVector;
-	for (int i = xRange.start; i <= xRange.end; i++)
-		xVector.push_back(i);
-	for (int i = yRange.start; i <= yRange.end; i++)
-		yVector.push_back(i);
-
-	repeat(Mat(xVector).reshape(1,1), yRange.size()+1, 1, X);
-	repeat(Mat(yVector).reshape(1,1).t(), 1, xRange.size()+1, Y);
+void Tools::meshGrid(const Range &range, Mat &X, Mat &Y){
+	std::vector<int> x;
+	for (int i = range.start; i < range.end; i++) x.push_back(i);
+	repeat(Mat(x).reshape(1,1), range.size(), 1, X);
+	Y = X.t();
 }
 
 /**

@@ -1,6 +1,34 @@
 #include "FileProcessor.hpp"
 
 /**
+ * @brief Process a frame from an image or a video. Input frame must be BGR from 0 to 255
+ * @param inputFrame Input frame
+ * @return Processed frame
+ */
+Mat FileProcessor::processFrame(const Mat &inputFrame){
+    // Input checking
+    int type = inputFrame.type();
+	double minVal, maxVal;
+	Tools::getMinMax(inputFrame, &minVal, &maxVal);
+	if (!(type == CV_8UC1 || type == CV_8UC3) || minVal < 0 || maxVal > 255)
+	   errorExit("Input frame must be a Grayscale or RGB unsigned integer matrix of size NxMx1 or NxMx3 on the closed interval [0,255].");
+
+    // Converto to CIELab color space
+	Mat outputFrame;
+    inputFrame.convertTo(outputFrame, CV_32F, 1.0/255.0); // The image has to to have values from 0 to 1 before convertion to CIELab
+	cvtColor(outputFrame, outputFrame, cv::COLOR_BGR2Lab); // Convert normalized BGR image to CIELab color space.
+	
+	// Process image
+	outputFrame = DeWAFF::DeceivedBilateralFilter(outputFrame);
+
+	// Convert filtered image back to BGR color space.
+	cvtColor(outputFrame, outputFrame, cv::COLOR_Lab2BGR);
+    outputFrame.convertTo(outputFrame, CV_8U, 255); // Scale back to [0,255] range
+	
+    return outputFrame;
+}
+
+/**
  * @brief Process an image file
  * @return return status
  */
@@ -35,7 +63,7 @@ int FileProcessor::processImage(){
 		errorExit("ERROR: Could not open the output file for write: " + outputFileName);
 
 	// Display the results (For continuous testing)
-	// displayImage(inputFrame, outputFrame);
+	displayResults(inputFrame, outputFrame);
 
 	return 0;
 }
@@ -123,46 +151,12 @@ int FileProcessor::processVideo(){
 }
 
 /**
- * @brief Process a frame from an image or a video. Input frame must be BGR from 0 to 255
- * @param inputFrame Input frame
- * @return Processed frame
- */
-Mat FileProcessor::processFrame(const Mat &inputFrame){
-    // Input checking
-    int type = inputFrame.type();
-	double minVal, maxVal;
-	Tools::getMinMax(inputFrame, &minVal, &maxVal);
-	if (!(type == CV_8UC1 || type == CV_8UC3) || minVal < 0 || maxVal > 255)
-	   errorExit("Input frame must be a Grayscale or RGB unsigned integer matrix of size NxMx1 or NxMx3 on the closed interval [0,255].");
-
-    // Converto to CIELab color space
-	Mat outputFrame;
-    inputFrame.convertTo(outputFrame, CV_32F, 1.0/255.0); // The image has to to have values from 0 to 1 before convertion to CIELab
-	cvtColor(outputFrame, outputFrame, cv::COLOR_BGR2Lab); // Convert normalized BGR image to CIELab color space.
-
-	// Set parameters for processing
-    int windowSize = 15;
-    double spatialSigma = windowSize/1.5;
-    int rangeSigma = 10;
-	
-	// Process image
-	DeWAFF DeWAFF(outputFrame);
-	outputFrame = DeWAFF.DeceivedBilateralFilter(windowSize, spatialSigma, rangeSigma);
-
-	// Convert filtered image back to BGR color space.
-	cvtColor(outputFrame, outputFrame, cv::COLOR_Lab2BGR);
-    outputFrame.convertTo(outputFrame, CV_8U, 255); // Scale back to [0,255] range
-	
-    return outputFrame;
-}
-
-/**
  * @brief Display the original image and the resulting image side by side. Used for continuous testing
  * 
  * @param input original image
  * @param output resulting image
  */
-void FileProcessor::displayImage(const Mat &input, const Mat &output){
+void FileProcessor::displayResults(const Mat &input, const Mat &output){
 	// Load the image into a matrix
 	Mat image;
     hconcat(input, output, image);

@@ -2,6 +2,7 @@
 
 /**
  * @brief Starts timer and resets the elapsed time
+ * 
  */
 void Timer::start(){
 	struct timeval timeOfDay;

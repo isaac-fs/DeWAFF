@@ -1,8 +1,8 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
-#include "ProgramInterface.hpp"
+#include "CLI.hpp"
 
 int main(int argc, char** argv) {
-    ProgramInterface Interface(argc,argv);
-    return Interface.run();
+    CLI interface(argc, argv);
+    return interface.run();
 }
