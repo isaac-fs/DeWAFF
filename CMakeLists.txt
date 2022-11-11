@@ -7,9 +7,8 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include") 
 add_executable(DeWAFF   src/main.cpp
                         src/DeWAFF.cpp
-                        src/NonAdaptiveUSM.cpp
-                        src/ProgramInterface.cpp
                         src/FileProcessor.cpp
+                        src/CLI.cpp
                         src/Timer.cpp
                         src/Tools.cpp)
 target_link_libraries(DeWAFF ${OpenCV_LIBS})
