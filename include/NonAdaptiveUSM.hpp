@@ -20,7 +20,7 @@
 using namespace cv;
 
 /**
- * @brief Filters an image with a non adaptive UnSharp Mask
+ * @brief Filters an image with a non adaptive UnSharp Mask.
  * For the kernel it uses a Laplacian kernel (a.k.a Laplacian of Gaussian kernel)
  */
 class NonAdaptiveUSM {

@@ -34,11 +34,11 @@ void Tools::meshGrid(const Range &xRange, const Range &yRange, Mat &X, Mat &Y){
 }
 
 /**
- * @brief Gets the global min and max values of a 3 channel Mat
+ * @brief Gets the global min and max values of a 3 channel Matrix
  * 
  * @param A Input matrix
- * @param minA Minimun value of the A matrix
- * @param maxA Maximun value of the A matrix
+ * @param minA Minimun value of the matrix A
+ * @param maxA Maximun value of the matrix A
  */
 void Tools::getMinMax(const Mat& A, double* minA, double* maxA){
 	double minT, maxT;
