@@ -13,7 +13,9 @@
 #define DEWAFF_H_
 
 #include <omp.h>
-#include "NonAdaptiveUSM.hpp"
+#include "opencv2/core/core.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2/highgui/highgui.hpp"
 #include "Tools.hpp"
 
 using namespace cv;
@@ -22,15 +24,30 @@ using namespace cv;
  * @brief Deceived Weighted Averaged Filter Framework class.
  * It applies filter using the deceived weighted averaged values of an image
  */
-class DeWAFF{
+class DeWAFF {
 	private:
 		enum CIELab : int {L, a, b}; // CIELab channels
+		Mat inputImage; // Original input
+		int windowSize;
+		Range range;
 		int lambda; // lambda value for the USM
-		const Mat &originalImage; // Reference to the image to process
-		Mat USMFilteredImage; // Laplacian of Gaussian filtered image
+		double spatialSigma;
+    	double spatialVariance;
+    	int rangeSigma;
+    	int rangeVariance;
+		Mat1f exponentialFactor;
+		Mat1f gaussianKernel;
+		Mat1f X, Y, XY;
+		Mat laplacianFilteredImage; // Laplacian of Gaussian filtered image
+
+		Mat NonAdaptiveUSMFilter(const Mat &image);
+		Mat1f LaplacianKernel();
+		Mat1f GaussianKernel();
+		Mat1f GaussianExponentialFactor();
+
 	public:
-		DeWAFF(const Mat &image);
-		Mat DeceivedBilateralFilter(int windowSize, double spatialSigma, int rangeSigma);
+		DeWAFF();
+		Mat DeceivedBilateralFilter(const Mat &image);
 };
 
 #endif /* DEWAFF_H_ */

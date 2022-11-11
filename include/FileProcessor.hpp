@@ -11,14 +11,14 @@
 #ifndef FILE_PROCESSOR_HPP_
 #define FILE_PROCESSOR_HPP_
 
-#include "DeWAFF.hpp"
 #include "Timer.hpp"
+#include "DeWAFF.hpp"
 
 /**
  * @brief Class in charge of al the file processing, may it be a an image or a video.
  * This class also allows for benchmarking of the processing
  */
-class FileProcessor {
+class FileProcessor : public DeWAFF {
     protected:
         std::string inputFileName;
         std::string outputFileName;
@@ -31,8 +31,8 @@ class FileProcessor {
 
     private:
         Timer timer;
-        Mat processFrame(const Mat & frame);
-        void displayImage(const Mat &input, const Mat &output);
+        Mat processFrame(const Mat &frame);
+        void displayResults(const Mat &input, const Mat &output);
 };
 
 #endif /* FILE_PROCESSOR_HPP_ */
