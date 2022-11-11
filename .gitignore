@@ -47,3 +47,6 @@ doxygen/latex/*
 
 # Binary
 DeWAFF
+
+# Testing files
+vid/*
