@@ -31,16 +31,14 @@ class DeWAFF {
 		int windowSize;
 		Range range;
 		int lambda; // lambda value for the USM
-		double spatialSigma;
-    	double spatialVariance;
-    	int rangeSigma;
-    	int rangeVariance;
+		int spatialSigma, spatialVariance;
+    	int rangeSigma, rangeVariance;
 		Mat1f exponentialFactor;
 		Mat1f gaussianKernel;
-		Mat1f X, Y, XY;
+		Mat1f X, Y, XX, YY;
 		Mat laplacianFilteredImage; // Laplacian of Gaussian filtered image
 
-		Mat NonAdaptiveUSMFilter(const Mat &image);
+		Mat LaplacianFilter(const Mat &image);
 		Mat1f LaplacianKernel();
 		Mat1f GaussianKernel();
 		Mat1f GaussianExponentialFactor();

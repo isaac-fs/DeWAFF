@@ -6,11 +6,23 @@
  * 
  */
 DeWAFF::DeWAFF(){
-    // Initial values. These are the three main parameters for the DeWAFF
+    // Initial values. These are the main parameters for the DeWAFF
     this->windowSize = 14;
-    this->spatialSigma = windowSize/1.5;
-    this->rangeSigma = 15;
+     // Check the windows size
+    if (windowSize < 3) {
+        std::cout
+        << "Window size must be greater than 3!"
+        << std::endl
+        << "Check the window size in the DeWAFF constructor"
+        << std::endl;
+        exit(-1);
+    }
+
+     // Set processing values
     this->lambda = 2; // Lambda value for the USM
+    this->spatialSigma = windowSize/1.5;
+    this->rangeSigma = 10;
+
 
     // Variance calculations
     this->spatialVariance = pow(spatialSigma, 2);
@@ -19,9 +31,10 @@ DeWAFF::DeWAFF(){
     // Pre computation of meshgrid values
     this->range = Range(-(windowSize/2), (windowSize/2) + windowSize%2);
     Tools::meshGrid(range, this->X, this->Y);
-    this->XY = X + Y;
 
     // Pre computation of the range (intensity) independant gaussian kernel values
+    pow(this->X, 2, this->XX);
+	pow(this->Y, 2, this->YY);
     this->exponentialFactor = GaussianExponentialFactor();
     this->gaussianKernel = GaussianKernel();
 };
@@ -35,7 +48,7 @@ DeWAFF::DeWAFF(){
 Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage){
     // Pre-process the laplacian masked image
     this->inputImage = inputImage;
-    laplacianFilteredImage = NonAdaptiveUSMFilter(inputImage);
+    laplacianFilteredImage = LaplacianFilter(inputImage);
 
     /**
     * Compute a spatial Gaussian kernel \f$ G_{\text{spatial}}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \f$ 
@@ -71,18 +84,22 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage){
             laplacianFilteredImage,\
             outputImage)
     for(int i = 0; i < inputImage.rows; i++){
+        iMin = max(i - windowSize, i);
+        iMax = min(i + windowSize, inputImage.rows);
+        xRange = Range(iMin, iMax);
+
         for(int j = 0; j < inputImage.cols; j++){
-            // Extract local region based on the window size
-            iMin = max(i - windowSize, i);
-            iMax = min(i + windowSize, inputImage.rows);
             jMin = max(j - windowSize, j);
             jMax = min(j + windowSize, inputImage.cols);
-
-            xRange = Range(iMin, iMax);
             yRange = Range(jMin, jMax);
 
-            if(xRange.size() != windowSize || yRange.size() != windowSize) break;
-            else localRegion = inputImage(xRange, yRange);
+            // Extract local region based on the window size
+            localRegion = inputImage(xRange, yRange);
+
+            // Add padding to the region to fit the convolution if necessary
+            if(localRegion.size() != spatialGaussianKernel.size())
+                Tools::addPadding(localRegion, spatialGaussianKernel.rows, spatialGaussianKernel.cols);
+ 
 
             /**
             * Compute a range Gaussian kernel \f$ G_{\text{range}}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
@@ -119,6 +136,9 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage){
             * \left( \sum_{m \in \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
             laplacianImageRegion = laplacianFilteredImage(xRange, yRange);
+            if(laplacianImageRegion.size() != localRegion.size())
+                Tools::addPadding(laplacianImageRegion, localRegion.rows, localRegion.cols);
+
             split(laplacianImageRegion, laplacianChannels);
             outputImage.at<Vec3f>(i,j)[L] = (1/bilateralFilterNorm) * sum(bilateralFilterKernel.mul(laplacianChannels[L])).val[0];
             outputImage.at<Vec3f>(i,j)[a] = (1/bilateralFilterNorm) * sum(bilateralFilterKernel.mul(laplacianChannels[a])).val[0];
@@ -131,13 +151,13 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage){
 
 /**
  * @brief Applies a regular non adaptive UnSharp mask (USM) with a Laplacian of Gaussian kernel
- * \f$ \hat{f}_{\text USM} = U + \lambda \, \mathcal{L} \text{ where } \mathcal{L} = l \, g\f$. 
+ * \f$ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \text{ where } \mathcal{L} = l * g\f$. 
  * Here \f$ g \f$ is a Gaussian kernel and \f$ l \f$ a Laplacian kernel, hence the name "Laplacian of Gaussian"
  * @param inputImage Image to apply the mask
  * @return Filtered image
  * 
  */
-Mat DeWAFF::NonAdaptiveUSMFilter(const Mat &inputImage){
+Mat DeWAFF::LaplacianFilter(const Mat &inputImage){
 	// Generate the Laplacian kernel
 	Mat laplacianKernel = -1 * DeWAFF::LaplacianKernel();
     
@@ -172,7 +192,7 @@ Mat DeWAFF::NonAdaptiveUSMFilter(const Mat &inputImage){
  */
 Mat1f DeWAFF::LaplacianKernel(){
     // Calculate the laplacian kernel
-	Mat1f laplacianKernel = (-1 / (CV_PI * pow(spatialVariance, 2))) * (exponentialFactor - gaussianKernel.mul(XY));
+	Mat1f laplacianKernel = (-1 / (CV_PI * pow(spatialVariance, 2))) * (exponentialFactor - gaussianKernel.mul(XX + YY));
 
 	// Scale the kernel so it sums to zero (High pass behavior of the derivative)
     double deltaFactor = sum(laplacianKernel).val[0] / pow(windowSize, 2);
@@ -202,12 +222,9 @@ Mat1f DeWAFF::GaussianKernel(){
  * @return Mat1f
  * 
  */
-Mat1f DeWAFF::GaussianExponentialFactor(){
-    Mat1f exponentialFactor, x, y, xy;
-	pow(X, 2, x);
-	pow(Y, 2, y);
-	xy = x + y;
-	exp(xy * (-1 / (2 * spatialVariance)), exponentialFactor);
+Mat1f DeWAFF::GaussianExponentialFactor() {
+    Mat1f exponentialFactor;
+	exp((XX + YY) * (-1 / (2 * spatialVariance)), exponentialFactor);
 
     return exponentialFactor;
 };
