@@ -5,7 +5,7 @@
  * @param inputFrame Input frame
  * @return Processed frame
  */
-Mat FileProcessor::processFrame(const Mat &inputFrame){
+Mat FileProcessor::processFrame(const Mat &inputFrame) {
     // Input checking
     int type = inputFrame.type();
 	double minVal, maxVal;
@@ -17,14 +17,14 @@ Mat FileProcessor::processFrame(const Mat &inputFrame){
 	Mat outputFrame;
     inputFrame.convertTo(outputFrame, CV_32F, 1.0/255.0); // The image has to to have values from 0 to 1 before convertion to CIELab
 	cvtColor(outputFrame, outputFrame, cv::COLOR_BGR2Lab); // Convert normalized BGR image to CIELab color space.
-	
+
 	// Process image
 	outputFrame = DeWAFF::DeceivedBilateralFilter(outputFrame);
 
 	// Convert filtered image back to BGR color space.
 	cvtColor(outputFrame, outputFrame, cv::COLOR_Lab2BGR);
     outputFrame.convertTo(outputFrame, CV_8U, 255); // Scale back to [0,255] range
-	
+
     return outputFrame;
 }
 
@@ -32,7 +32,7 @@ Mat FileProcessor::processFrame(const Mat &inputFrame){
  * @brief Process an image file
  * @return return status
  */
-int FileProcessor::processImage(){
+int FileProcessor::processImage() {
 	Mat inputFrame = imread(inputFileName);
 	if(inputFrame.empty())
 		errorExit("Could not open the input file for read: " + inputFileName);
@@ -40,9 +40,9 @@ int FileProcessor::processImage(){
 	// Process image
 	std::cout << "Processing image..." << std::endl;
 	Mat outputFrame;
-	if(this->mode & benchmark){ // Benchmark mode?
+	if(this->mode & benchmark) { // Benchmark mode?
 		double elapsedSeconds;
-		for(int i = 1; i <= this->benchmarkIterations; i++){
+		for(int i = 1; i <= this->benchmarkIterations; i++) {
 			std::cout << "Iteration " << i << std::endl;
 			this->timer.start();
 
@@ -69,7 +69,7 @@ int FileProcessor::processImage(){
  * @brief Process a video file
  * @return return status
  */
-int FileProcessor::processVideo(){
+int FileProcessor::processVideo() {
 	// Open input video file
 	VideoCapture inputVideo = VideoCapture(inputFileName);
 	if (!inputVideo.isOpened())
@@ -109,11 +109,11 @@ int FileProcessor::processVideo(){
     std::cout << "Processing video..." << std::endl;
 	Mat inputFrame, outputFrame;
 	double elapsedSeconds = 0.0;
-	if(this->mode & benchmark){ // Benchmark mode?
+	if(this->mode & benchmark) { // Benchmark mode?
 		// Start timer
 		this->timer.start();
 
-		for(int frame = 1; frame <= frameCount; frame++){
+		for(int frame = 1; frame <= frameCount; frame++) {
 			// Read one frame from input video
 			if(!inputVideo.read(inputFrame))
 				errorExit("Could not read current frame from video");
@@ -130,12 +130,12 @@ int FileProcessor::processVideo(){
 			// Stop timer
 			elapsedSeconds += this->timer.stop();
 		}
-		
+
 		// Display the benchmark time
 		std::cout << "Processing time = " << elapsedSeconds << " seconds." << std::endl;\
-		
+
 	} else {
-		for(int frame = 1; frame <= frameCount; frame++){
+		for(int frame = 1; frame <= frameCount; frame++) {
 			// Read one frame from input video
 			if(!inputVideo.read(inputFrame))
 				errorExit("Could not read current frame from video");
@@ -145,7 +145,7 @@ int FileProcessor::processVideo(){
 
 			// Process current frame
 			outputFrame = this->processFrame(inputFrame);
-			
+
 			// Write frame to output video
 			outputVideo.write(outputFrame);
 		}
@@ -162,7 +162,7 @@ int FileProcessor::processVideo(){
  * @brief Display an error message
  * @param msg Error message
  */
-void FileProcessor::errorExit(std::string msg){
+void FileProcessor::errorExit(std::string msg) {
 	std::cerr << "ERROR: " << msg << std::endl;
 	exit(-1);
 }

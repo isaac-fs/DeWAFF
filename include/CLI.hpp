@@ -4,9 +4,9 @@
  * @date 2015-11-05
  * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
  * @date 2022-11-06
- * @brief 
+ * @brief
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #ifndef PROGRAM_INTERFACE_HPP_

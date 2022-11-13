@@ -5,14 +5,14 @@
  * @param argc argument count from the terminal
  * @param argv arguments from the terminal
  */
-CLI::CLI(int argc, char** argv){
+CLI::CLI(int argc, char** argv) {
 	this->mode = start;
 	this->benchmarkIterations = 0;
 	this->programName = argv[0];
 
     int c;
-    while ((c = getopt(argc,argv,"hb:i:v:")) != -1){
-		switch(c){
+    while ((c = getopt(argc,argv,"hb:i:v:")) != -1) {
+		switch(c) {
 			case 'i': // Process an image
 				if(this->mode & video) // Check if flag for video enabled
 					this->errorExit("Options -v and -i are mutually exclusive");
@@ -45,7 +45,7 @@ CLI::CLI(int argc, char** argv){
 				abort();
 		}
     }
-	if (argc == 1) 
+	if (argc == 1)
 		this->help();
 	else if((this->mode & benchmark) && argc == 3)
 		this->errorExit("Incomplete command. Use the -h flag to see the options");
@@ -54,7 +54,7 @@ CLI::CLI(int argc, char** argv){
 /**
  * @brief Start program execution
  */
-int CLI::run(){
+int CLI::run() {
 	int success = -1;
 	if(this->mode & image)
 		success = processImage();
@@ -66,7 +66,7 @@ int CLI::run(){
 /**
  * @brief Display program help
  */
-void CLI::help(){
+void CLI::help() {
 	std::cout<< "------------------------------------------------------------------------------" 	<< std::endl
 		<< "Use:"                                                                         			<< std::endl
 		<< this->programName << " -i|-v <input file> [-b [N]]"										<< std::endl

@@ -4,9 +4,9 @@
  * @date 2015-11-05
  * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
  * @date 2022-11-06
- * @brief 
+ * @brief
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #ifndef TOOLS_HPP_
@@ -22,7 +22,7 @@ using namespace cv;
 
 /**
  * @brief Useful tools for the file processing
- * 
+ *
  */
 class Tools {
 public:
