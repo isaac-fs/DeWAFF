@@ -53,3 +53,23 @@ void Tools::getMinMax(const Mat& A, double* minA, double* maxA){
 	*minA = std::min(*minA,minT);
 	*maxA = std::max(*maxA,maxT);
 }
+
+/**
+ * @brief Adds padding to a region of interest or local region. 
+ * Lets say you have a [5x5] kernel, but your RoI to convolute is smaller be it [5x3], [3x5] or [3x3].
+ * This function allows to add padding to the RoI so it fits the convolution. The padding is calculated
+ * with the image that the RoI belongs to
+ * 
+ * @param RoI Region of interest to add padding to 
+ * @param xRangeSize x range size to fit
+ * @param yRangeSize y range size to fit
+ */
+void Tools::addPadding(Mat &RoI, int xRangeSize, int yRangeSize) {
+    if (xRangeSize == yRangeSize)
+        copyMakeBorder(RoI, RoI, 0, xRangeSize - RoI.rows, 0, xRangeSize - RoI.cols, BORDER_REPLICATE);
+    else if(xRangeSize < yRangeSize)
+        copyMakeBorder(RoI, RoI, 0, yRangeSize - xRangeSize, 0, 0, BORDER_REPLICATE);
+    else
+        copyMakeBorder(RoI, RoI, 0, 0, 0, xRangeSize - yRangeSize, BORDER_REPLICATE);
+
+}

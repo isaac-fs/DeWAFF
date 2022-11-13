@@ -28,6 +28,7 @@ class Tools {
 public:
 	static void meshGrid(const Range &range, Mat &X, Mat &Y);
 	static void getMinMax(const Mat& A, double* minA, double* maxA);
+	static void addPadding(Mat &RoI, int xRangeSize, int yRangeSize);
 };
 
 #endif /* TOOLS_HPP_ */
