@@ -11,7 +11,7 @@ Mat FileProcessor::processFrame(const Mat &inputFrame){
 	double minVal, maxVal;
 	Tools::getMinMax(inputFrame, &minVal, &maxVal);
 	if (!(type == CV_8UC1 || type == CV_8UC3) || minVal < 0 || maxVal > 255)
-	   errorExit("Input frame must be a Grayscale or RGB unsigned integer matrix of size NxMx1 or NxMx3 on the closed interval [0,255].");
+	   errorExit("Input frame must be a Grayscale or RGB unsigned integer matrix of size NxMx1 or NxMx3 on the closed interval [0,255]");
 
     // Converto to CIELab color space
 	Mat outputFrame;
@@ -35,14 +35,14 @@ Mat FileProcessor::processFrame(const Mat &inputFrame){
 int FileProcessor::processImage(){
 	Mat inputFrame = imread(inputFileName);
 	if(inputFrame.empty())
-		errorExit("ERROR: Could not open the input file for read: " + inputFileName);
+		errorExit("Could not open the input file for read: " + inputFileName);
 
 	// Process image
 	std::cout << "Processing image..." << std::endl;
 	Mat outputFrame;
 	if(this->mode & benchmark){ // Benchmark mode?
 		double elapsedSeconds;
-		for(int i = 1; i <= this->numIter; i++){
+		for(int i = 1; i <= this->benchmarkIterations; i++){
 			std::cout << "Iteration " << i << std::endl;
 			this->timer.start();
 
@@ -60,10 +60,7 @@ int FileProcessor::processImage(){
 	this->outputFileName = this->inputFileName.substr(0, pAt) + "_DeWAFF.jpg";
 
 	if(!imwrite(outputFileName, outputFrame))
-		errorExit("ERROR: Could not open the output file for write: " + outputFileName);
-
-	// Display the results (For continuous testing)
-	displayResults(inputFrame, outputFrame);
+		errorExit("Could not open the output file for write: " + outputFileName);
 
 	return 0;
 }
@@ -76,9 +73,9 @@ int FileProcessor::processVideo(){
 	// Open input video file
 	VideoCapture inputVideo = VideoCapture(inputFileName);
 	if (!inputVideo.isOpened())
-		errorExit("ERROR: Could not open the input video for read: " + inputFileName);
+		errorExit("Could not open the input video for read: " + inputFileName);
 
-    // Acquire input video information: 
+    // Acquire input video information
 	int frameRate = static_cast<int>(inputVideo.get(cv::CAP_PROP_FPS));
     int frameCount = static_cast<int>(inputVideo.get(cv::CAP_PROP_FRAME_COUNT));
     int codec = static_cast<int>(inputVideo.get(cv::CAP_PROP_FOURCC));
@@ -107,37 +104,48 @@ int FileProcessor::processVideo(){
 	// Open output video
 	VideoWriter outputVideo(outputFileName, codec, frameRate , videoSize, true);
     if (!outputVideo.isOpened())
-        errorExit("ERROR: Could not open the output video for write: " + outputFileName);
+        errorExit("Could not open the output video for write: " + outputFileName);
 
     std::cout << "Processing video..." << std::endl;
 	Mat inputFrame, outputFrame;
 	double elapsedSeconds = 0.0;
 	if(this->mode & benchmark){ // Benchmark mode?
+		// Start timer
+		this->timer.start();
+
 		for(int frame = 1; frame <= frameCount; frame++){
 			// Read one frame from input video
-			if(!inputVideo.read(inputFrame)){
-				std::cerr << "ERROR: Could not read current frame from video, skipping." << std::endl;
-				break;
-			}
-			this->timer.start();
+			if(!inputVideo.read(inputFrame))
+				errorExit("Could not read current frame from video");
+
+			// Display current frame number
+			std::cout << "Processing frame " << frame << " out of " << frameCount << std::endl;
 
 			// Process current frame
 			outputFrame = this->processFrame(inputFrame);
+
 			// Write frame to output video
 			outputVideo.write(outputFrame);
 
+			// Stop timer
 			elapsedSeconds += this->timer.stop();
 		}
-		std::cout << "Processing time = " << elapsedSeconds << " seconds." << std::endl;
+		
+		// Display the benchmark time
+		std::cout << "Processing time = " << elapsedSeconds << " seconds." << std::endl;\
+		
 	} else {
 		for(int frame = 1; frame <= frameCount; frame++){
 			// Read one frame from input video
-			if(!inputVideo.read(inputFrame)){
-				std::cerr << "ERROR: Could not read current frame from video, skipping." << std::endl;
-				break;
-			}
+			if(!inputVideo.read(inputFrame))
+				errorExit("Could not read current frame from video");
+
+			// Display current frame number
+			std::cout << "Processing frame " << frame << " out of " << frameCount << std::endl;
+
 			// Process current frame
 			outputFrame = this->processFrame(inputFrame);
+			
 			// Write frame to output video
 			outputVideo.write(outputFrame);
 		}
@@ -151,29 +159,10 @@ int FileProcessor::processVideo(){
 }
 
 /**
- * @brief Display the original image and the resulting image side by side. Used for continuous testing
- * 
- * @param input original image
- * @param output resulting image
- */
-void FileProcessor::displayResults(const Mat &input, const Mat &output){
-	// Load the image into a matrix
-	Mat image;
-    hconcat(input, output, image);
-
-    // Display the image
-    namedWindow("DeWAFF result", WINDOW_AUTOSIZE);
-    imshow("DeWAFF result", image);
-
-    // Wait for an user interruption to quit
-    waitKey(0);
-}
-
-/**
  * @brief Display an error message
  * @param msg Error message
  */
 void FileProcessor::errorExit(std::string msg){
-	std::cerr << "Error: " << msg << std::endl;
+	std::cerr << "ERROR: " << msg << std::endl;
 	exit(-1);
 }
