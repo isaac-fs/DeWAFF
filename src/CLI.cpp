@@ -7,7 +7,7 @@
  */
 CLI::CLI(int argc, char** argv){
 	this->mode = start;
-	this->numIter = 0;
+	this->benchmarkIterations = 0;
 	this->programName = argv[0];
 
     int c;
@@ -16,7 +16,7 @@ CLI::CLI(int argc, char** argv){
 			case 'i': // Process an image
 				if(this->mode & video) // Check if flag for video enabled
 					this->errorExit("Options -v and -i are mutually exclusive");
-				if(this->mode & benchmark && this->numIter <= 0)
+				if(this->mode & benchmark && this->benchmarkIterations <= 0)
 						this->errorExit("Number of benchmark iterations for "
 								"image mode has to be greater than 1");
 				this->mode |= image;
@@ -31,7 +31,7 @@ CLI::CLI(int argc, char** argv){
 			case 'b': // Enable benchmark mode
 				this->mode |= benchmark;
 				if(optarg)
-					this->numIter = atoi(optarg);
+					this->benchmarkIterations = atoi(optarg);
 				break;
 			case 'h':
 				this->help();
