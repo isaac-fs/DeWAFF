@@ -55,7 +55,6 @@ Las clases implementadas y/o adaptadas y sus métodos son las siguientes:
     - processVideo
     - processFrame
     - errorExit
-    - displayResults
 - CLI
     - run
     - help
