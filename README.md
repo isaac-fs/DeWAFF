@@ -73,10 +73,10 @@ Se deben introducir los siguientes comandos
     cd doxygen/
     doxygen Doxyfile
 ```
-Después se debe abrir el enlace símbolico en el directorio raíz `DeWAFF-B52786/` del proyecto llamado `index.html`. Esto abrirá en su navegador la documentacion del proyecto.
+Después se debe abrir el enlace símbolico en el directorio raíz `DeWAFF-B52786/` del proyecto llamado `index.html`. Esto abrirá en su navegador la documentacion del proyecto. Doxygen debe estar instalado previamente.
 
 ## Compilación del proyecto
-La compliación de este proyecto se realiza de manera automatizada con `cmake` y `make`. Para crear un ejecutable debe seguir los siguientes pasos en el directorio raíz `DeWAFF-B52786/`
+La compliación de este proyecto se realiza de manera automatizada con `cmake` y `make`. Para crear un ejecutable debe seguir los siguientes pasos en el directorio raíz `DeWAFF-B52786/`. Todas las dependencias de `OpenCV` deben estar instaladas previamente.
 ```bash
     cmake .
     cmake --build .
