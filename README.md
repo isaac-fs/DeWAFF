@@ -17,7 +17,7 @@ Repositorio dedicado a avances del proyecto elétctrico.<br>
     - [Procesar vídeo](#procesar-vídeo)
     - [Procesar vídeo y hacer benchmark](#procesar-vídeo-y-hacer-benchmark)
   - [Idea inicial de implementación](#idea-inicial-de-implementación)
-  - [Clase DEWAFF](#clase-dewaff)
+    - [Clase DEWAFF](#clase-dewaff)
     - [Métodos](#métodos)
     - [Funciones](#funciones)
     - [Pruebas](#pruebas)
@@ -116,7 +116,7 @@ A los vídeos se les agrega la extensión `.avi` y las imágenes la extensión `
 La idea original era crear desde cero una implementación de DeWAFF. Más adelante se esperaba partir de una implementación del algoritmo en Matlab, lamentablemente esta se perdió, por lo que se comenzó a implementar el framework desde cero. A medio camino se dio con una implementación de código abierto. Se hizo un fork de esta y se comenzó a trabajar con esto como nueva base. A pesar de tener ciertas inconsistencias tenía las bases necesarias y una implementación del filtro bilateral funcional.
 
 A continuación se muestran las ideas originales del proyecto, las cuales terminaron siendo consistentes con la implementación actual.
-## Clase DEWAFF
+### Clase DEWAFF
 La clase DEWAFF debe contar con un constructor que inicialice los valores necesarios para iniciar el filtrado de una imagen.
 
 ### Métodos
