@@ -5,12 +5,14 @@
  * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
  * @date 2022-11-06
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #ifndef FILE_PROCESSOR_HPP_
 #define FILE_PROCESSOR_HPP_
 
+#include <cstdio>
+#include <iomanip>
 #include "Timer.hpp"
 #include "DeWAFF.hpp"
 
