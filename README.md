@@ -110,7 +110,7 @@ Para correr el programa use el siguiente comando en el directorio raíz `DeWAFF-
 
 El resultado se generará en la `ruta del archivo` escogido y se le agregará el sufijo DeWAFF de forma que el resultado se mostrará de la forma `<nombre_del_archivo>_DeWAFF.<ext>`. En el directorio raíz se encuentran un par de ejemplos en el directorio `img/`.
 
-A los vídeos se les agrega la extensión `.avi` y las imágenes la extensión `.jpg` por defecto.
+A los vídeos se les agrega la extensión `.avi` y las imágenes la extensión `.png` por defecto.
 
 ## Idea inicial de implementación
 La idea original era crear desde cero una implementación de DeWAFF. Más adelante se esperaba partir de una implementación del algoritmo en Matlab, lamentablemente esta se perdió, por lo que se comenzó a implementar el framework desde cero. A medio camino se dio con una implementación de código abierto. Se hizo un fork de esta y se comenzó a trabajar con esto como nueva base. A pesar de tener ciertas inconsistencias tenía las bases necesarias y una implementación del filtro bilateral funcional.
@@ -130,6 +130,6 @@ La clase DEWAFF debe contar con métodos que realicen los siguientes pasos:
 Se debe implementar una función por cada tipo de operación que el framework implemente. Por ejemplo, se deben implementar los filtros y las funciones que estos requieran.
 
 ### Pruebas
-Con imágenes de formato FHD o HD se debe probar cada configuración del framework para asegurar el correcto funcionamiento del mismo. Se pretende usar imágenes en estas resoluciones para evaluar los tiempos de funcionamiento del framework y verificar visualmente los resultados. 
+Con imágenes de formato FHD o HD se debe probar cada configuración del framework para asegurar el correcto funcionamiento del mismo. Se pretende usar imágenes en estas resoluciones para evaluar los tiempos de funcionamiento del framework y verificar visualmente los resultados.
 
 Como pruebas finales se planea procesar imágenes de gran tamaño obtenidas de microoscopios u otros dispositivos.
