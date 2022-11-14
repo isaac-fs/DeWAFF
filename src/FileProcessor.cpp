@@ -38,19 +38,38 @@ int FileProcessor::processImage() {
 		errorExit("Could not open the input file for read: " + inputFileName);
 
 	// Process image
-	std::cout << "Processing image..." << std::endl;
 	Mat outputFrame;
 	if(this->mode & benchmark) { // Benchmark mode?
 		double elapsedSeconds;
+
+		// Print header
+		std::cout << std::internal <<"\nBenchmark mode" << std::endl;
+		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ');
+		std::cout << "| "
+		<< std::left << std::setw(4) << "N"
+		<< " | "
+		<< std::left << std::setw(19) << "Time"
+		<< "|";
+		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+
 		for(int i = 1; i <= this->benchmarkIterations; i++) {
-			std::cout << "Iteration " << i << std::endl;
 			this->timer.start();
 
 			outputFrame = this->processFrame(inputFrame);
 
 			elapsedSeconds = this->timer.stop();
-			std::cout << "Processing time = " << elapsedSeconds << " seconds." << std::endl;
+
+			// Print results
+			std::cout << "| "
+			<< std::left << std::setw(4) << i
+			<< " | "
+			<< std::left << std::setw(10) << elapsedSeconds << std::setw(8) << " seconds"
+			<< " |";
+			if(i != benchmarkIterations) std::cout << std::endl;
 		}
+
+		// Print footer
+		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << '\n' << std::endl;
 	}
 	else
 		outputFrame = this->processFrame(inputFrame);
@@ -61,6 +80,9 @@ int FileProcessor::processImage() {
 
 	if(!imwrite(outputFileName, outputFrame))
 		errorExit("Could not open the output file for write: " + outputFileName);
+
+	// Display exit
+	std::cout << "Processing done" << std::endl;
 
 	return 0;
 }
@@ -90,12 +112,24 @@ int FileProcessor::processVideo() {
 				};
     std::string codecType = EXT;
 
-    std::cout 	<< "### Input Video Information ###" 							<< std::endl
-    	 		<< "Resolution: " << videoSize.width << "x" << videoSize.height << std::endl
-         		<< "Number of frames: " << frameCount 							<< std::endl
-         		<< "Frame rate: " << frameRate << "fps"							<< std::endl
-         		<< "Codec type: " << codecType 									<< std::endl
-         		<< std::endl;
+	// Print collected video information
+	std::cout << "\nInput Video Information" << std::endl;
+	std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ');
+	std::cout << "| "
+	<< std::left << std::setw(14) << "Data"
+	<< " | "
+	<< std::left << std::setw(9) << "Value"
+	<< "|";
+	std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+	std::ostringstream stringStream;
+	stringStream << videoSize.width << "x" << videoSize.height;
+	std::cout << "| " << std::setw(14) << std::left  << "Resolution"  << " | "  << std::setw(8) << std::left << stringStream.str()	<< " |" << std::endl;
+	std::cout << "| " << std::setw(14) << std::left  << "Frame count" << " | "  << std::setw(8) << std::left << frameCount			<< " |" << std::endl;
+	stringStream.str(""); stringStream.clear();
+	stringStream << frameRate << " fps";
+	std::cout << "| " << std::setw(14) << std::left  << "Frame rate"  << " | "  << std::setw(8) << std::left << stringStream.str()	<< " |" << std::endl;
+	std::cout << "| " << std::setw(14) << std::left  << "Codec type"  << " | "  << std::setw(8) << std::left << codecType			<< " |";
+	std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 
 	// Define output file name
 	std::string::size_type pAt = this->inputFileName.find_last_of('.');
@@ -103,46 +137,60 @@ int FileProcessor::processVideo() {
 
 	// Open output video
 	VideoWriter outputVideo(outputFileName, codec, frameRate , videoSize, true);
-    if (!outputVideo.isOpened())
-        errorExit("Could not open the output video for write: " + outputFileName);
+    if(!outputVideo.isOpened()) errorExit("Could not open the output video for write: " + outputFileName);
 
-    std::cout << "Processing video..." << std::endl;
 	Mat inputFrame, outputFrame;
 	double elapsedSeconds = 0.0;
 	if(this->mode & benchmark) { // Benchmark mode?
-		// Start timer
-		this->timer.start();
+		// Print header
+		std::cout << std::internal <<"\nBenchmark mode" << std::endl;
+		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ');
+		std::cout << "| "
+		<< std::left << std::setw(4) << "N"
+		<< " | "
+		<< std::left << std::setw(19) << "Time"
+		<< "|";
+		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 
-		for(int frame = 1; frame <= frameCount; frame++) {
-			// Read one frame from input video
-			if(!inputVideo.read(inputFrame))
-				errorExit("Could not read current frame from video");
+		for(int i = 1; i <= this->benchmarkIterations; i++) {
+			// Start timer
+			this->timer.start();
 
-			// Display current frame number
-			std::cout << "Processing frame " << frame << " out of " << frameCount << std::endl;
+			// Read one frame at a time
+			while(inputVideo.read(inputFrame)) {
+				// Process current frame
+				outputFrame = this->processFrame(inputFrame);
 
-			// Process current frame
-			outputFrame = this->processFrame(inputFrame);
+				// Write frame to output video
+				outputVideo.write(outputFrame);
 
-			// Write frame to output video
-			outputVideo.write(outputFrame);
+				// Update timer
+				elapsedSeconds += this->timer.stop();
+			}
 
-			// Stop timer
-			elapsedSeconds += this->timer.stop();
+			// Print results
+			std::cout << "| "
+			<< std::left << std::setw(4) << i
+			<< " | "
+			<< std::left << std::setw(10) << elapsedSeconds << std::setw(8) << " seconds"
+			<< " |";
+			if(i != benchmarkIterations) std::cout << std::endl;
+
+			// Release last benchmarked video
+			inputVideo.release();
+			outputVideo.release();
+
+			// Update files for a new iteration
+			inputVideo = VideoCapture(inputFileName);
+			VideoWriter outputVideo(outputFileName, codec, frameRate , videoSize, true);
 		}
 
-		// Display the benchmark time
-		std::cout << "Processing time = " << elapsedSeconds << " seconds." << std::endl;\
+		// Print footer
+		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << '\n' << std::endl;
 
 	} else {
-		for(int frame = 1; frame <= frameCount; frame++) {
-			// Read one frame from input video
-			if(!inputVideo.read(inputFrame))
-				errorExit("Could not read current frame from video");
-
-			// Display current frame number
-			std::cout << "Processing frame " << frame << " out of " << frameCount << std::endl;
-
+		// Read one frame at a time
+		while(inputVideo.read(inputFrame)) {
 			// Process current frame
 			outputFrame = this->processFrame(inputFrame);
 
@@ -154,6 +202,9 @@ int FileProcessor::processVideo() {
 	// Release video resources
 	inputVideo.release();
 	outputVideo.release();
+
+	// Display exit
+	std::cout << "Processing done" << std::endl;
 
 	return 0;
 }
