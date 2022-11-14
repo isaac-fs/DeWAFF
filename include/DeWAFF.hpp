@@ -4,9 +4,9 @@
  * @date 2015-08-29
  * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
  * @date 2022-11-06
- * @brief 
+ * @brief
  * @copyright Copyright (c) 2022
- * 
+ *
  */
 
 #ifndef DEWAFF_H_

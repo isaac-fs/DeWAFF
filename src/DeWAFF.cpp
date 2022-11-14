@@ -51,7 +51,7 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage) {
     laplacianFilteredImage = LaplacianFilter(inputImage);
 
     /**
-    * Compute a spatial Gaussian kernel \f$ G_{\text{spatial}}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \f$
+    * Compute a spatial Gaussian kernel \f$ G_{\text spatial}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \f$
     * with the spatial values (pixel positions) from an image region \f$ \Omega \in U \f$.
     * The spatial kernel uses the \f$ m_i \in \Omega \f$ pixels coordinates as weighting values for the pixel \f$ p = (x, y) \f$
     *
@@ -102,11 +102,11 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage) {
 
 
             /**
-            * Compute a range Gaussian kernel \f$ G_{\text{range}}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
+            * Compute a range Gaussian kernel \f$ G_{\text range}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
             * with the range values (pixel intensities) from an image region \f$ \Omega \in U \f$.
             * The range kernel uses the \f$ m_i \in \Omega \f$ pixels intensities as weighting values for the pixel \f$ p = (x, y) \f$ instead of their
             * locations as in the spatial kernel computation. In this case a the image \f$ U \f$ is separated into the three CIELab channels and each
-            * channel is processed as an individual image \f$ U_{\text{channel}} \f$
+            * channel is processed as an individual image \f$ U_{\text channel} \f$
             */
             split(localRegion, channels);
             pixel = inputImage.at<Vec3f>(i, j);
@@ -118,7 +118,7 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage) {
 
             /**
             * Convolute the spatial and range gaussian kernels to obtain the bilateral filter kernel
-            * \f$ \phi_{\text{BF}}(U, m, p) = G_{\text{spatial}}(|| m-p ||) \, G_{\text{range}}(|| U(m)-U(p) ||) \f$
+            * \f$ \phi_{\text BF}(U, m, p) = G_{\text spatial}(|| m-p ||) \, G_{\text range}(|| U(m)-U(p) ||) \f$
             *
             */
             bilateralFilterKernel = spatialGaussianKernel.mul(rangeGaussianKernel);
@@ -132,7 +132,7 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage) {
             /**
              * Apply the bilateral filter kernel to the laplacian image. The Laplacian deceive consists on weighting the Bilateral Filter kernel with the
             * original image and use the USM image as input for the filter
-            * \f$ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \in \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1}
+            * \f$ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \in \Omega} \phi_{\text BF}(U, m, p) \right)^{-1}
             * \left( \sum_{m \in \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
             laplacianImageRegion = laplacianFilteredImage(xRange, yRange);
@@ -151,7 +151,7 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage) {
 
 /**
  * @brief Applies a regular non adaptive UnSharp mask (USM) with a Laplacian of Gaussian kernel
- * \f$ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \text{ where } \mathcal{L} = l * g\f$.
+ * \f$ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \text{ where } \mathcal{L} = l * g \f$.
  * Here \f$ g \f$ is a Gaussian kernel and \f$ l \f$ a Laplacian kernel, hence the name "Laplacian of Gaussian"
  * @param inputImage Image to apply the mask
  * @return Filtered image
@@ -218,7 +218,7 @@ Mat1f DeWAFF::GaussianKernel() {
 
 /**
  * @brief Calculate the exponential factor for the Gaussian kernel
- * \f$ e_{\text{Gaussian}} = \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \f$
+ * \f$ e_{\text Gaussian} = \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \f$
  * @return Mat1f
  *
  */
