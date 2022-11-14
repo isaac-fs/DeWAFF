@@ -70,16 +70,13 @@ int FileProcessor::processImage() {
 
 		// Print footer
 		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << '\n' << std::endl;
-	}
-	else
-		outputFrame = this->processFrame(inputFrame);
+	} else outputFrame = this->processFrame(inputFrame);
 
 	// Define the output file name
-	std::string::size_type pAt = this->inputFileName.find_last_of('.');
-	this->outputFileName = this->inputFileName.substr(0, pAt) + "_DeWAFF.jpg";
+	std::string::size_type dotPos = this->inputFileName.find_last_of('.');
+	this->outputFileName = this->inputFileName.substr(0, dotPos) + "_DeWAFF.png";
 
-	if(!imwrite(outputFileName, outputFrame))
-		errorExit("Could not open the output file for write: " + outputFileName);
+	if(!imwrite(outputFileName, outputFrame)) errorExit("Could not open the output file for write: " + outputFileName);
 
 	// Display exit
 	std::cout << "Processing done" << std::endl;
@@ -132,8 +129,8 @@ int FileProcessor::processVideo() {
 	std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 
 	// Define output file name
-	std::string::size_type pAt = this->inputFileName.find_last_of('.');
-	this->outputFileName = this->inputFileName.substr(0, pAt) + "_DeWAFF.avi";
+	std::string::size_type dotPos = this->inputFileName.find_last_of('.');
+	this->outputFileName = this->inputFileName.substr(0, dotPos) + "_DeWAFF.avi";
 
 	// Open output video
 	VideoWriter outputVideo(outputFileName, codec, frameRate , videoSize, true);
@@ -161,12 +158,14 @@ int FileProcessor::processVideo() {
 				// Process current frame
 				outputFrame = this->processFrame(inputFrame);
 
-				// Write frame to output video
-				outputVideo.write(outputFrame);
-
-				// Update timer
-				elapsedSeconds += this->timer.stop();
+				if(i == benchmarkIterations) {
+					// Write frame to output video
+					outputVideo.write(outputFrame);
+				}
 			}
+
+			// Update timer
+			elapsedSeconds = this->timer.stop();
 
 			// Print results
 			std::cout << "| "
@@ -176,18 +175,12 @@ int FileProcessor::processVideo() {
 			<< " |";
 			if(i != benchmarkIterations) std::cout << std::endl;
 
-			// Release last benchmarked video
-			inputVideo.release();
-			outputVideo.release();
-
 			// Update files for a new iteration
 			inputVideo = VideoCapture(inputFileName);
-			VideoWriter outputVideo(outputFileName, codec, frameRate , videoSize, true);
 		}
 
 		// Print footer
 		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << '\n' << std::endl;
-
 	} else {
 		// Read one frame at a time
 		while(inputVideo.read(inputFrame)) {
