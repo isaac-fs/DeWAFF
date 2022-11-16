@@ -30,7 +30,7 @@ Esta sección sirve como referencia para la metodología del trabajo escrito.
 - Instalar VSCode y las extensiones necesarias para C++. Además de extensiones para soporte de CMake y Doxygen
 - Investigar sobre el framework DeWAFF
 - Comenzar implementación en C++
-- Hacer un fork the [ParallelDeWAFF](https://github.com/david-prado/ParallelDeWAFF) por David Prado (ITC)
+- Hacer un fork the [temporalSegmentation](https://github.com/juanGuerrero19/temporalSegmentation)
 - Automatización de compilación con CMake
 - Revisión extensiva y corrección de inconsistencias en el fork
 - Pruebas con imágenes y revisión de resultados
