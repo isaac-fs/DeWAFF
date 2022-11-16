@@ -1,5 +1,23 @@
 #include "FileProcessor.hpp"
 
+int windowSize_ = 15;
+int lambda_ = 2;
+double spatialSigma_ = windowSize_/1.5;
+int rangeSigma_ = 2;
+
+/**
+ * @brief Construct a new File Processor:: File Processor object
+ * It initializes the DeWAFF constructor
+ *
+ */
+FileProcessor::FileProcessor() : DeWAFF(windowSize = windowSize_, lambda = lambda_, spatialSigma = spatialSigma_, rangeSigma = rangeSigma_) {
+	// Check the windows size
+    if (windowSize < 3 || windowSize % 2 == 0) {
+        std::cout << "Window size must be equal or greater than 3 and an odd number" << std::endl;
+        exit(-1);
+    }
+}
+
 /**
  * @brief Process a frame from an image or a video. Input frame must be BGR from 0 to 255
  * @param inputFrame Input frame
@@ -16,13 +34,14 @@ Mat FileProcessor::processFrame(const Mat &inputFrame) {
     // Converto to CIELab color space
 	Mat outputFrame;
     inputFrame.convertTo(outputFrame, CV_32F, 1.0/255.0); // The image has to to have values from 0 to 1 before convertion to CIELab
-	cvtColor(outputFrame, outputFrame, cv::COLOR_BGR2Lab); // Convert normalized BGR image to CIELab color space.
+	cvtColor(outputFrame, outputFrame, COLOR_BGR2Lab); // Convert normalized BGR image to CIELab color space.
 
-	// Process image
-	outputFrame = DeWAFF::DeceivedBilateralFilter(outputFrame);
+	// Process frame
+	//outputFrame = DeceivedBilateralFilter(outputFrame);
+	outputFrame = DeceivedNonLocalMeansFilter(outputFrame);
 
 	// Convert filtered image back to BGR color space.
-	cvtColor(outputFrame, outputFrame, cv::COLOR_Lab2BGR);
+	cvtColor(outputFrame, outputFrame, COLOR_Lab2BGR);
     outputFrame.convertTo(outputFrame, CV_8U, 255); // Scale back to [0,255] range
 
     return outputFrame;

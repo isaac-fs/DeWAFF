@@ -20,7 +20,7 @@
  * @brief Class in charge of al the file processing, may it be a an image or a video.
  * This class also allows for benchmarking of the processing
  */
-class FileProcessor : public DeWAFF {
+class FileProcessor : protected DeWAFF {
     protected:
         std::string inputFileName;
         std::string outputFileName;
@@ -34,6 +34,9 @@ class FileProcessor : public DeWAFF {
     private:
         Timer timer;
         Mat processFrame(const Mat &frame);
+
+    public:
+        FileProcessor();
 };
 
 #endif /* FILE_PROCESSOR_HPP_ */
