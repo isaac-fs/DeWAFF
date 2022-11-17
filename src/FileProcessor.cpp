@@ -37,8 +37,9 @@ Mat FileProcessor::processFrame(const Mat &inputFrame) {
 	cvtColor(outputFrame, outputFrame, COLOR_BGR2Lab); // Convert normalized BGR image to CIELab color space.
 
 	// Process frame
-	//outputFrame = DeceivedBilateralFilter(outputFrame);
-	outputFrame = DeceivedNonLocalMeansFilter(outputFrame);
+	outputFrame = DeceivedBilateralFilter(outputFrame);
+	//outputFrame = ScaledDeceivedBilateralFilter(outputFrame);
+	//outputFrame = DeceivedNonLocalMeansFilter(outputFrame);
 
 	// Convert filtered image back to BGR color space.
 	cvtColor(outputFrame, outputFrame, COLOR_Lab2BGR);
@@ -56,6 +57,26 @@ int FileProcessor::processImage() {
 	if(inputFrame.empty())
 		errorExit("Could not open the input file for read: " + inputFileName);
 
+	// Get the las dot position in the file name
+	std::string::size_type dotPos = this->inputFileName.find_last_of('.');
+	std::string imageExtension = inputFileName.substr(dotPos+1);
+	std::transform(imageExtension.begin(), imageExtension.end(),imageExtension.begin(), ::toupper);
+
+	// Print image information
+	std::cout << "\nInput image information" << std::endl;
+	std::cout << std::setw(DIVIDER_SPACE_2) << std::setfill('-') << '\n' << std::setfill(' ');
+	std::cout << "| "
+	<< std::left << std::setw(DATA_SPACE) << "Data"
+	<< " | "
+	<< std::left << std::setw(VALUE_SPACE+1) << "Value"
+	<< "|";
+	std::cout << std::setw(DIVIDER_SPACE_2) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+	std::ostringstream stringStream;
+	stringStream << inputFrame.rows << "x" << inputFrame.cols;
+	std::cout << "| " << std::setw(DATA_SPACE) << std::left  << "Resolution"  << " | "  << std::setw(VALUE_SPACE) << std::left << stringStream.str()	<< " |" << std::endl;
+	std::cout << "| " << std::setw(DATA_SPACE) << std::left  << "Image Type" << " | " 	<< std::setw(VALUE_SPACE) << std::left << imageExtension		<< " |";
+	std::cout << std::setw(DIVIDER_SPACE_2) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+
 	// Process image
 	Mat outputFrame;
 	if(this->mode & benchmark) { // Benchmark mode?
@@ -63,13 +84,13 @@ int FileProcessor::processImage() {
 
 		// Print header
 		std::cout << std::internal <<"\nBenchmark mode" << std::endl;
-		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ');
+		std::cout << std::setw(DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ');
 		std::cout << "| "
-		<< std::left << std::setw(4) << "N"
+		<< std::left << std::setw(NUMBER_SPACE) << "N"
 		<< " | "
-		<< std::left << std::setw(19) << "Time"
+		<< std::left << std::setw(TIME_SPACE+1) << "Time [s]"
 		<< "|";
-		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+		std::cout << std::setw(DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 
 		for(int i = 1; i <= this->benchmarkIterations; i++) {
 			this->timer.start();
@@ -80,19 +101,18 @@ int FileProcessor::processImage() {
 
 			// Print results
 			std::cout << "| "
-			<< std::left << std::setw(4) << i
+			<< std::left << std::setw(NUMBER_SPACE) << i
 			<< " | "
-			<< std::left << std::setw(10) << elapsedSeconds << std::setw(8) << " seconds"
+			<< std::left << std::setw(TIME_SPACE) << elapsedSeconds
 			<< " |";
 			if(i != benchmarkIterations) std::cout << std::endl;
 		}
 
 		// Print footer
-		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << '\n' << std::endl;
+		std::cout << std::setw(DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << '\n' << std::endl;
 	} else outputFrame = this->processFrame(inputFrame);
 
 	// Define the output file name
-	std::string::size_type dotPos = this->inputFileName.find_last_of('.');
 	this->outputFileName = this->inputFileName.substr(0, dotPos) + "_DeWAFF.png";
 
 	if(!imwrite(outputFileName, outputFrame)) errorExit("Could not open the output file for write: " + outputFileName);
@@ -129,23 +149,23 @@ int FileProcessor::processVideo() {
     std::string codecType = EXT;
 
 	// Print collected video information
-	std::cout << "\nInput Video Information" << std::endl;
-	std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ');
+	std::cout << "\nInput video information" << std::endl;
+	std::cout << std::setw(DIVIDER_SPACE_2) << std::setfill('-') << '\n' << std::setfill(' ');
 	std::cout << "| "
-	<< std::left << std::setw(14) << "Data"
+	<< std::left << std::setw(DATA_SPACE) << "Data"
 	<< " | "
-	<< std::left << std::setw(9) << "Value"
+	<< std::left << std::setw(VALUE_SPACE+1) << "Value"
 	<< "|";
-	std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+	std::cout << std::setw(DIVIDER_SPACE_2) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 	std::ostringstream stringStream;
 	stringStream << videoSize.width << "x" << videoSize.height;
-	std::cout << "| " << std::setw(14) << std::left  << "Resolution"  << " | "  << std::setw(8) << std::left << stringStream.str()	<< " |" << std::endl;
-	std::cout << "| " << std::setw(14) << std::left  << "Frame count" << " | "  << std::setw(8) << std::left << frameCount			<< " |" << std::endl;
+	std::cout << "| " << std::setw(DATA_SPACE) << std::left  << "Resolution"  << " | "  << std::setw(VALUE_SPACE) << std::left << stringStream.str()	<< " |" << std::endl;
+	std::cout << "| " << std::setw(DATA_SPACE) << std::left  << "Frame count" << " | "  << std::setw(VALUE_SPACE) << std::left << frameCount			<< " |" << std::endl;
 	stringStream.str(""); stringStream.clear();
 	stringStream << frameRate << " fps";
-	std::cout << "| " << std::setw(14) << std::left  << "Frame rate"  << " | "  << std::setw(8) << std::left << stringStream.str()	<< " |" << std::endl;
-	std::cout << "| " << std::setw(14) << std::left  << "Codec type"  << " | "  << std::setw(8) << std::left << codecType			<< " |";
-	std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+	std::cout << "| " << std::setw(DATA_SPACE) << std::left  << "Frame rate"  << " | "  << std::setw(VALUE_SPACE) << std::left << stringStream.str()	<< " |" << std::endl;
+	std::cout << "| " << std::setw(DATA_SPACE) << std::left  << "Codec type"  << " | "  << std::setw(VALUE_SPACE) << std::left << codecType			<< " |";
+	std::cout << std::setw(DIVIDER_SPACE_2) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 
 	// Define output file name
 	std::string::size_type dotPos = this->inputFileName.find_last_of('.');
@@ -160,13 +180,13 @@ int FileProcessor::processVideo() {
 	if(this->mode & benchmark) { // Benchmark mode?
 		// Print header
 		std::cout << std::internal <<"\nBenchmark mode" << std::endl;
-		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ');
+		std::cout << std::setw(DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ');
 		std::cout << "| "
-		<< std::left << std::setw(4) << "N"
+		<< std::left << std::setw(NUMBER_SPACE) << "N"
 		<< " | "
-		<< std::left << std::setw(19) << "Time"
+		<< std::left << std::setw(TIME_SPACE) << "Time [s]"
 		<< "|";
-		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+		std::cout << std::setw(DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 
 		for(int i = 1; i <= this->benchmarkIterations; i++) {
 			// Start timer
@@ -188,9 +208,9 @@ int FileProcessor::processVideo() {
 
 			// Print results
 			std::cout << "| "
-			<< std::left << std::setw(4) << i
+			<< std::left << std::setw(NUMBER_SPACE) << i
 			<< " | "
-			<< std::left << std::setw(10) << elapsedSeconds << std::setw(8) << " seconds"
+			<< std::left << std::setw(TIME_SPACE) << elapsedSeconds << std::setw(8)
 			<< " |";
 			if(i != benchmarkIterations) std::cout << std::endl;
 
@@ -199,7 +219,7 @@ int FileProcessor::processVideo() {
 		}
 
 		// Print footer
-		std::cout << std::setw(30) << std::setfill('-') << '\n' << std::setfill(' ') << '\n' << std::endl;
+		std::cout << std::setw(DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << '\n' << std::endl;
 	} else {
 		// Read one frame at a time
 		while(inputVideo.read(inputFrame)) {

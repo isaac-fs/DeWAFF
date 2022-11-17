@@ -32,6 +32,14 @@ class FileProcessor : protected DeWAFF {
         void errorExit(std::string msg);
 
     private:
+        enum SPACE {
+            DIVIDER_SPACE = 19,
+            DIVIDER_SPACE_2 = 27,
+            NUMBER_SPACE = 3,
+            TIME_SPACE = 8,
+            DATA_SPACE = 11,
+            VALUE_SPACE = 8
+            };
         Timer timer;
         Mat processFrame(const Mat &frame);
 
