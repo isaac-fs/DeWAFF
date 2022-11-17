@@ -71,8 +71,10 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage) {
     laplacianImage = LaplacianFilter(image);
 
     // Prepare variables for the bilateral filtering
-    Mat outputImage = Mat(image.size(), image.type());
-    Mat bilateralKernel, rangeGaussianKernel, imageRegion, laplacianImageRegion, dL, da, db;
+    Mat outputImage(image.size(), image.type());
+    Mat imageRegion, laplacianImageRegion;
+    Mat dL, da, db;
+    Mat bilateralKernel, rangeGaussianKernel;
 	double bilateralKernelNorm;
     int iMin, iMax, jMin, jMax;
     Range xRange, yRange;
@@ -115,7 +117,7 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage) {
             * locations as in the spatial kernel computation. In this case a the image \f$ U \f$ is separated into the three CIELab channels and each
             * channel is processed as an individual image \f$ U_{\text channel} \f$
             */
-            split(imageRegion, channels);
+            cv::split(imageRegion, channels);
             pixel = image.at<Vec3f>(i, j);
             pow(channels[L] - pixel.val[L], 2, dL);
             pow(channels[a] - pixel.val[a], 2, da);
@@ -142,7 +144,7 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage) {
             * \left( \sum_{m \in \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
             laplacianImageRegion = laplacianImage(xRange, yRange);
-            split(laplacianImageRegion, laplacianChannels);
+            cv::split(laplacianImageRegion, laplacianChannels);
             outputImage.at<Vec3f>(i,j)[L] = (1/bilateralKernelNorm) * sum(bilateralKernel.mul(laplacianChannels[L])).val[0];
             outputImage.at<Vec3f>(i,j)[a] = (1/bilateralKernelNorm) * sum(bilateralKernel.mul(laplacianChannels[a])).val[0];
             outputImage.at<Vec3f>(i,j)[b] = (1/bilateralKernelNorm) * sum(bilateralKernel.mul(laplacianChannels[b])).val[0];
@@ -152,17 +154,120 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage) {
     return outputImage(Range(padding, inputImage.rows + padding), Range(padding, inputImage.cols + padding));
 }
 
+Mat DeWAFF::ScaledDeceivedBilateralFilter(const Mat &inputImage) {
+    // Add padding to the image for kernel consistency
+    copyMakeBorder(inputImage, this->image, padding, padding, padding, padding, BORDER_REPLICATE);
+
+    // Pre-process the laplacian masked image
+    laplacianImage = LaplacianFilter(image);
+
+    // Prepare variables for the bilateral filtering
+    Mat outputImage(image.size(), image.type());
+    Mat scaledImage(image.size(), image.type()), scaledRegion;
+    Mat imageRegion, laplacianImageRegion;
+    Mat dL, da, db;
+    Mat scaledBilateralKernel, rangeGaussianKernel;
+	double scaledBilateralKernelNorm;
+    int iMin, iMax, jMin, jMax;
+    Range xRange, yRange;
+	Vec3f pixel;
+    Mat channels[3], laplacianChannels[3];
+
+    // Compute a low pass filtered version of the input image
+    // In this case use a Gaussian blur as LPF
+    GaussianBlur(image, scaledImage, Size(windowSize, windowSize), rangeSigma);
+
+    // Set the parallelization pragma for OpenMP
+    #pragma omp parallel for\
+    private(iMin, iMax, jMin, jMax,\
+            xRange, yRange,\
+            imageRegion,\
+            pixel,\
+            channels, dL, da, db,\
+            scaledRegion,\
+            rangeGaussianKernel, scaledBilateralKernel,\
+            scaledBilateralKernelNorm,\
+            laplacianImageRegion, laplacianChannels)\
+	shared( image,\
+            scaledImage,\
+            windowSize, \
+            spatialSigma,\
+            rangeSigma,\
+            laplacianImage,\
+            outputImage)
+    for(int i = padding; i < image.rows - padding; i++) {
+        iMin = i - padding;
+        iMax = iMin + windowSize;
+        xRange = Range(iMin, iMax);
+
+        for(int j = padding; j < image.cols - padding; j++) {
+            jMin = j -  padding;
+            jMax = jMin + windowSize;
+            yRange = Range(jMin, jMax);
+
+            // Extract local region based on the window size
+            scaledRegion = scaledImage(xRange, yRange);
+
+            /**
+            * Compute a range Gaussian kernel \f$ G_{\text range}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
+            * with the range values (pixel intensities) from an image region \f$ \Omega \in U \f$.
+            * The range kernel uses the \f$ m_i \in \Omega \f$ pixels intensities as weighting values for the pixel \f$ p = (x, y) \f$ instead of their
+            * locations as in the spatial kernel computation. In this case a the image \f$ U \f$ is separated into the three CIELab channels and each
+            * channel is processed as an individual image \f$ U_{\text channel} \f$
+            */
+            cv::split(scaledRegion, channels);
+            pixel = image.at<Vec3f>(i, j);
+            pow(channels[L] - pixel.val[L], 2, dL);
+            pow(channels[a] - pixel.val[a], 2, da);
+            pow(channels[b] - pixel.val[b], 2, db);
+            exp((dL + da + db) / (-2 * rangeVariance), rangeGaussianKernel);
+
+            /**
+            * Convolute the spatial and range gaussian kernels to obtain the bilateral filter kernel
+            * \f$ \phi_{\text BF}(U, m, p) = G_{\text spatial}(|| m-p ||) \, G_{\text range}(|| U(m)-U(p) ||) \f$
+            *
+            */
+            scaledBilateralKernel = spatialGaussianKernel.mul(rangeGaussianKernel);
+
+            /**
+            * Calculate the Bilateral filter's norm
+            * \f$ \left( \sum_{m \in \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \f$
+            */
+            scaledBilateralKernelNorm = sum(scaledBilateralKernel).val[0];
+
+            /**
+             * Apply the bilateral filter kernel to the laplacian image. The Laplacian deceive consists on weighting the Bilateral Filter kernel with the
+            * original image and use the USM image as input for the filter
+            * \f$ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \in \Omega} \phi_{\text BF}(U, m, p) \right)^{-1}
+            * \left( \sum_{m \in \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
+            */
+            laplacianImageRegion = laplacianImage(xRange, yRange);
+            cv::split(laplacianImageRegion, laplacianChannels);
+            outputImage.at<Vec3f>(i,j)[L] = (1/scaledBilateralKernelNorm) * sum(scaledBilateralKernel.mul(laplacianChannels[L])).val[0];
+            outputImage.at<Vec3f>(i,j)[a] = (1/scaledBilateralKernelNorm) * sum(scaledBilateralKernel.mul(laplacianChannels[a])).val[0];
+            outputImage.at<Vec3f>(i,j)[b] = (1/scaledBilateralKernelNorm) * sum(scaledBilateralKernel.mul(laplacianChannels[b])).val[0];
+        }
+    }
+
+    return outputImage(Range(padding, inputImage.rows + padding), Range(padding, inputImage.cols + padding));
+}
+
+
 Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage){
     // Add padding to the image for kernel consistency
     copyMakeBorder(inputImage, this->image, padding, padding, padding, padding, BORDER_REPLICATE);
 
     // Pre-process the laplacian masked image
     laplacianImage = LaplacianFilter(image);
+
+    // Set the window size for the NLM inner sub window
     int subWindowSize = 3;
 
     // Prepare variables for the bilateral filtering
-    Mat outputImage = Mat(image.size(), image.type());
-    Mat nonLocalMeansKernel, euclideanDistanceKernel, imageRegion, laplacianImageRegion, dL, da, db;
+    Mat outputImage(image.size(), image.type());
+    Mat imageRegion, laplacianImageRegion;
+    Mat dL, da, db;
+    Mat nonLocalMeansKernel, euclideanDistanceMatrix;
 	double nonLocalMeansKernelNorm;
     int iMin, iMax, jMin, jMax;
     Range xRange, yRange;
@@ -176,7 +281,7 @@ Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage){
             imageRegion,\
             pixel,\
             channels, dL, da, db,\
-            euclideanDistanceKernel, nonLocalMeansKernel,\
+            euclideanDistanceMatrix, nonLocalMeansKernel,\
             nonLocalMeansKernelNorm,\
             laplacianImageRegion, euclideanChannels, laplacianChannels)\
 	shared( image,\
@@ -205,18 +310,18 @@ Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage){
             * locations as in the spatial kernel computation. In this case a the image \f$ U \f$ is separated into the three CIELab channels and each
             * channel is processed as an individual image \f$ U_{\text channel} \f$
             */
-            split(imageRegion, channels);
-            euclideanChannels[L] = EuclideanDistanceKernel(channels[L], subWindowSize);
-            euclideanChannels[a] = EuclideanDistanceKernel(channels[a], subWindowSize);
-            euclideanChannels[b] = EuclideanDistanceKernel(channels[b], subWindowSize);
-            euclideanDistanceKernel = euclideanChannels[L] + euclideanChannels[a] + euclideanChannels[b];
+            cv::split(imageRegion, channels);
+            euclideanChannels[L] = EuclideanDistanceMatrix(channels[L], subWindowSize);
+            euclideanChannels[a] = EuclideanDistanceMatrix(channels[a], subWindowSize);
+            euclideanChannels[b] = EuclideanDistanceMatrix(channels[b], subWindowSize);
+            euclideanDistanceMatrix = euclideanChannels[L] + euclideanChannels[a] + euclideanChannels[b];
 
             /**
             * Convolute the spatial and range gaussian kernels to obtain the bilateral filter kernel
             * \f$ \phi_{\text BF}(U, m, p) = G_{\text spatial}(|| m-p ||) \, G_{\text range}(|| U(m)-U(p) ||) \f$
             *
             */
-            nonLocalMeansKernel = spatialGaussianKernel.mul(euclideanDistanceKernel);
+            nonLocalMeansKernel = spatialGaussianKernel.mul(euclideanDistanceMatrix);
 
             /**
             * Calculate the Bilateral filter's norm
@@ -231,7 +336,7 @@ Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage){
             * \left( \sum_{m \in \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
             laplacianImageRegion = laplacianImage(xRange, yRange);
-            split(laplacianImageRegion, laplacianChannels);
+            cv::split(laplacianImageRegion, laplacianChannels);
             outputImage.at<Vec3f>(i,j)[L] = (1/nonLocalMeansKernelNorm) * sum(nonLocalMeansKernel.mul(laplacianChannels[L])).val[0];
             outputImage.at<Vec3f>(i,j)[a] = (1/nonLocalMeansKernelNorm) * sum(nonLocalMeansKernel.mul(laplacianChannels[a])).val[0];
             outputImage.at<Vec3f>(i,j)[b] = (1/nonLocalMeansKernelNorm) * sum(nonLocalMeansKernel.mul(laplacianChannels[b])).val[0];
@@ -239,6 +344,10 @@ Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage){
     }
 
     return outputImage(Range(padding, inputImage.rows + padding), Range(padding, inputImage.cols + padding));
+}
+
+Mat DeceivedGuidedFilter(const Mat &inputImage){
+
 }
 
 /**
@@ -272,7 +381,7 @@ Mat DeWAFF::LaplacianFilter(const Mat &inputImage) {
 	return (image + lambda * laplacianImage);
 }
 
-Mat DeWAFF::EuclideanDistanceKernel(const Mat& imageRegion, int subWindowSize) {
+Mat DeWAFF::EuclideanDistanceMatrix(const Mat& imageRegion, int subWindowSize) {
     // Add padding to the image for kernel consistency
     int subPadding = (subWindowSize - 1) / 2;
     Mat paddedRegion;
@@ -284,7 +393,7 @@ Mat DeWAFF::EuclideanDistanceKernel(const Mat& imageRegion, int subWindowSize) {
     Mat fixedSubRegion = imageRegion(Range(windowSizeRatio, subWindowSize + windowSizeRatio), Range(windowSizeRatio, subWindowSize + windowSizeRatio));
 
     // Initialize the output matrix
-    Mat euclideanDistanceKernel = Mat(imageRegion.size(), imageRegion.type());
+    Mat euclideanDistanceMatrix = Mat(imageRegion.size(), imageRegion.type());
 
     // Moving pixel sub region
     Mat movingSubRegion = Mat(fixedSubRegion.size(), fixedSubRegion.type());
@@ -304,12 +413,12 @@ Mat DeWAFF::EuclideanDistanceKernel(const Mat& imageRegion, int subWindowSize) {
             movingSubRegion = paddedRegion(xRange, yRange);
 
             // Calculate the norm between the fixed and moving region
-            euclideanDistanceKernel.at<float>(i, j) = (float) norm(fixedSubRegion, movingSubRegion, NORM_L2SQR);
+            euclideanDistanceMatrix.at<float>(i, j) = (float) norm(fixedSubRegion, movingSubRegion, NORM_L2SQR);
         }
     }
 
-    cv::exp((-1 * euclideanDistanceKernel) / pow(h, 2), euclideanDistanceKernel);
+    cv::exp((-1 * euclideanDistanceMatrix) / pow(h, 2), euclideanDistanceMatrix);
 
-    return euclideanDistanceKernel;
+    return euclideanDistanceMatrix;
 }
 

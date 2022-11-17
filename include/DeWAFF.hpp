@@ -33,8 +33,7 @@ class DeWAFF {
 		Mat1f X, Y, S, spatialGaussianKernel, LoGkernel;
 		Mat laplacianImage; // Laplacian of Gaussian filtered image
 		Mat LaplacianFilter(const Mat &inputImage);
-		Mat1f LaplacianKernel();
-		Mat EuclideanDistanceKernel(const Mat& imageRegion, int subWindowSize);
+		Mat EuclideanDistanceMatrix(const Mat& imageRegion, int subWindowSize);
 
 	protected:
 		int windowSize;
@@ -46,8 +45,9 @@ class DeWAFF {
 	public:
 		DeWAFF(int windowSize, int lambda, double spatialSigma, int rangeSigma);
 		Mat DeceivedBilateralFilter(const Mat &inputImage);
-		// Mat DeceivedScaledBilateralFilter(const Mat &inputImage);
+		Mat ScaledDeceivedBilateralFilter(const Mat &inputImage);
 		Mat DeceivedNonLocalMeansFilter(const Mat &inputImage);
+		Mat DeceivedGuidedFilter(const Mat &inputImage);
 };
 
 #endif /* DEWAFF_H_ */
