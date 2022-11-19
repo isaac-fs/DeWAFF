@@ -5,12 +5,12 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
-add_executable(DeWAFF   src/main.cpp
+add_executable(DeWAFF   src/Main.cpp
                         src/DeWAFF.cpp
-                        src/FileProcessor.cpp
-                        src/CLI.cpp
-                        src/Timer.cpp
-                        src/Tools.cpp)
+                        src/Filters.cpp
+                        src/GuidedFilter.cpp
+                        src/ProgramInterface.cpp
+                        src/Utils.cpp)
 target_link_libraries(DeWAFF ${OpenCV_LIBS})
 
 # Parallel flags

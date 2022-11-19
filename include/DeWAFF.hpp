@@ -1,53 +1,38 @@
 /**
  * @file DeWAFF.cpp
- * @author David Prado (davidp)
- * @date 2015-08-29
  * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
  * @date 2022-11-06
- * @brief
- * @copyright Copyright (c) 2022
  *
  */
 
 #ifndef DEWAFF_H_
 #define DEWAFF_H_
 
-#include <omp.h>
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
-#include "Tools.hpp"
+#include "Utils.hpp"
+#include "Filters.hpp"
 
 using namespace cv;
 
 /**
- * @brief Deceived Weighted Averaged Filter Framework class.
- * It applies filter using the deceived weighted averaged values of an image
+ * @brief Deceived Weighted Average Filters Framework class
+ * It applies a filter which intput and weighting input are decoupled, so it is possible
+ * deceive the input and to still use the original input weighting values
+ *
  */
-class DeWAFF {
+class DeWAFF : public Filters {
 	private:
-		enum CIELab : int {L, a, b}; // CIELab channels
-		int padding;
-		Mat image; // input image with padding for kernel consistency
-		Range range;
-		Mat1f X, Y, S, spatialGaussianKernel, LoGkernel;
-		Mat laplacianImage; // Laplacian of Gaussian filtered image
-		Mat LaplacianFilter(const Mat &inputImage);
-		Mat EuclideanDistanceMatrix(const Mat& imageRegion, int subWindowSize);
-
+		int usmLambda = 2; /// Parameter for the Laplacian deceive
 	protected:
-		int windowSize;
-		int lambda; // lambda value for the USM
-		double spatialSigma, spatialVariance;
-		int rangeSigma, rangeVariance;
-		int neighborhoodWindowSize; // For the NLM filter
-
+		enum FilterType : unsigned int {DBF, DSBF, DNLM, DGF};
 	public:
-		DeWAFF(int windowSize, int lambda, double spatialSigma, int rangeSigma);
-		Mat DeceivedBilateralFilter(const Mat &inputImage);
-		Mat ScaledDeceivedBilateralFilter(const Mat &inputImage);
-		Mat DeceivedNonLocalMeansFilter(const Mat &inputImage);
-		Mat DeceivedGuidedFilter(const Mat &inputImage);
+		DeWAFF();
+		Mat DeceivedBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma);
+		Mat DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma);
+		Mat DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int patchSize, double spatialSigma, int rangeSigma);
+		Mat DeceivedGuidedFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma);
 };
 
 #endif /* DEWAFF_H_ */
