@@ -1,7 +1,18 @@
 #include "Filters.hpp"
 
+/**
+ * @brief Apply a Bilateral Filter to an image. This is the decoupled version of this filter, this means
+ * that the weighting image for the filter can be different from the input image
+ *
+ * @param weightingImage image used to calculate the kernel's weight
+ * @param inputImage image used as input for the filter
+ * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
+ * @param spatialSigma spatial standard deviation
+ * @param rangeSigma range or radiometric standard deviation
+ * @return Mat output image
+ */
 Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const double spatialSigma, const int rangeSigma) {
-    // Set the paddingvalue
+    // Set the padding value
     int padding = (windowSize - 1) / 2;
 
     // Working images
@@ -14,26 +25,27 @@ Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, c
     // Pre computation of meshgrid values
     Mat1f X, Y, S;
     Range range = Range(-(windowSize/2), (windowSize/2) + 1);
-    Utils::MeshGrid(range, X, Y);
+    lib.MeshGrid(range, X, Y);
 
-    /**
-     * @brief Pre computates the spatial Gaussian kernel
-     *  Calculate the kernel variable \f$ S = X^2 + Y^2 \f$
-     */
-    cv::pow(X, 2, X);
-    cv::pow(Y, 2, Y);
+    pow(X, 2, X);
+    pow(Y, 2, Y);
     S = X + Y;
 
-    Mat spatialGaussian = Utils::GaussianFunction(S, spatialSigma);
+    /**
+    * This filter uses two Gaussian kernels, one of them is the spatial Gaussian kernel
+    * \f$ G_{\text spatial}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \f$
+    * with the spatial values from an image region \f$ \Omega \subseteq U \f$.
+    * The spatial kernel uses the \f$ m_i \subseteq \Omega \f$ pixels coordinates as weighting values for the pixel \f$ p = (x, y) \f$
+    */
+    Mat spatialGaussian = lib.GaussianFunction(S, spatialSigma);
 
-    // Variance calculations
+    // Variance calculation
     int rangeVariance = std::pow(rangeSigma, 2);
 
     // Prepare variables for the bilateral filtering
     Mat output(input.size(), input.type());
     Mat weightRegion, inputRegion;
-    Mat dL, da, db;
-    Mat bilateralFilterKernel, rangeGaussian;
+    Mat dL, da, db, bilateralFilterKernel, rangeGaussian;
 	double bilateralFilterKernelNorm;
     int iMin, iMax, jMin, jMax;
     Range xRange, yRange;
@@ -63,9 +75,9 @@ Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, c
             cv::split(weightRegion, weightChannels);
 
             /**
-            * Compute a range Gaussian kernel \f$ G_{\text range}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
-            * with the range values (pixel intensities) from an input weightRegion \f$ \Omega \in U \f$.
-            * The range kernel uses the \f$ m_i \in \Omega \f$ pixels intensities as weighting values for the pixel \f$ p = (x, y) \f$ instead of their
+            * The other Gaussian kernel is the range Gaussian kernel \f$ G_{\text range}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
+            * with the intensity (range) values from an image region \f$ \Omega \subseteq U \f$.
+            * The range kernel uses the \f$ m_i \subseteq \Omega \f$ pixels intensities as weighting values for the pixel \f$ p = (x, y) \f$ instead of their
             * locations as in the spatial kernel computation. In this case a the input \f$ U \f$ is separated into the three CIELab weightChannels and each
             * channel is processed as an individual input \f$ U_{\text channel} \f$
             */
@@ -76,23 +88,22 @@ Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, c
             cv::exp((dL + da + db) / (-2 * rangeVariance), rangeGaussian);
 
             /**
-            * Convolute the spatial and range gaussian kernels to obtain the bilateral filter kernel
-            * \f$ \phi_{\text BF}(U, m, p) = G_{\text spatial}(|| m-p ||) \, G_{\text range}(|| U(m)-U(p) ||) \f$
+            * The two kernels convolve to obtain the Bilateral Filter kernel
+            * \f$ \phi_{\text SBF}(U, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U(m)-U(p)||) \f$
             *
             */
             bilateralFilterKernel = spatialGaussian.mul(rangeGaussian);
 
             /**
-            * Calculate the Bilateral filter's norm
-            * \f$ \left( \sum_{m \in \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \f$
+            * The Bilateral filter's norm corresponds to
+            * \f$ \left( \sum_{m \subseteq \Omega} \phi_{\text{SBF}}(U, m, p) \right)^{-1} \f$
             */
             bilateralFilterKernelNorm = sum(bilateralFilterKernel).val[0];
 
             /**
-             * Apply the bilateral filter kernel to the laplacian input. The Laplacian deceive consists on weighting the Bilateral Filter kernel with the
-            * original input and use the USM input as input for the filter
-            * \f$ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \in \Omega} \phi_{\text BF}(U, m, p) \right)^{-1}
-            * \left( \sum_{m \in \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
+            * Finally the bilateral filter kernel can be convolved with the input as follows
+            * \f$ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, m, p) \right)^{-1}
+            * \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
             inputRegion = input(xRange, yRange);
             cv::split(inputRegion, inputChannels);
@@ -102,14 +113,28 @@ Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, c
         }
     }
 
+    // Discard the padding
     xRange = Range(padding, padding + inputImage.rows);
     yRange = Range(padding, padding + inputImage.cols);
 
     return output(xRange, yRange);
 }
 
+/**
+ * @brief Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter, this means
+ * that the weighting image for the filter can be different from the input image. The difference between this filter and the
+ * not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter to have better performance
+ * under heavy AWGN
+ *
+ * @param weightingImage image used to calculate the kernel's weight
+ * @param inputImage image used as input for the filter
+ * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
+ * @param spatialSigma spatial standard deviation
+ * @param rangeSigma range or radiometric standard deviation
+ * @return Mat output image
+ */
 Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const double spatialSigma, const int rangeSigma) {
-     // Set the paddingvalue
+     // Set the padding value
     int padding = (windowSize - 1) / 2;
 
     // Working images
@@ -122,23 +147,26 @@ Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputIm
     // Pre computation of meshgrid values
     Mat1f X, Y, S;
     Range range = Range(-(windowSize/2), (windowSize/2) + 1);
-    Utils::MeshGrid(range, X, Y);
+    lib.MeshGrid(range, X, Y);
 
-    /**
-     * @brief Pre computates the spatial Gaussian kernel
-     *  Calculate the kernel variable \f$ S = X^2 + Y^2 \f$
-     */
-    cv::pow(X, 2, X);
-    cv::pow(Y, 2, Y);
+    pow(X, 2, X);
+    pow(Y, 2, Y);
     S = X + Y;
 
-    Mat spatialGaussian = Utils::GaussianFunction(S, spatialSigma);
+    /**
+    * This filter uses two Gaussian kernels, one of them is the spatial Gaussian kernel
+    * \f$ G_{\text spatial}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \f$
+    * with the spatial values from an image region \f$ \Omega \subseteq U \f$.
+    * The spatial kernel uses the \f$ m_i \subseteq \Omega \f$ pixels coordinates as weighting values for the pixel \f$ p = (x, y) \f$
+    */
+    Mat spatialGaussian = lib.GaussianFunction(S, spatialSigma);
 
-    // Variance calculations
+    // Variance calculation
     int rangeVariance = std::pow(rangeSigma, 2);
 
-    // Compute a low pass filtered version of the input image
-    // In this case use a Gaussian blur as LPF
+    /* This filter uses a low pass filtered version of the input image as part of the weighting input.
+    *  In this case with a Gaussian blur as LPF
+    */
     Mat scaled(weight.size(), weight.type());
     GaussianBlur(weight, scaled, Size(windowSize, windowSize), rangeSigma);
 
@@ -176,9 +204,9 @@ Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputIm
             cv::split(scaledRegion, scaledChannels);
 
             /**
-            * Compute a range Gaussian kernel \f$ G_{\text range}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
-            * with the range values (pixel intensities) from an image region \f$ \Omega \in U \f$.
-            * The range kernel uses the \f$ m_i \in \Omega \f$ pixels intensities as weighting values for the pixel \f$ p = (x, y) \f$ instead of their
+            * The other Gaussian kernel is the range Gaussian kernel \f$ G_{\text range}(U, U^s, m, p) = \exp\left( -\frac{ ||U^s(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
+            * with the intensity (range) values from an image region \f$ \Omega \subseteq U \f$.
+            * The range kernel uses the \f$ m_i \subseteq \Omega \f$ pixels intensities as weighting values for the pixel \f$ p = (x, y) \f$ instead of their
             * locations as in the spatial kernel computation. In this case a the image \f$ U \f$ is separated into the three CIELab scaledChannels and each
             * channel is processed as an individual image \f$ U_{\text channel} \f$
             */
@@ -189,23 +217,22 @@ Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputIm
             exp((dL + da + db) / (-2 * rangeVariance), rangeGaussian);
 
             /**
-            * Convolute the spatial and range gaussian kernels to obtain the bilateral filter kernel
-            * \f$ \phi_{\text BF}(U, m, p) = G_{\text spatial}(|| m-p ||) \, G_{\text range}(|| U(m)-U(p) ||) \f$
+            * The two kernels convolve to obtain the Scaled Bilateral Filter kernel
+            * \f$ \phi_{\text SBF}(U, U^s, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U^s(m)-U(p)||) \f$
             *
             */
             scaledBilateralKernel = spatialGaussian.mul(rangeGaussian);
 
             /**
-            * Calculate the Bilateral filter's norm
-            * \f$ \left( \sum_{m \in \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \f$
+            * The Scaled Bilateral filter's norm corresponds to
+            * \f$ \left( \sum_{m \subseteq \Omega} \phi_{\text{SBF}}(U, U^s, m, p) \right)^{-1} \f$
             */
             scaledBilateralKernelNorm = sum(scaledBilateralKernel).val[0];
 
             /**
-             * Apply the bilateral filter kernel to the laplacian image. The Laplacian deceive consists on weighting the Bilateral Filter kernel with the
-            * original image and use the USM image as input for the filter
-            * \f$ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \in \Omega} \phi_{\text BF}(U, m, p) \right)^{-1}
-            * \left( \sum_{m \in \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
+            * Finally the bilateral filter kernel can be convolved with the input as follows
+            * \f$ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, U^s, m, p) \right)^{-1}
+            * \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
             inputRegion = input(xRange, yRange);
             cv::split(inputRegion, inputChannels);
@@ -215,14 +242,26 @@ Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputIm
         }
     }
 
+    // Discard the padding
     xRange = Range(padding, padding + inputImage.rows);
     yRange = Range(padding, padding + inputImage.cols);
 
     return output(xRange, yRange);
 }
 
+/**
+ * @brief Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means
+ * that the weighting image for the filter can be different from the input image. The algorithm used for this filter
+ * is very computationally demanding
+ *
+ * @param weightingImage image used to calculate the kernel's weight
+ * @param inputImage image used as input for the filter
+ * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
+ * @param rangeSigma range or radiometric standard deviation. Used to calculate the parameter \f$ h = \frac{\sqrt(\sigma)}{2} \f$
+ * @return Mat output image
+ */
 Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const int patchSize, const double rangeSigma) {
-     // Set the paddingvalue
+     // Set the padding value
     int padding = (windowSize - 1) / 2;
 
     // Working images
@@ -232,14 +271,14 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
     copyMakeBorder(inputImage, input, padding, padding, padding, padding, BORDER_CONSTANT);
     copyMakeBorder(weightingImage, weight, padding, padding, padding, padding, BORDER_CONSTANT);
 
-    // Variable
+    // NML standard deviation h
     double h = sqrt(rangeSigma)/2;
 
     // Prepare variables for the bilateral filtering
     Mat output(input.size(), input.type());
-    Mat inputRegion, weightRegion, extendedRegion;
+    Mat inputRegion, weightRegion;
     Mat dL, da, db;
-    Mat nonLocalMeansKernel, edmGaussian;
+    Mat nonLocalMeansKernel;
 	double nonLocalMeansKernelNorm;
     Range xRange, yRange;
 	Vec3f pixel;
@@ -249,9 +288,9 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
     // Set the parallelization pragma for OpenMP
     #pragma omp parallel for\
     private(iMin, iMax, jMin, jMax, xRange, yRange,\
-            pixel, dL, da, db, edmGaussian,\
-            nonLocalMeansKernel, nonLocalMeansKernelNorm,\
-            weightRegion, weightChannels, inputRegion, inputChannels, nlmChannels)\
+            pixel, dL, da, db,\
+            nlmChannels, nonLocalMeansKernel, nonLocalMeansKernelNorm,\
+            weightRegion, weightChannels, inputRegion, inputChannels)\
 	shared( input, weight, output,\
             windowSize, patchSize, rangeSigma)
     for(int i = padding; i < input.rows - padding; i++) {
@@ -268,31 +307,30 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
             weightRegion = weight(xRange, yRange);
 
             /**
-            * Compute a range Gaussian kernel \f$ G_{\text range}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
-            * with the range values (pixel intensities) from an image region \f$ \Omega \in U \f$.
-            * The range kernel uses the \f$ m_i \in \Omega \f$ pixels intensities as weighting values for the pixel \f$ p = (x, y) \f$ instead of their
-            * locations as in the spatial kernel computation. In this case a the image \f$ U \f$ is separated into the three CIELab channels and each
-            * channel is processed as an individual image \f$ U_{\text channel} \f$
+            * The discrete representation of the Non Local Means Filter is as follows,
+            * \f$ \phi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2}{h^2} \right)\f$
+            * where  \f$B(p)\f$ is a patch part of the window \f$\Omega\f$ centered at pixel \f$p\f$. \f$B(m)\f$ represents all of the
+            * patches at \f$\Omega\f$ centered in each \f$m\f$ pixel. The Non Local Means Filter calculates the Euclidean distance
+            * between  each patch \f$B(m)\f$ and \f$B(p)\f$ for each window \f$\Omega \subseteq U\f$. This is why this algorithm is
+            * highly demanding in computational terms. Each Euclidean distance matrix obtained from each patch pair is the input for
+            * a Gaussian decreasing function with standard deviation \f$h\f$ that generates the new pixel \f$p\f$ value
             */
             cv::split(weightRegion, weightChannels);
-            nlmChannels[L] = Utils::GaussianFunction(Utils::EuclideanDistanceMatrix(weightChannels[L], windowSize, patchSize), h);
-            nlmChannels[a] = Utils::GaussianFunction(Utils::EuclideanDistanceMatrix(weightChannels[a], windowSize, patchSize), h);
-            nlmChannels[b] = Utils::GaussianFunction(Utils::EuclideanDistanceMatrix(weightChannels[b], windowSize, patchSize), h);
-
-            //
+            nlmChannels[L] = lib.GaussianFunction(lib.EuclideanDistanceMatrix(weightChannels[L], patchSize), h);
+            nlmChannels[a] = lib.GaussianFunction(lib.EuclideanDistanceMatrix(weightChannels[a], patchSize), h);
+            nlmChannels[b] = lib.GaussianFunction(lib.EuclideanDistanceMatrix(weightChannels[b], patchSize), h);
             nonLocalMeansKernel = (nlmChannels[L] + nlmChannels[a] + nlmChannels[b]);
 
             /**
-            * Calculate the Bilateral filter's norm
-            * \f$ \left( \sum_{m \in \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \f$
+            * The Non Local Means filter's norm is calculated with
+            * \f$ \phi_{\text NLM}(U, m, p) \left( \sum_{m \subseteq \Omega} \phi_{\text{NLM}}(U, m, p) \right)^{-1} \f$
             */
             nonLocalMeansKernelNorm = sum(nonLocalMeansKernel).val[0];
 
             /**
-             * Apply the bilateral filter kernel to the laplacian image. The Laplacian deceive consists on weighting the Bilateral Filter kernel with the
-            * original image and use the USM image as input for the filter
-            * \f$ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \in \Omega} \phi_{\text BF}(U, m, p) \right)^{-1}
-            * \left( \sum_{m \in \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
+             * The NLM filter kernel is applied to the laplacian image
+            * \f$ Y_{\phi_{\text NLM}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text NLM}(U, m, p) \right)^{-1}
+            * \left( \sum_{m \subseteq \Omega} \phi_{\text NLM}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
             inputRegion = input(xRange, yRange);
             cv::split(inputRegion, inputChannels);
@@ -302,13 +340,29 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
         }
     }
 
+    // Discard the padding
     xRange = Range(padding, padding + inputImage.rows);
     yRange = Range(padding, padding + inputImage.cols);
 
     return output(xRange, yRange);
 }
 
+/**
+ * @brief Apply a Guided Filter to an image. This is the decoupled version of this filter, this means
+ * that the weighting image for the filter can be different from the input image. In this case the weighting
+ * image is known as guiding image. This filter uses a lineal algorithm, making it very fast computationally
+ *
+ * @param weightingImage image used to calculate the kernel's weight
+ * @param inputImage image used as input for the filter
+ * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
+ * @param rangeSigma range or radiometric standard deviation. Used to calculate \f$ \epsilon = \sigma_r^2}
+ * @return Mat output image
+ */
 Mat Filters::GuidedFilter(const Mat &inputImage, const Mat &guidingImage, const int windowSize, const int rangeSigma) {
-    double epsilon = pow(rangeSigma, 2);//1 / pow(rangeSigma, 2);
+    double epsilon = pow(rangeSigma, 2);
+    /**
+     * The Guided Filter follows the followin algorithm
+     *
+     */
     return guidedFilter(guidingImage, inputImage, windowSize, epsilon, -1);
 }

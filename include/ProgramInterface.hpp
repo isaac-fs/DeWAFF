@@ -1,9 +1,9 @@
 /**
  * @file ProgramInterface.hpp
- * @author David Prado (davidp)
- * @date 2015-11-05
  * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
  * @date 2022-11-06
+ * @author David Prado (davidp)
+ * @date 2015-11-05
  *
  */
 
@@ -22,13 +22,21 @@
  * @brief In charge of displaying the program and capturing the needed parameters
  *
  */
-class ProgramInterface : protected DeWAFF {
+class ProgramInterface {
 public:
 	ProgramInterface(int argc, char** argv);
 	int run();
 
 private:
-	enum modes : unsigned int {start = 0, image = 1, video = 2, benchmark = 4}; // Processing modes
+	DeWAFF framework;
+	Utils lib;
+	Timer timer;
+
+	enum modes : unsigned int { // Processing modes
+		start = 0,
+		image = 1,
+		video = 2,
+		benchmark = 4};
 
 	std::string programName;
 	std::string inputFileName;
@@ -64,16 +72,13 @@ private:
 	void errorMessage(std::string msg);
 	void setOutputFileName();
 
-	Timer timer;
-
 	enum SPACE {
         VIDEO_DIVIDER_SPACE = 27,
         DATA_SPACE = 11,
         VALUE_SPACE = 8,
         DIVIDER_SPACE = 20,
         NUMBER_SPACE = 3,
-        TIME_SPACE = 9
-        };
+        TIME_SPACE = 9};
 };
 
 #endif /* PROGRAM_INTERFACE_HPP_ */

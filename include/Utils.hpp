@@ -1,11 +1,9 @@
 /**
  * @file Utils.hpp
- * @author David Prado (davidp)
- * @date 2015-11-05
  * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
  * @date 2022-11-06
- * @brief
- * @copyright Copyright (c) 2022
+ * @author David Prado (davidp)
+ * @date 2015-11-05
  *
  */
 
@@ -29,20 +27,20 @@ using namespace cv;
  */
 class Utils {
     public:
-        static void MeshGrid(const Range &range, Mat &X, Mat &Y);
-        static void MinMax(const Mat& A, double* minA, double* maxA);
-        static Mat GaussianFunction(Mat input, double sigma);
-        static Mat GaussianKernel(int windowSize, double sigma);
-		static Mat LoGKernel(int windowSize, double sigma);
-        static Mat NonAdaptiveUSM(const Mat &image, int windowSize, int lambda, double sigma);
-		static Mat EuclideanDistanceMatrix(const Mat& image, int windowSize, int patchSize);
+        void MeshGrid(const Range &range, Mat &X, Mat &Y);
+        void MinMax(const Mat& A, double* minA, double* maxA);
+        Mat GaussianFunction(Mat input, double sigma);
+        Mat GaussianKernel(int windowSize, double sigma);
+		Mat LoGKernel(int windowSize, double sigma);
+        Mat NonAdaptiveUSM(const Mat &image, int windowSize, int lambda, double sigma);
+		Mat EuclideanDistanceMatrix(const Mat& image, int patchSize);
 };
 
 /**
  * @brief Class containing the timer methods for the benchmarking of file processing
  *
  */
-class Timer {
+class Timer : Utils {
     private:
         double startTime;
     public:

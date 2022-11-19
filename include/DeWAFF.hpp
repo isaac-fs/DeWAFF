@@ -1,5 +1,5 @@
 /**
- * @file DeWAFF.cpp
+ * @file DeWAFF.hpp
  * @author Isaac Fonseca (isaac.fonsecasegura@ucr.ac.cr)
  * @date 2022-11-06
  *
@@ -22,13 +22,12 @@ using namespace cv;
  * deceive the input and to still use the original input weighting values
  *
  */
-class DeWAFF : public Filters {
+class DeWAFF : protected Filters {
 	private:
-		int usmLambda = 2; /// Parameter for the Laplacian deceive
-	protected:
-		enum FilterType : unsigned int {DBF, DSBF, DNLM, DGF};
+		int usmLambda; /// Parameter for the Laplacian deceive
 	public:
 		DeWAFF();
+		enum FilterType : unsigned int {DBF, DSBF, DNLM, DGF};
 		Mat DeceivedBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma);
 		Mat DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma);
 		Mat DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int patchSize, double spatialSigma, int rangeSigma);

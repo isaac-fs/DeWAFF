@@ -1,17 +1,25 @@
 #include "ProgramInterface.hpp"
 
 /**
- * @brief Constructor for the ProgramInterface class
+ * @brief Constructor for the ProgramInterface class. Sets all the necessary parameters for the DeWAFF processing,
+ * including the ones captured from the user input in the terminal
  * @param argc argument count from the terminal
  * @param argv arguments from the terminal
  */
-ProgramInterface::ProgramInterface(int argc, char** argv) {
-	// Params
-	this->filterType = DGF;
-	this->windowSize = 15;
-    this->spatialSigma = windowSize/1.5;
-    this->rangeSigma = 10;
-	this->patchSize = 3;
+ProgramInterface::ProgramInterface(int argc, char** argv): framework(DeWAFF()), lib(Utils()), timer(Timer()) {
+	// Incomplete command catch
+	if (argc == 1) help();
+	else if((mode & benchmark) && argc == 3) errorMessage("Incomplete command. Use the -h flag to see the options");
+
+	programName = argv[0];
+	mode = start;
+	benchmarkIterations = 0;
+
+	filterType = DeWAFF::DGF;
+	windowSize = 11;
+	spatialSigma = windowSize / 1.5;
+	rangeSigma = 10;
+	patchSize = windowSize/2;
 
 	// Check the windows size
     if (windowSize < 3 || windowSize % 2 == 0) {
@@ -30,43 +38,35 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 		exit(-1);
 	}
 
-
-	// Inner params
-	this->mode = start;
-	this->benchmarkIterations = 0;
-	this->programName = argv[0];
-
 	int c;
     while ((c = getopt(argc,argv,"hb:i:v:f:")) != -1) {
 		switch(c) {
 			case 'i': // Process an image
-				if(this->mode & video) // Check if flag for video enabled
-					this->errorMessage("Options -v and -i are mutually exclusive");
-				this->mode |= image;
-				this->inputFileName = optarg;
+				if(mode & video) errorMessage("Options -v and -i are mutually exclusive");
+				mode |= image;
+				inputFileName = optarg;
 				break;
 			case 'v': // Process a video
-				if(this->mode & image) // Check if flag for image enabled
-					this->errorMessage("Options -v and -i are mutually exclusive");
-				this->mode |= video;
-				this->inputFileName = optarg;
+				if(mode & image) errorMessage("Options -v and -i are mutually exclusive");
+				mode |= video;
+				inputFileName = optarg;
 				break;
 			case 'b': // Enable benchmark mode
-				this->mode |= benchmark;
-				if(optarg){
-					this->benchmarkIterations = atoi(optarg);
+				mode |= benchmark;
+				if(optarg) {
+					benchmarkIterations = atoi(optarg);
 					if(benchmarkIterations < 1) errorMessage("The number of benchmark iterations [N] needs to be 1 or greater");
 				}
 				break;
-			case 'f': // Filter type
-				if(optarg) this->filterType = atoi(optarg);
-			break;
+			case 'f': // Filters type
+				if(optarg) filterType = (unsigned int) atoi(optarg);
+				break;
 			case 'h':
-				this->help();
+				help();
 				exit(-1);
 				break;
 			case '?':
-				this->help();
+				help();
 				exit(-1);
 		        break;
 			default:
@@ -78,15 +78,10 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 	this->dotPos = inputFileName.find_last_of('.');
 	// Set the output file name
 	setOutputFileName();
-
-	// Incomplete command catch
-	if (argc == 1) this->help();
-	else if((this->mode & benchmark) && argc == 3)
-		this->errorMessage("Incomplete command. Use the -h flag to see the options");
 }
 
 /**
- * @brief Start program execution
+ * @brief Starts the program execution
  */
 int ProgramInterface::run() {
 	switch (mode) {
@@ -113,12 +108,18 @@ int ProgramInterface::run() {
 	}
 }
 
-
+/**
+ * @brief Pre processes the input. This includes size checking and type checking.
+ * It converts the input to a CIELab format for further processing
+ *
+ * @param inputImage
+ * @return Mat
+ */
 Mat ProgramInterface::inputPreProcessor(const Mat &inputImage) {
     // Input checking
     int type = inputImage.type();
 	double minVal, maxVal;
-	Utils::MinMax(inputImage, &minVal, &maxVal);
+	lib.MinMax(inputImage, &minVal, &maxVal);
 	if (!(type == CV_8UC1 || type == CV_8UC3) || minVal < 0 || maxVal > 255)
 	   errorMessage("Input frame must be a Grayscale or RGB unsigned integer matrix of size NxMx1 or NxMx3 on the closed interval [0,255]");
 
@@ -130,6 +131,12 @@ Mat ProgramInterface::inputPreProcessor(const Mat &inputImage) {
 	return input;
 }
 
+/**
+ * @brief Pos processes the output. It converts the filtered image to its original format
+ *
+ * @param input
+ * @return Mat
+ */
 Mat ProgramInterface::outputPosProcessor(const Mat &input) {
 	Mat output;
     // Convert filtered image back to BGR color space
@@ -141,7 +148,7 @@ Mat ProgramInterface::outputPosProcessor(const Mat &input) {
 }
 
 /**
- * @brief Process a frame from an image or a video. Input frame must be BGR from 0 to 255
+ * @brief Process a frame from an image or a video in the chosen DeWAFF filter
  * @param inputFrame Input frame
  * @return Processed frame
  */
@@ -150,17 +157,17 @@ Mat ProgramInterface::processFrame(const Mat &inputFrame) {
 	Mat input = inputPreProcessor(inputFrame);
 	Mat output;
 	switch (filterType) {
-	case DBF:
-		output = DeceivedBilateralFilter(input, windowSize, spatialSigma, rangeSigma);
+	case DeWAFF::DBF:
+		output = framework.DeceivedBilateralFilter(input, windowSize, spatialSigma, rangeSigma);
 		break;
-	case DSBF:
-		output = DeceivedScaledBilateralFilter(input, windowSize, spatialSigma, rangeSigma);
+	case DeWAFF::DSBF:
+		output = framework.DeceivedScaledBilateralFilter(input, windowSize, spatialSigma, rangeSigma);
 		break;
-	case DNLM:
-		output = DeceivedNonLocalMeansFilter(input, windowSize, patchSize, spatialSigma, rangeSigma);
+	case DeWAFF::DNLM:
+		output = framework.DeceivedNonLocalMeansFilter(input, windowSize, patchSize, spatialSigma, rangeSigma);
 		break;
-	case DGF:
-		output = output = DeceivedGuidedFilter(input, windowSize, spatialSigma, rangeSigma);
+	case DeWAFF::DGF:
+		output = framework.DeceivedGuidedFilter(input, windowSize, spatialSigma, rangeSigma);
 		break;
 	default:
 		help();
@@ -172,7 +179,7 @@ Mat ProgramInterface::processFrame(const Mat &inputFrame) {
 
 
 /**
- * @brief Process an image file
+ * @brief Processes an image file
  *
  */
 void ProgramInterface::processImage() {
@@ -193,7 +200,7 @@ void ProgramInterface::processImage() {
 }
 
 /**
- * @brief Process a video file
+ * @brief Processes a video file
  *
  */
 void ProgramInterface::processVideo() {
@@ -229,6 +236,10 @@ void ProgramInterface::processVideo() {
 	std::cout << "Processing done" << std::endl;
 }
 
+/**
+ * @brief Benchmarks an image
+ *
+ */
 void ProgramInterface::benchmarkImage() {
 		Mat inputFrame = imread(inputFileName);
 		if(inputFrame.empty()) errorMessage("Could not open the input file for read: " + inputFileName);
@@ -257,6 +268,10 @@ void ProgramInterface::benchmarkImage() {
 		printBenchmarkFooter();
 }
 
+/**
+ * @brief Benchmarks a video
+ *
+ */
 void ProgramInterface::benchmarkVideo() {
 	VideoCapture inputVideo = VideoCapture(inputFileName);
 	if (!inputVideo.isOpened()) errorMessage("Could not open the input video for read: " + inputFileName);
@@ -298,6 +313,10 @@ void ProgramInterface::benchmarkVideo() {
 	printBenchmarkFooter();
 }
 
+/**
+ * @brief Sets the video information
+ *
+ */
 void ProgramInterface::getVideoInfo(VideoCapture inputVideo) {
 	frameRate = static_cast<int>(inputVideo.get(cv::CAP_PROP_FPS));
     frameCount = static_cast<int>(inputVideo.get(cv::CAP_PROP_FRAME_COUNT));
@@ -305,15 +324,17 @@ void ProgramInterface::getVideoInfo(VideoCapture inputVideo) {
 
     // Transform from int to char via Bitwise operators
     int codec = static_cast<int>(inputVideo.get(cv::CAP_PROP_FOURCC));
-    char EXT[] = {	(char)((codec & 0XFF)),
-					(char)((codec & 0XFF00) >> 8),
-					(char)((codec & 0XFF0000) >> 16),
-					(char)((codec & 0XFF000000) >> 24),
-					0
-				};
+    char EXT[] = {	static_cast<char> ((codec & 0XFF)),
+					static_cast<char> ((codec & 0XFF00) >> 8),
+					static_cast<char> ((codec & 0XFF0000) >> 16),
+					static_cast<char> ((codec & 0XFF00000) >> 24),0};
     codecType = EXT;
 }
 
+/**
+ * @brief Prints the video information
+ *
+ */
 void ProgramInterface::printVideoInfo() {
 	std::cout << "\nInput video information" << std::endl;
 	std::cout << std::setw(VIDEO_DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ');
@@ -334,6 +355,10 @@ void ProgramInterface::printVideoInfo() {
 	std::cout << std::setw(VIDEO_DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 }
 
+/**
+ * @brief Prints the image information
+ *
+ */
 void ProgramInterface::printImageInfo() {
 	// Get the image extension
 	std::string imageExtension = inputFileName.substr(dotPos+1);
@@ -356,6 +381,10 @@ void ProgramInterface::printImageInfo() {
 
 }
 
+/**
+ * @brief Prints the benchmark header
+ *
+ */
 void ProgramInterface::printBenchmarkHeader() {
 	// Print header
 	std::cout << std::internal <<"\nBenchmark mode" << std::endl;
@@ -368,12 +397,16 @@ void ProgramInterface::printBenchmarkHeader() {
 	std::cout << std::setw(DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 }
 
+/**
+ * @brief Prints the benchmark footer
+ *
+ */
 void ProgramInterface::printBenchmarkFooter() {
 	std::cout << std::setw(DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << '\n' << std::endl;
 }
 
 /**
- * @brief Display program help
+ * @brief Displays the program's help
  */
 void ProgramInterface::help() {
 	// Print header
@@ -435,7 +468,7 @@ void ProgramInterface::help() {
 }
 
 /**
- * @brief Display an error message
+ * @brief Displays an error message and exits the program
  * @param msg Error message
  */
 void ProgramInterface::errorMessage(std::string msg) {
@@ -443,19 +476,23 @@ void ProgramInterface::errorMessage(std::string msg) {
 	exit(-1);
 }
 
+/**
+ * @brief Sets the output file name with the corresponding applied filter acronym
+ *
+ */
 void ProgramInterface::setOutputFileName() {
 	std::string filterAcronym;
 	switch (filterType) {
-	case DBF:
+	case DeWAFF::DBF:
 		filterAcronym = "DBF";
 		break;
-	case DSBF:
+	case DeWAFF::DSBF:
 		filterAcronym = "DSBF";
 		break;
-	case DNLM:
+	case DeWAFF::DNLM:
 		filterAcronym = "DNLM";
 		break;
-	case DGF:
+	case DeWAFF::DGF:
 		filterAcronym = "DGF";
 		break;
 	default:

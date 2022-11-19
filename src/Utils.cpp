@@ -1,31 +1,30 @@
 #include "Utils.hpp"
 
 /**
- * @brief Generate a meshgrid from X and Y unidimensional coordinates
+ * @brief Generates a meshgrid from \f$X\f$ and \f$Y\f$ unidimensional coordinates
  * Example:
- * xRange = [0,3[ and yRange = [0,3[ will return the following X and Y coordinates
+ * xRange = [0,3[ and yRange = [0,3[ will return the following \f$X\f$ and \f$Y\f$ coordinates
  *
- * X = \n
+ * \f$X\f$ = \n
  * 		[0, 0, 0;	\n
  *		 1, 1, 1;	\n
  *		 2, 2, 2]	\n
  *
- * Y = \n
+ * \f$Y\f$ = \n
  * 		[0, 1, 2;	\n
  *		 0, 1, 2;	\n
  *		 0, 1, 2]	\n
  * 					\n
  * Wich would form the following mesh grid
  *
- * (X,Y) = \n
+ * \f$(X,Y)\f$ = \n
  * 		[(0,0) (0,1), (0,2); \n
  * 		 (0,1) (1,1), (2,1); \n
  * 		 (2,0) (2,1), (2,2)]
  *
- * @param xRange X OpenCV Range variable
- * @param yRange Y OpenCV Range variable
- * @param X x axis values matrix
- * @param Y y axis values matrix
+ * @param range range to form the 2D grid
+ * @param X x axis values for the mesh grid
+ * @param Y y axis values for the mesh grid
  */
 void Utils::MeshGrid(const Range &range, Mat &X, Mat &Y) {
 	std::vector<int> x;
@@ -64,11 +63,14 @@ Mat Utils::GaussianFunction(Mat input, double sigma){
 }
 
 /**
-* @brief Compute a spatial Gaussian kernel \f$ G_{\text spatial}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \f$
-* with the spatial values (pixel positions) from an image region \f$ \Omega \in U \f$.
-* The spatial kernel uses the \f$ m_i \in \Omega \f$ pixels coordinates as weighting values for the pixel \f$ p = (x, y) \f$.
-* Normalize it with \f$\fract{1}{\sum G_{\text kernel}}\f$ so it sums to 1 for low pass filter behavior consistency
-*/
+ * @brief Computes a spatial Gaussian kernel \f$ G(X, Y) = \exp\left(-\frac{|X + Y|^2 }{ 2 {\sigma_s^2} } \right) \f$
+ * where X + Y are the horizontal and vertical coordinates on a \f$ \text{windowSize} \times \text{windowSize} \f$ 2D plane.
+ * The result can be interpreted as looking at a Gaussian distribution from a top view
+ *
+ * @param windowSize 2D plane dimension
+ * @param sigma standar deviation for the Gaussian distribution
+ * @return Mat A Gaussian kernel
+ */
 Mat Utils::GaussianKernel(int windowSize, double sigma) {
 	// Pre computation of meshgrid values
     Mat1f X, Y, S;
@@ -92,7 +94,7 @@ Mat Utils::GaussianKernel(int windowSize, double sigma) {
 }
 
 /**
- * @brief Compute a Laplacian of Gaussian kernel. Same as fspecial('log',..) in Matlab.
+ * @brief Computes a Laplacian of Gaussian kernel. Same as fspecial('log',..) in Matlab.
  * \f$ \text{LoG}_{\text kernel} = - \frac{1}{\pi \sigma^4} \left[ 1 - \frac{X^2 + Y^2}{2 \sigma^2} \right] \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \f$
  * and normalize it with \f$ \frac{\sum \text{LoG} }{|\text{LoG}|}\f$ where \f$ |\text{LoG}| \f$ is the number of elements in \f$ \text{LoG} \f$ so it
  * sums to 0 for high pass filter behavior consistency
@@ -152,9 +154,20 @@ Mat Utils::NonAdaptiveUSM(const Mat &image, int windowSize, int lambda, double s
 	return (image + lambda * LoG);
 }
 
-Mat Utils::EuclideanDistanceMatrix(const Mat& inputImage, int windowSize, int patchSize) {
+/**
+ * @brief Computes an Euclidean distance matrix from an input matrix. This is achieved
+ * by calculating the Euclidean distance between a fixed patch at the center of the input
+ * image and a patch centered in every other pixel in the input image, mathematically, for
+ * an input matrix \f$A = (a_{ij})\f$ every element will take the corresponding Euclidean distance value
+ * \f$a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\f$
+ * @param inputImage input image to obtain the patches to compute the matrix
+ * @param patchSize size of the used patch. Analog to window size
+ * @return Mat Euclidean distance matrix
+ */
+Mat Utils::EuclideanDistanceMatrix(const Mat& inputImage, int patchSize) {
     // Fixed pixel sub region (must be a square region)
 	Mat image;
+	int windowSize = inputImage.rows;
     int padding = (windowSize-1)/2;
 	copyMakeBorder(inputImage, image, padding, padding, padding, padding, BORDER_CONSTANT);
 
@@ -190,7 +203,7 @@ Mat Utils::EuclideanDistanceMatrix(const Mat& inputImage, int windowSize, int pa
 }
 
 /**
- * @brief Starts timer and resets the elapsed time
+ * @brief Starts the timer and resets the elapsed time
  *
  */
 void Timer::start() {
