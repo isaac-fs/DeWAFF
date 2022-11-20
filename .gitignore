@@ -41,8 +41,13 @@ cmake*
 build/
 Makefile
 
-# GitHub page
-isaac-fs.github.io/
+# Doxygen
+Doxygen/html/
+Doxygen/latex/
+Doxygen/doxygen-awesome.css
+
+# GH Workflow
+.github
 
 # Binary
 DeWAFF
