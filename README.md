@@ -1,135 +1,73 @@
-# Implementación y validación de un algoritmo de abstracción de imagen en C++
-Repositorio dedicado a avances del proyecto elétctrico.<br>
-**Estudiante**: Isaac F. Fonseca Segura.<br>
-**Profesor guía**: Dr.rer.nat. Francisco Siles Canales.
+# Deceived Weighted Average Filters Framework
 
-## Tabla de contenidos
-- [Implementación y validación de un algoritmo de abstracción de imagen en C++](#implementación-y-validación-de-un-algoritmo-de-abstracción-de-imagen-en-c)
-  - [Tabla de contenidos](#tabla-de-contenidos)
-  - [Pasos seguidos](#pasos-seguidos)
-  - [Implementación actual](#implementación-actual)
-  - [Clases](#clases)
-  - [Generación de la documentación](#generación-de-la-documentación)
-  - [Compilación del proyecto](#compilación-del-proyecto)
-  - [Ejecución del framework](#ejecución-del-framework)
-    - [Procesar imagen](#procesar-imagen)
-    - [Procesar imagen y hacer benchmark](#procesar-imagen-y-hacer-benchmark)
-    - [Procesar vídeo](#procesar-vídeo)
-    - [Procesar vídeo y hacer benchmark](#procesar-vídeo-y-hacer-benchmark)
-  - [Idea inicial de implementación](#idea-inicial-de-implementación)
-    - [Clase DEWAFF](#clase-dewaff)
-    - [Métodos](#métodos)
-    - [Funciones](#funciones)
-    - [Pruebas](#pruebas)
+## Table of contents
+- [Deceived Weighted Average Filters Framework](#deceived-weighted-average-filters-framework)
+  - [Table of contents](#table-of-contents)
+  - [Description](#description)
+  - [Installation](#installation)
+  - [Execution](#execution)
+  - [Benchmark](#benchmark)
 
-## Pasos seguidos
-Esta sección sirve como referencia para la metodología del trabajo escrito.
-- Configurar una VM con Ubuntu 22.04 LTS
-- Leer el material de [Open CV introduction](https://www.opencv-srf.com/p/introduction.html)
-- Seguir la guía de instalación [OpenCV Instalation tutorial - Linux](https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html)
-- Instalar VSCode y las extensiones necesarias para C++. Además de extensiones para soporte de CMake y Doxygen
-- Investigar sobre el framework DeWAFF
-- Comenzar implementación en C++
-- Hacer un fork the [temporalSegmentation](https://github.com/juanGuerrero19/temporalSegmentation)
-- Automatización de compilación con CMake
-- Revisión extensiva y corrección de inconsistencias en el fork
-- Pruebas con imágenes y revisión de resultados
-- Pruebas con vídeo y revisión de resultados
-- Documentación del código con Doxygen
-- Elaboración del trabajo escrito
-<br>
+## Description
+Implementation of the image abstraction framework DeWAFF in C++. This framework allows to use WAF (Weighted Average Filters) with their input decoupled into a weigthing input and processing input. The weighthing input is used to generate the kernel values for the WAFF and  the processing input serves as the input for the filter. This tehcnique is known as "deceiving" hence the name of the framework. The filter's kernel is weighted with the original input values, but the actual input of the filter is the original input filtered through an UnSharp Masked image. Normal WAFs use the same image for both processes. This is the novelty of this framework, to avoid a pipelined approach by applying two different techniques to an image, but instead combine them and apply them as one.
 
-## Implementación actual
-En la implementación actual se cuenta no sólo con la clase DeWAFF, pero también con clases que asisten al procesado de la imagen como la clase NonAdaptiveUSM. Además se incluyen clases que se encargan del preprocesado de la imagen y la presentación del programa en la terminal. Finalmente hay clases con métodos de asistencia como Timer y Tools.
+The DeWAFF is aimed at improving patter recognition tasks providing the following improvements:
+- Noise reduction
+- Irrelevant detail simplification
+- Border emphasis of Regions Of Interest
+- Enhanced separation of ROIs from the background
 
-## Clases
-Las clases implementadas y/o adaptadas y sus métodos son las siguientes:
-- DeWAFF
-    - DeceivedBilateralFilter
-    - NonAdaptiveUSMFilter
-    - LaplacianKernel
-    - GaussianKernel
-    - GaussianExponentialFactor
-- FileProcessor
-    - processImage
-    - processVideo
-    - processFrame
-    - errorExit
-- CLI
-    - run
-    - help
-- Timer
-    - start
-    - stop
-- Tools
-    - meshGrid
-    - getMinMax
+## Installation
 
-Estas clases y funciones se encuentran extensivamente documentadas en formato Doxygen. Para generar la documentación se deben seguir los siguientes pasos
+This project requires that OpenCV is alredy installed in your machine. For this you can follow the [OpenCV linux installation guide](https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html).
 
-## Generación de la documentación
-Se deben introducir los siguientes comandos
+- Clone the repository from https://github.com/isaac-fs/DeWAFF
+
 ```bash
-    cd doxygen/
-    doxygen Doxyfile
+    git clone https://github.com/isaac-fs/DeWAFF.git
 ```
-Después se debe abrir el enlace símbolico en el directorio raíz `DeWAFF-B52786/` del proyecto llamado `index.html`. Esto abrirá en su navegador la documentacion del proyecto. Doxygen debe estar instalado previamente.
 
-## Compilación del proyecto
-La compliación de este proyecto se realiza de manera automatizada con `cmake` y `make`. Para crear un ejecutable debe seguir los siguientes pasos en el directorio raíz `DeWAFF-B52786/`. Todas las dependencias de `OpenCV` deben estar instaladas previamente.
+- Build the project
+
 ```bash
+    cd ./DeWAFF
     cmake .
     cmake --build .
 ```
-Si hace cambios al código podrá actualizar el proyecto con `make`.
+After these steps binary named `DeWAFF` should appear in the directory. To recompile the project you can use the generated Makefille.
 
-## Ejecución del framework
-Para correr el programa se debe haber generado el binario `DeWAFF` en el directorio raíz al haber seguido los pasos de compilación. Una vez con este binario se pueden procesar imágenes y vídeo con la opción de hacer un benchmark.
+## Execution
+To execute the framework run `./DeWAFF` accompanied of one or more of the following options:
 
-Para correr el programa use el siguiente comando en el directorio raíz `DeWAFF-B52786/`, o donde desee ubicar el programa
+        --------------------------------------------------------------------
+        | Options  | Description                                           |
+        --------------------------------------------------------------------
+        | -i       | Process an image given a file name -i <file name>     |
+        | -v       | Process a video given a file name -v <file name>      |
+        | -b < N > | Run a series of N benchmarks for a video or an image. |
+        | -h       | Display this help message                             |
+        --------------------------------------------------------------------
 
-### Procesar imagen
+For example, to process an image the command looks like this
 ```bash
-    ./DeWAFF -i <ruta del archivo>
+    ./DeWAFF -i /path/to/image/file
 ```
-
-### Procesar imagen y hacer benchmark
+To process a video just change the flag from `-i` to `-v` as follows
 ```bash
-    ./DeWAFF -i <ruta del archivo> -b <número de iteraciones>
+    ./DeWAFF -v /path/to/video/file
 ```
+These options will generate an output in the `/path/to/file` directory with the applied filter acronym as suffix `file_ACRONYM.extension`.
 
-### Procesar vídeo
+## Benchmark
+
+There is also a benchmark mode that allows to run several executions over an image without saving it. This can be helpful to measure the performance of a particular DeWAF for your needs.
+
+To benchmark an image pass the image with the `-i` flag, but this time add the benchmark flag `-b` to indicate the number of benchmarking runs. The number of runs has to be a positive integer equal or greater than one
 ```bash
-    ./DeWAFF -v <ruta del archivo>
+    ./DeWAFF -i /path/to/image/file -b 10
 ```
-
-### Procesar vídeo y hacer benchmark
+To benchmar a video just change the flag from `-i` to `-v` as follows
 ```bash
-    ./DeWAFF -v <ruta del archivo> -b <número de iteraciones>
+    ./DeWAFF -v /path/to/video/file -b 3
 ```
-
-El resultado se generará en la `ruta del archivo` escogido y se le agregará el sufijo DeWAFF de forma que el resultado se mostrará de la forma `<nombre_del_archivo>_DeWAFF.<ext>`. En el directorio raíz se encuentran un par de ejemplos en el directorio `img/`.
-
-A los vídeos se les agrega la extensión `.avi` y las imágenes la extensión `.png` por defecto.
-
-## Idea inicial de implementación
-La idea original era crear desde cero una implementación de DeWAFF. Más adelante se esperaba partir de una implementación del algoritmo en Matlab, lamentablemente esta se perdió, por lo que se comenzó a implementar el framework desde cero. A medio camino se dio con una implementación de código abierto. Se hizo un fork de esta y se comenzó a trabajar con esto como nueva base. A pesar de tener ciertas inconsistencias tenía las bases necesarias y una implementación del filtro bilateral funcional.
-
-A continuación se muestran las ideas originales del proyecto, las cuales terminaron siendo consistentes con la implementación actual.
-### Clase DEWAFF
-La clase DEWAFF debe contar con un constructor que inicialice los valores necesarios para iniciar el filtrado de una imagen.
-
-### Métodos
-La clase DEWAFF debe contar con métodos que realicen los siguientes pasos:
-
-- Un método que permita cargar una imágen desde una ruta local. Adquirir el tamaño de la imagen y guardar otros parámetros que sean relevantes. Y finalmente definir el formato de la imágen (color, densidad de pixeles).
-
-- Un método que permita escoger el tipo de filtrado del framework utilizar (es posible pasar un string como parámetro). Este debe llamar a las funciones de filtrado necesarias y pasarles los parámetros que estas necesiten. Una vez terminado debe guardar la imágen con sufijo, ej: "imagen_\<BF>_\<DEWAFF>.png" si se utiliza el filtro bilateral.
-
-### Funciones
-Se debe implementar una función por cada tipo de operación que el framework implemente. Por ejemplo, se deben implementar los filtros y las funciones que estos requieran.
-
-### Pruebas
-Con imágenes de formato FHD o HD se debe probar cada configuración del framework para asegurar el correcto funcionamiento del mismo. Se pretende usar imágenes en estas resoluciones para evaluar los tiempos de funcionamiento del framework y verificar visualmente los resultados.
-
-Como pruebas finales se planea procesar imágenes de gran tamaño obtenidas de microoscopios u otros dispositivos.
+Take into consideration that videos take a long time to benchmark as each frame has to be processed
