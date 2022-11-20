@@ -73,12 +73,15 @@ private:
 	void setOutputFileName();
 
 	enum SPACE {
-        VIDEO_DIVIDER_SPACE = 27,
+        VIDEO_LINE = 27,
         DATA_SPACE = 11,
         VALUE_SPACE = 8,
-        DIVIDER_SPACE = 20,
+        BENCHMARK_LINE = 20,
         NUMBER_SPACE = 3,
-        TIME_SPACE = 9};
+        TIME_SPACE = 9,
+		HELP_SPACE = 69,
+		HELP_OPTION = 8,
+		HELP_DESCR = 53};
 };
 
 #endif /* PROGRAM_INTERFACE_HPP_ */

@@ -337,13 +337,13 @@ void ProgramInterface::getVideoInfo(VideoCapture inputVideo) {
  */
 void ProgramInterface::printVideoInfo() {
 	std::cout << "\nInput video information" << std::endl;
-	std::cout << std::setw(VIDEO_DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ');
+	std::cout << std::setw(VIDEO_LINE) << std::setfill('-') << '\n' << std::setfill(' ');
 	std::cout << "| "
 	<< std::left << std::setw(DATA_SPACE) << "Data"
 	<< " | "
 	<< std::left << std::setw(VALUE_SPACE+1) << "Value"
 	<< "|";
-	std::cout << std::setw(VIDEO_DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+	std::cout << std::setw(VIDEO_LINE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 	std::ostringstream stringStream;
 	stringStream << frameSize.width << "x" << frameSize.height;
 	std::cout << "| " << std::setw(DATA_SPACE) << std::left  << "Resolution"  << " | "  << std::setw(VALUE_SPACE) << std::left << stringStream.str()	<< " |" << std::endl;
@@ -352,7 +352,7 @@ void ProgramInterface::printVideoInfo() {
 	stringStream << frameRate << " fps";
 	std::cout << "| " << std::setw(DATA_SPACE) << std::left  << "Frame rate"  << " | "  << std::setw(VALUE_SPACE) << std::left << stringStream.str()	<< " |" << std::endl;
 	std::cout << "| " << std::setw(DATA_SPACE) << std::left  << "Codec type"  << " | "  << std::setw(VALUE_SPACE) << std::left << codecType			<< " |";
-	std::cout << std::setw(VIDEO_DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+	std::cout << std::setw(VIDEO_LINE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 }
 
 /**
@@ -366,18 +366,18 @@ void ProgramInterface::printImageInfo() {
 
 	// Print image information
 	std::cout << "\nInput image information" << std::endl;
-	std::cout << std::setw(VIDEO_DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ');
+	std::cout << std::setw(VIDEO_LINE) << std::setfill('-') << '\n' << std::setfill(' ');
 	std::cout << "| "
 	<< std::left << std::setw(DATA_SPACE) << "Data"
 	<< " | "
 	<< std::left << std::setw(VALUE_SPACE+1) << "Value"
 	<< "|";
-	std::cout << std::setw(VIDEO_DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+	std::cout << std::setw(VIDEO_LINE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 	std::ostringstream stringStream;
 	stringStream << frameSize.width << "x" << frameSize.height;
 	std::cout << "| " << std::setw(DATA_SPACE) << std::left  << "Resolution"  << " | "  << std::setw(VALUE_SPACE) << std::left << stringStream.str()	<< " |" << std::endl;
 	std::cout << "| " << std::setw(DATA_SPACE) << std::left  << "Image Type" << " | " 	<< std::setw(VALUE_SPACE) << std::left << imageExtension		<< " |";
-	std::cout << std::setw(VIDEO_DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+	std::cout << std::setw(VIDEO_LINE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 
 }
 
@@ -388,13 +388,13 @@ void ProgramInterface::printImageInfo() {
 void ProgramInterface::printBenchmarkHeader() {
 	// Print header
 	std::cout << std::internal <<"\nBenchmark mode" << std::endl;
-	std::cout << std::setw(DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ');
+	std::cout << std::setw(BENCHMARK_LINE) << std::setfill('-') << '\n' << std::setfill(' ');
 	std::cout << "| "
 	<< std::left << std::setw(NUMBER_SPACE) << "N"
 	<< " | "
 	<< std::left << std::setw(TIME_SPACE+1) << "Time [s]"
 	<< "|";
-	std::cout << std::setw(DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
+	std::cout << std::setw(BENCHMARK_LINE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 }
 
 /**
@@ -402,7 +402,7 @@ void ProgramInterface::printBenchmarkHeader() {
  *
  */
 void ProgramInterface::printBenchmarkFooter() {
-	std::cout << std::setw(DIVIDER_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << '\n' << std::endl;
+	std::cout << std::setw(BENCHMARK_LINE) << std::setfill('-') << '\n' << std::setfill(' ') << '\n' << std::endl;
 }
 
 /**
@@ -412,59 +412,38 @@ void ProgramInterface::help() {
 	// Print header
 	std::cout << std::internal <<"\nHelp for " << this->programName << std::endl;
 
-	std::cout << std::setw(68) << std::setfill('-') << '\n' << std::setfill(' ');
+	std::cout << std::setw(HELP_SPACE) << std::setfill('-') << '\n' << std::setfill(' ');
 	std::cout << "| "
-	<< std::setw(6) << std::left << "Options" << " | " << std::setw(54) << std::left << "Description" << " |"
-	<< std::setw(68) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl
+	<< std::setw(HELP_OPTION) << std::left << "Options" << " | " << std::setw(HELP_DESCR) << std::left << "Description" << " |"
+	<< std::setw(HELP_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl
 
 	<< "| "
-	<< std::setw(6) << std::left << "-i"
+	<< std::setw(HELP_OPTION) << std::left << "-i"
 	<< " | "
-	<< std::setw(55) << "Process an image given a file name -i <file name>"
+	<< std::setw(HELP_DESCR) << "Process an image given a file name -i <file name>"
 	<< " |"
 	<< std::endl
 
 	<< "| "
-	<< std::setw(6) << std::left << "-v"
+	<< std::setw(HELP_OPTION) << std::left << "-v"
 	<< " | "
-	<< std::setw(55) << "Process a video given a file name -v <file name>"
+	<< std::setw(HELP_DESCR) << "Process a video given a file name -v <file name>"
 	<< " |"
 	<< std::endl
 
 	<< "| "
-	<< std::setw(6) << std::left << "-b <N>"
+	<< std::setw(HELP_OPTION) << std::left << "-b < N >"
 	<< " | "
-	<< std::setw(55) << "Run a series of <N> benchmarks for a video or an image."
+	<< std::setw(HELP_DESCR) << "Run a series of N benchmarks for a video or an image."
 	<< " |"
 	<< std::endl
 
 	<< "| "
-	<< std::setw(6) << std::left << "-h"
+	<< std::setw(HELP_OPTION) << std::left << "-h"
 	<< " | "
-	<< std::setw(55) << "Display this help message"
+	<< std::setw(HELP_DESCR) << "Display this help message"
 	<< " |"
-	<< std::setw(68) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl
-
-	<< std::setw(68) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl
-	<< "| " << std::setw(64) << std::left << "Examples" << " |"
-	<< std::setw(68) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl
-
-	<< "| "
-	<< std::setw(64) << std::left << "-> Run an image benchmark for 10 iterations: " << " |" << std::endl
-	<< "| ";
-	std::ostringstream stringStream;
-	stringStream << this->programName << " -i someFile.png -b 10";
-	std::cout << std::setw(64) << std::left << stringStream.str() << " |"
-	<< std::setw(68) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl
-
-	<< "| "
-	<< std::setw(64) << std::left << "-> Process a video: " << " |" << std::endl
-	<< "| ";
-	stringStream.str(""), stringStream.clear();
-	stringStream << this->programName << " -v someFile.mp4";
-	std::cout << std::setw(64) << std::left << stringStream.str() << " |"
-	<< std::setw(68) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl
-	<< std::endl;
+	<< std::setw(HELP_SPACE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 }
 
 /**
