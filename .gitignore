@@ -44,6 +44,7 @@ Makefile
 # Doxygen
 Doxygen/html/*
 Doxygen/latex/*
+action.yml
 
 # Binary
 DeWAFF
