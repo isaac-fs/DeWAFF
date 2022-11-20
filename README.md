@@ -6,7 +6,8 @@
   - [Description](#description)
   - [Installation](#installation)
   - [Execution](#execution)
-  - [Benchmark](#benchmark)
+  - [Benchmark mode](#benchmark-mode)
+  - [Documentation](#documentation)
 
 ## Description
 Implementation of the image abstraction framework DeWAFF in C++. This framework allows to use WAF (Weighted Average Filters) with their input decoupled into a weigthing input and processing input. The weighthing input is used to generate the kernel values for the WAFF and  the processing input serves as the input for the filter. This tehcnique is known as "deceiving" hence the name of the framework. The filter's kernel is weighted with the original input values, but the actual input of the filter is the original input filtered through an UnSharp Masked image. Normal WAFs use the same image for both processes. This is the novelty of this framework, to avoid a pipelined approach by applying two different techniques to an image, but instead combine them and apply them as one.
@@ -59,7 +60,7 @@ To process a video just change the flag from `-i` to `-v` as follows
 ```
 These options will generate an output in the `/path/to/file` directory with the applied filter acronym as suffix `file_ACRONYM.extension`.
 
-## Benchmark
+## Benchmark mode
 
 There is also a benchmark mode that allows to run several executions over an image without saving it. This can be helpful to measure the performance of a particular DeWAF for your needs.
 
@@ -72,3 +73,6 @@ To benchmar a video just change the flag from `-i` to `-v` as follows
     ./DeWAFF -v /path/to/video/file -b 3
 ```
 Take into consideration that videos take a long time to benchmark as each frame has to be processed
+
+## Documentation
+The documentation for this project is hosted at https://isaac-fs.github.io/class_filters.html
