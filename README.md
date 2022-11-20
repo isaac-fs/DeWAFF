@@ -10,7 +10,7 @@
   - [Documentation](#documentation)
 
 ## Description
-Implementation of the image abstraction framework DeWAFF in C++. This framework allows to use WAF (Weighted Average Filters) with their input decoupled into a weigthing input and processing input. The weighthing input is used to generate the kernel values for the WAFF and  the processing input serves as the input for the filter. This tehcnique is known as "deceiving" hence the name of the framework. The filter's kernel is weighted with the original input values, but the actual input of the filter is the original input filtered through an UnSharp Masked image. Normal WAFs use the same image for both processes. This is the novelty of this framework, to avoid a pipelined approach by applying two different techniques to an image, but instead combine them and apply them as one.
+Implementation of the image abstraction framework DeWAFF in C++. This framework allows to use WAF (Weighted Average Filters) with their input decoupled as a weigthing input and processing input. The weighthing input is used to generate the kernel values for the WAFF, and  the processing input serves as input for the filter. This tehcnique is known as "deceiving", hence the name of the framework. With this approach the filter's kernel is weighted with the original input but the actual input for the filter is the original image filtered through an UnSharp Mask. Normal WAFs use the same image for both processes. This is the novelty of this framework, to avoid a pipelined approach by applying two different techniques to an image, but instead combine them and apply them as one.
 
 The DeWAFF is aimed at improving patter recognition tasks providing the following improvements:
 - Noise reduction
