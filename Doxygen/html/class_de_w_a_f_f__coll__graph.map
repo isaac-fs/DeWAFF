@@ -1,5 +1,0 @@
-<map id="DeWAFF" name="DeWAFF">
-<area shape="rect" id="node1" title="Deceived Weighted Average Filters Framework class It applies a filter which intput and weighting inpu..." alt="" coords="5,171,83,197"/>
-<area shape="rect" id="node2" href="$class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ..." alt="" coords="13,95,75,121"/>
-<area shape="rect" id="node3" href="$class_utils.html" title="Useful tools for image processing These tools are statics objects to use them in the lifetime of the ..." alt="" coords="18,5,70,32"/>
-</map>

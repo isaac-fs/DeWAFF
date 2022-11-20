@@ -1,5 +1,0 @@
-var searchData=
-[
-  ['nonadaptiveusm_16',['NonAdaptiveUSM',['../class_utils.html#a2f186a4cf3bafaa09b6cf14c23f9cfae',1,'Utils']]],
-  ['nonlocalmeansfilter_17',['NonLocalMeansFilter',['../class_filters.html#ac7458d17abc87805f5fd4e615da97973',1,'Filters']]]
-];
