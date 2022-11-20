@@ -2,8 +2,14 @@ name: Doxygen GitHub Pages Deploy Action
   # You may pin to the exact commit or the version.
   # uses: DenverCoder1/doxygen-github-pages-action@f1a31f55f226a53e48f414a3aa45ede1d2fdf969
 
+on:
+  push:
+    branches:
+      - main
+
 jobs:
     deploy:
+        runs-on: ubuntu-latest
         steps:
           - uses: DenverCoder1/doxygen-github-pages-action@v1.1.0
             with:
