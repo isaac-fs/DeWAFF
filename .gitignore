@@ -42,10 +42,8 @@ build/
 Makefile
 
 # Doxygen
-docs/html/
-docs/latex/
-docs/doxygen-awesome-css-main
-docs/header.html
+html/
+latex/
 
 # Binary
 DeWAFF
