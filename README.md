@@ -75,4 +75,4 @@ To benchmar a video just change the flag from `-i` to `-v` as follows
 Take into consideration that videos take a long time to benchmark as each frame has to be processed
 
 ## Documentation
-The documentation for this project is hosted at https://isaac-fs.github.io/class_filters.html
+The documentation for this project is hosted at https://isaac-fs.github.io/
