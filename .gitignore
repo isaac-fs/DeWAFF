@@ -42,9 +42,10 @@ build/
 Makefile
 
 # Doxygen
-Doxygen/html/
-Doxygen/latex/
-Doxygen/doxygen-awesome.css
+docs/html/
+docs/latex/
+docs/doxygen-awesome-css-main
+docs/header.html
 
 # GH Workflow
 .github
