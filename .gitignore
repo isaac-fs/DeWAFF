@@ -41,9 +41,8 @@ cmake*
 build/
 Makefile
 
-# Doxygen
-html/
-latex/
+# Doc generation
+docs/
 
 # Binary
 DeWAFF
