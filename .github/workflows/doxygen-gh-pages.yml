@@ -1,6 +1,6 @@
 name: Doxygen GitHub Pages Deploy Action
 
-on: [workflow_dispatch]
+on: workflow_dispatch:
   jobs:
     deploy:
       runs-on: ubuntu-latest
@@ -10,4 +10,4 @@ on: [workflow_dispatch]
             github_token: ${{ secrets.GITHUB_TOKEN }}
             branch: gh-pages
             folder: docs/html
-            config_file: Doxyfile
+            config_file: docs/Doxyfile
