@@ -1,0 +1,144 @@
+\label{index_md__home_isaac_Desktop_DeWAFF_README}%
+\Hypertarget{index_md__home_isaac_Desktop_DeWAFF_README}%
+Repositorio dedicado a avances del proyecto elétctrico.~\newline
+ {\bfseries{Estudiante}}\+: Isaac F. Fonseca Segura.~\newline
+ {\bfseries{Profesor guía}}\+: Dr.\+rer.\+nat. Francisco Siles Canales.\hypertarget{index_autotoc_md1}{}\doxysubsection{Tabla de contenidos}\label{index_autotoc_md1}
+
+\begin{DoxyItemize}
+\item \href{\#implementaci\%C3\%B3n-y-validaci\%C3\%B3n-de-un-algoritmo-de-abstracci\%C3\%B3n-de-imagen-en-c}{\texttt{ Implementación y validación de un algoritmo de abstracción de imagen en C++}}
+\begin{DoxyItemize}
+\item \href{\#tabla-de-contenidos}{\texttt{ Tabla de contenidos}}
+\item \href{\#pasos-seguidos}{\texttt{ Pasos seguidos}}
+\item \href{\#implementaci\%C3\%B3n-actual}{\texttt{ Implementación actual}}
+\item \href{\#clases}{\texttt{ Clases}}
+\item \href{\#generaci\%C3\%B3n-de-la-documentaci\%C3\%B3n}{\texttt{ Generación de la documentación}}
+\item \href{\#compilaci\%C3\%B3n-del-proyecto}{\texttt{ Compilación del proyecto}}
+\item \href{\#ejecuci\%C3\%B3n-del-framework}{\texttt{ Ejecución del framework}}
+\begin{DoxyItemize}
+\item \href{\#procesar-imagen}{\texttt{ Procesar imagen}}
+\item \href{\#procesar-imagen-y-hacer-benchmark}{\texttt{ Procesar imagen y hacer benchmark}}
+\item \href{\#procesar-v\%C3\%ADdeo}{\texttt{ Procesar vídeo}}
+\item \href{\#procesar-v\%C3\%ADdeo-y-hacer-benchmark}{\texttt{ Procesar vídeo y hacer benchmark}}
+\end{DoxyItemize}
+\item \href{\#idea-inicial-de-implementaci\%C3\%B3n}{\texttt{ Idea inicial de implementación}}
+\begin{DoxyItemize}
+\item \href{\#clase-dewaff}{\texttt{ Clase DEWAFF}}
+\item \href{\#m\%C3\%A9todos}{\texttt{ Métodos}}
+\item \href{\#funciones}{\texttt{ Funciones}}
+\item \href{\#pruebas}{\texttt{ Pruebas}}
+\end{DoxyItemize}
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{index_autotoc_md2}{}\doxysubsection{Pasos seguidos}\label{index_autotoc_md2}
+Esta sección sirve como referencia para la metodología del trabajo escrito.
+\begin{DoxyItemize}
+\item Configurar una VM con Ubuntu 22.\+04 LTS
+\item Leer el material de \href{https://www.opencv-srf.com/p/introduction.html}{\texttt{ Open CV introduction}}
+\item Seguir la guía de instalación \href{https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html}{\texttt{ Open\+CV Instalation tutorial -\/ Linux}}
+\item Instalar VSCode y las extensiones necesarias para C++. Además de extensiones para soporte de CMake y Doxygen
+\item Investigar sobre el framework \mbox{\hyperlink{class_de_w_a_f_f}{De\+WAFF}}
+\item Comenzar implementación en C++
+\item Hacer un fork the \href{https://github.com/juanGuerrero19/temporalSegmentation}{\texttt{ temporal\+Segmentation}}
+\item Automatización de compilación con CMake
+\item Revisión extensiva y corrección de inconsistencias en el fork
+\item Pruebas con imágenes y revisión de resultados
+\item Pruebas con vídeo y revisión de resultados
+\item Documentación del código con Doxygen
+\item Elaboración del trabajo escrito ~\newline
+
+\end{DoxyItemize}\hypertarget{index_autotoc_md3}{}\doxysubsection{Implementación actual}\label{index_autotoc_md3}
+En la implementación actual se cuenta no sólo con la clase \mbox{\hyperlink{class_de_w_a_f_f}{De\+WAFF}}, pero también con clases que asisten al procesado de la imagen como la clase Non\+Adaptive\+USM. Además se incluyen clases que se encargan del preprocesado de la imagen y la presentación del programa en la terminal. Finalmente hay clases con métodos de asistencia como \mbox{\hyperlink{class_timer}{Timer}} y Tools.\hypertarget{index_autotoc_md4}{}\doxysubsection{Clases}\label{index_autotoc_md4}
+Las clases implementadas y/o adaptadas y sus métodos son las siguientes\+:
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{class_de_w_a_f_f}{De\+WAFF}}
+\begin{DoxyItemize}
+\item Deceived\+Bilateral\+Filter
+\item Non\+Adaptive\+USMFilter
+\item Laplacian\+Kernel
+\item Gaussian\+Kernel
+\item Gaussian\+Exponential\+Factor
+\end{DoxyItemize}
+\item File\+Processor
+\begin{DoxyItemize}
+\item process\+Image
+\item process\+Video
+\item process\+Frame
+\item error\+Exit
+\end{DoxyItemize}
+\item CLI
+\begin{DoxyItemize}
+\item run
+\item help
+\end{DoxyItemize}
+\item \mbox{\hyperlink{class_timer}{Timer}}
+\begin{DoxyItemize}
+\item start
+\item stop
+\end{DoxyItemize}
+\item Tools
+\begin{DoxyItemize}
+\item mesh\+Grid
+\item get\+Min\+Max
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+Estas clases y funciones se encuentran extensivamente documentadas en formato Doxygen. Para generar la documentación se deben seguir los siguientes pasos\hypertarget{index_autotoc_md5}{}\doxysubsection{Generación de la documentación}\label{index_autotoc_md5}
+Se deben introducir los siguientes comandos 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cd doxygen/}
+\DoxyCodeLine{doxygen Doxyfile}
+
+\end{DoxyCode}
+ Después se debe abrir el enlace símbolico en el directorio raíz {\ttfamily De\+WAFF-\/\+B52786/} del proyecto llamado {\ttfamily index.\+html}. Esto abrirá en su navegador la documentacion del proyecto. Doxygen debe estar instalado previamente.\hypertarget{index_autotoc_md6}{}\doxysubsection{Compilación del proyecto}\label{index_autotoc_md6}
+La compliación de este proyecto se realiza de manera automatizada con {\ttfamily cmake} y {\ttfamily make}. Para crear un ejecutable debe seguir los siguientes pasos en el directorio raíz {\ttfamily De\+WAFF-\/\+B52786/}. Todas las dependencias de {\ttfamily Open\+CV} deben estar instaladas previamente. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{cmake .}
+\DoxyCodeLine{cmake -\/-\/build .}
+
+\end{DoxyCode}
+ Si hace cambios al código podrá actualizar el proyecto con {\ttfamily make}.\hypertarget{index_autotoc_md7}{}\doxysubsection{Ejecución del framework}\label{index_autotoc_md7}
+Para correr el programa se debe haber generado el binario {\ttfamily \mbox{\hyperlink{class_de_w_a_f_f}{De\+WAFF}}} en el directorio raíz al haber seguido los pasos de compilación. Una vez con este binario se pueden procesar imágenes y vídeo con la opción de hacer un benchmark.
+
+Para correr el programa use el siguiente comando en el directorio raíz {\ttfamily De\+WAFF-\/\+B52786/}, o donde desee ubicar el programa\hypertarget{index_autotoc_md8}{}\doxysubsubsection{Procesar imagen}\label{index_autotoc_md8}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./DeWAFF -\/i <ruta del archivo>}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md9}{}\doxysubsubsection{Procesar imagen y hacer benchmark}\label{index_autotoc_md9}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./DeWAFF -\/i <ruta del archivo> -\/b <número de iteraciones>}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md10}{}\doxysubsubsection{Procesar vídeo}\label{index_autotoc_md10}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./DeWAFF -\/v <ruta del archivo>}
+
+\end{DoxyCode}
+\hypertarget{index_autotoc_md11}{}\doxysubsubsection{Procesar vídeo y hacer benchmark}\label{index_autotoc_md11}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{./DeWAFF -\/v <ruta del archivo> -\/b <número de iteraciones>}
+
+\end{DoxyCode}
+
+
+El resultado se generará en la {\ttfamily ruta del archivo} escogido y se le agregará el sufijo \mbox{\hyperlink{class_de_w_a_f_f}{De\+WAFF}} de forma que el resultado se mostrará de la forma {\ttfamily $<$nombre\+\_\+del\+\_\+archivo$>$\+\_\+\+De\+WAFF.$<$ext$>$}. En el directorio raíz se encuentran un par de ejemplos en el directorio {\ttfamily img/}.
+
+A los vídeos se les agrega la extensión {\ttfamily .avi} y las imágenes la extensión {\ttfamily .png} por defecto.\hypertarget{index_autotoc_md12}{}\doxysubsection{Idea inicial de implementación}\label{index_autotoc_md12}
+La idea original era crear desde cero una implementación de \mbox{\hyperlink{class_de_w_a_f_f}{De\+WAFF}}. Más adelante se esperaba partir de una implementación del algoritmo en Matlab, lamentablemente esta se perdió, por lo que se comenzó a implementar el framework desde cero. A medio camino se dio con una implementación de código abierto. Se hizo un fork de esta y se comenzó a trabajar con esto como nueva base. A pesar de tener ciertas inconsistencias tenía las bases necesarias y una implementación del filtro bilateral funcional.
+
+A continuación se muestran las ideas originales del proyecto, las cuales terminaron siendo consistentes con la implementación actual. \hypertarget{index_autotoc_md13}{}\doxysubsubsection{Clase DEWAFF}\label{index_autotoc_md13}
+La clase DEWAFF debe contar con un constructor que inicialice los valores necesarios para iniciar el filtrado de una imagen.\hypertarget{index_autotoc_md14}{}\doxysubsubsection{Métodos}\label{index_autotoc_md14}
+La clase DEWAFF debe contar con métodos que realicen los siguientes pasos\+:
+
+
+\begin{DoxyItemize}
+\item Un método que permita cargar una imágen desde una ruta local. Adquirir el tamaño de la imagen y guardar otros parámetros que sean relevantes. Y finalmente definir el formato de la imágen (color, densidad de pixeles).
+\item Un método que permita escoger el tipo de filtrado del framework utilizar (es posible pasar un string como parámetro). Este debe llamar a las funciones de filtrado necesarias y pasarles los parámetros que estas necesiten. Una vez terminado debe guardar la imágen con sufijo, ej\+: \char`\"{}imagen\+\_\+\textbackslash{}$<$\+BF$>$\+\_\+\textbackslash{}$<$\+DEWAFF$>$.\+png\char`\"{} si se utiliza el filtro bilateral.
+\end{DoxyItemize}\hypertarget{index_autotoc_md15}{}\doxysubsubsection{Funciones}\label{index_autotoc_md15}
+Se debe implementar una función por cada tipo de operación que el framework implemente. Por ejemplo, se deben implementar los filtros y las funciones que estos requieran.\hypertarget{index_autotoc_md16}{}\doxysubsubsection{Pruebas}\label{index_autotoc_md16}
+Con imágenes de formato FHD o HD se debe probar cada configuración del framework para asegurar el correcto funcionamiento del mismo. Se pretende usar imágenes en estas resoluciones para evaluar los tiempos de funcionamiento del framework y verificar visualmente los resultados.
+
+Como pruebas finales se planea procesar imágenes de gran tamaño obtenidas de microoscopios u otros dispositivos. 

@@ -1,0 +1,101 @@
+\begin{theindex}
+
+  \item {/home/isaac/Desktop/DeWAFF/include/DeWAFF.hpp}, \hyperpage{19}
+  \item {/home/isaac/Desktop/DeWAFF/include/Filters.hpp}, 
+		\hyperpage{19}
+  \item {/home/isaac/Desktop/DeWAFF/include/GuidedFilter.hpp}, 
+		\hyperpage{20}
+  \item {/home/isaac/Desktop/DeWAFF/include/ProgramInterface.hpp}, 
+		\hyperpage{20}
+  \item {/home/isaac/Desktop/DeWAFF/include/Utils.hpp}, \hyperpage{21}
+
+  \indexspace
+
+  \item {BilateralFilter}
+    \subitem {Filters}, \hyperpage{10}
+
+  \indexspace
+
+  \item {DeceivedBilateralFilter}
+    \subitem {DeWAFF}, \hyperpage{7}
+  \item {DeceivedGuidedFilter}
+    \subitem {DeWAFF}, \hyperpage{8}
+  \item {DeceivedNonLocalMeansFilter}
+    \subitem {DeWAFF}, \hyperpage{8}
+  \item {DeceivedScaledBilateralFilter}
+    \subitem {DeWAFF}, \hyperpage{9}
+  \item {DeWAFF}, \hyperpage{6}
+    \subitem {DeceivedBilateralFilter}, \hyperpage{7}
+    \subitem {DeceivedGuidedFilter}, \hyperpage{8}
+    \subitem {DeceivedNonLocalMeansFilter}, \hyperpage{8}
+    \subitem {DeceivedScaledBilateralFilter}, \hyperpage{9}
+    \subitem {DeWAFF}, \hyperpage{7}
+
+  \indexspace
+
+  \item {EuclideanDistanceMatrix}
+    \subitem {Utils}, \hyperpage{16}
+
+  \indexspace
+
+  \item {Filters}, \hyperpage{9}
+    \subitem {BilateralFilter}, \hyperpage{10}
+    \subitem {NonLocalMeansFilter}, \hyperpage{11}
+    \subitem {ScaledBilateralFilter}, \hyperpage{12}
+
+  \indexspace
+
+  \item {GaussianKernel}
+    \subitem {Utils}, \hyperpage{17}
+  \item {GuidedFilter}, \hyperpage{13}
+  \item {GuidedFilterColor}, \hyperpage{13}
+  \item {GuidedFilterImpl}, \hyperpage{13}
+  \item {GuidedFilterMono}, \hyperpage{14}
+
+  \indexspace
+
+  \item {LoGKernel}
+    \subitem {Utils}, \hyperpage{17}
+
+  \indexspace
+
+  \item {MeshGrid}
+    \subitem {Utils}, \hyperpage{17}
+  \item {MinMax}
+    \subitem {Utils}, \hyperpage{18}
+
+  \indexspace
+
+  \item {NonAdaptiveUSM}
+    \subitem {Utils}, \hyperpage{18}
+  \item {NonLocalMeansFilter}
+    \subitem {Filters}, \hyperpage{11}
+
+  \indexspace
+
+  \item {ProgramInterface}, \hyperpage{14}
+    \subitem {ProgramInterface}, \hyperpage{14}
+
+  \indexspace
+
+  \item {ScaledBilateralFilter}
+    \subitem {Filters}, \hyperpage{12}
+  \item {stop}
+    \subitem {Timer}, \hyperpage{15}
+
+  \indexspace
+
+  \item {Timer}, \hyperpage{15}
+    \subitem {stop}, \hyperpage{15}
+
+  \indexspace
+
+  \item {Utils}, \hyperpage{16}
+    \subitem {EuclideanDistanceMatrix}, \hyperpage{16}
+    \subitem {GaussianKernel}, \hyperpage{17}
+    \subitem {LoGKernel}, \hyperpage{17}
+    \subitem {MeshGrid}, \hyperpage{17}
+    \subitem {MinMax}, \hyperpage{18}
+    \subitem {NonAdaptiveUSM}, \hyperpage{18}
+
+\end{theindex}

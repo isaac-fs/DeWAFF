@@ -1,0 +1,89 @@
+\hypertarget{class_tools}{}\doxysubsection{Tools Class Reference}
+\label{class_tools}\index{Tools@{Tools}}
+
+
+Useful tools for the file processing.  
+
+
+
+
+{\ttfamily \#include $<$Tools.\+hpp$>$}
+
+\doxysubsubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_tools_a41ebdc3f47f5aef80a5140ea12662e3a}{mesh\+Grid}} (const Range \&range, Mat \&X, Mat \&Y)
+\begin{DoxyCompactList}\small\item\em Generate a meshgrid from X and Y unidimensional coordinates Example\+: x\+Range = \mbox{[}0,3\mbox{[} and y\+Range = \mbox{[}0,3\mbox{[} will return the following X and Y coordinates. \end{DoxyCompactList}\item 
+static void \mbox{\hyperlink{class_tools_aa7411ecd3205071250e4d052fb03298b}{get\+Min\+Max}} (const Mat \&A, double $\ast$minA, double $\ast$maxA)
+\begin{DoxyCompactList}\small\item\em Gets the global min and max values of a 3 channel Matrix. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_tools_a244f695c3bacb6d1699358616aaff6c0}\label{class_tools_a244f695c3bacb6d1699358616aaff6c0}} 
+static void {\bfseries add\+Padding} (Mat \&RoI, int x\+Range\+Size, int y\+Range\+Size)
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Useful tools for the file processing. 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_tools_aa7411ecd3205071250e4d052fb03298b}\label{class_tools_aa7411ecd3205071250e4d052fb03298b}} 
+\index{Tools@{Tools}!getMinMax@{getMinMax}}
+\index{getMinMax@{getMinMax}!Tools@{Tools}}
+\doxyparagraph{\texorpdfstring{getMinMax()}{getMinMax()}}
+{\footnotesize\ttfamily void Tools\+::get\+Min\+Max (\begin{DoxyParamCaption}\item[{const Mat \&}]{A,  }\item[{double $\ast$}]{minA,  }\item[{double $\ast$}]{maxA }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Gets the global min and max values of a 3 channel Matrix. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em A} & Input matrix \\
+\hline
+{\em minA} & Minimun value of the matrix A \\
+\hline
+{\em maxA} & Maximun value of the matrix A \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_tools_a41ebdc3f47f5aef80a5140ea12662e3a}\label{class_tools_a41ebdc3f47f5aef80a5140ea12662e3a}} 
+\index{Tools@{Tools}!meshGrid@{meshGrid}}
+\index{meshGrid@{meshGrid}!Tools@{Tools}}
+\doxyparagraph{\texorpdfstring{meshGrid()}{meshGrid()}}
+{\footnotesize\ttfamily void Tools\+::mesh\+Grid (\begin{DoxyParamCaption}\item[{const Range \&}]{range,  }\item[{Mat \&}]{X,  }\item[{Mat \&}]{Y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Generate a meshgrid from X and Y unidimensional coordinates Example\+: x\+Range = \mbox{[}0,3\mbox{[} and y\+Range = \mbox{[}0,3\mbox{[} will return the following X and Y coordinates. 
+
+X = ~\newline
+ \mbox{[}0, 0, 0; ~\newline
+ 1, 1, 1; ~\newline
+ 2, 2, 2\mbox{]} ~\newline
+ Y = ~\newline
+ \mbox{[}0, 1, 2; ~\newline
+ 0, 1, 2; ~\newline
+ 0, 1, 2\mbox{]} ~\newline
+ ~\newline
+Wich would form the following mesh grid
+
+(X,Y) = ~\newline
+ \mbox{[}(0,0) (0,1), (0,2); ~\newline
+ (0,1) (1,1), (2,1); ~\newline
+ (2,0) (2,1), (2,2)\mbox{]}
+
+
+\begin{DoxyParams}{Parameters}
+{\em x\+Range} & X Open\+CV Range variable \\
+\hline
+{\em y\+Range} & Y Open\+CV Range variable \\
+\hline
+{\em X} & x axis values matrix \\
+\hline
+{\em Y} & y axis values matrix \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/isaac/\+Desktop/\+De\+WAFF/include/\mbox{\hyperlink{_tools_8hpp}{Tools.\+hpp}}\item 
+/home/isaac/\+Desktop/\+De\+WAFF/src/Tools.\+cpp\end{DoxyCompactItemize}

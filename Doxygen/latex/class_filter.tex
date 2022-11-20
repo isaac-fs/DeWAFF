@@ -1,0 +1,150 @@
+\doxysubsection{Filter Class Reference}
+\label{class_filter}\index{Filter@{Filter}}
+
+
+Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original image to fit square odd dimensioned kernels throughout the processing.  
+
+
+
+
+{\ttfamily \#include $<$Filter.\+hpp$>$}
+
+Inheritance diagram for Filter\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_filter}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+Mat \textbf{ Bilateral\+Filter} (const Mat \&weighting\+Image, const Mat \&input\+Image, const int window\+Size, const double spatial\+Sigma, const int range\+Sigma)
+\begin{DoxyCompactList}\small\item\em Apply a Bilateral \doxyref{Filter}{p.}{class_filter} to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. \end{DoxyCompactList}\item 
+Mat \textbf{ Scaled\+Bilateral\+Filter} (const Mat \&weighting\+Image, const Mat \&input\+Image, const int window\+Size, const double spatial\+Sigma, const int range\+Sigma)
+\begin{DoxyCompactList}\small\item\em Apply a Scaled Bilateral \doxyref{Filter}{p.}{class_filter} to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The difference between this filter and the not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter to have better performance under heavy AWGN. \end{DoxyCompactList}\item 
+Mat \textbf{ Non\+Local\+Means\+Filter} (const Mat \&weighting\+Image, const Mat \&input\+Image, const int window\+Size, const int patch\+Size, const double range\+Sigma)
+\begin{DoxyCompactList}\small\item\em Apply a Non Local Means \doxyref{Filter}{p.}{class_filter} to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding. \end{DoxyCompactList}\item 
+\mbox{\label{class_filter_a5207fd86afc6201dc53ec0dc6892cc50}} 
+Mat {\bfseries Guided\+Filter} (const Mat \&input\+Image, const Mat \&guiding\+Image, const int window\+Size, const int range\+Sigma)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\label{class_filter_ad6382618e9f9b60f9d66106965a0027c}} 
+\textbf{ Utils} {\bfseries lib}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\label{class_filter_ab9a61a4434b20514b4c0cb4541f26c61}} 
+enum {\bfseries CIELab} \+: int \{ {\bfseries L}
+, {\bfseries a}
+, {\bfseries b}
+ \}
+\end{DoxyCompactItemize}
+
+
+\doxysubsubsection{Detailed Description}
+Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original image to fit square odd dimensioned kernels throughout the processing. 
+
+\doxysubsubsection{Member Function Documentation}
+\mbox{\label{class_filter_a9850745e2c33c0b338890552a8b1657c}} 
+\index{Filter@{Filter}!BilateralFilter@{BilateralFilter}}
+\index{BilateralFilter@{BilateralFilter}!Filter@{Filter}}
+\doxyparagraph{BilateralFilter()}
+{\footnotesize\ttfamily Mat Filter\+::\+Bilateral\+Filter (\begin{DoxyParamCaption}\item[{const Mat \&}]{weighting\+Image,  }\item[{const Mat \&}]{input\+Image,  }\item[{const int}]{window\+Size,  }\item[{const double}]{spatial\+Sigma,  }\item[{const int}]{range\+Sigma }\end{DoxyParamCaption})}
+
+
+
+Apply a Bilateral \doxyref{Filter}{p.}{class_filter} to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em weighting\+Image} & image used to calculate the kernel\textquotesingle{}s weight \\
+\hline
+{\em input\+Image} & image used as input for the filter \\
+\hline
+{\em window\+Size} & processing window size, has to be odd numbered and greater or equal than 3 \\
+\hline
+{\em spatial\+Sigma} & spatial standard deviation \\
+\hline
+{\em range\+Sigma} & range or radiometric standard deviation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mat output image 
+\end{DoxyReturn}
+Compute a spatial Gaussian kernel $ G_{\text spatial}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) $ with the spatial values (pixel positions) from an image region $ \Omega \subseteq U $. The spatial kernel uses the $ m_i \subseteq \Omega $ pixels coordinates as weighting values for the pixel $ p = (x, y) $. Normalize it with $\frac{1}{\sum G_{\text kernel}}$ so it sums to 1 for low pass filter behavior consistency
+
+Compute a range Gaussian kernel $ G_{\text range}(U, m, p) = \exp\left( -\frac{ |U(m) - U(p)|^2 }{ 2{\sigma_s^2} } \right) $ with the range values (pixel intensities) from an input weight\+Region $ \Omega \subseteq U $. The range kernel uses the $ m_i \subseteq \Omega $ pixels intensities as weighting values for the pixel $ p = (x, y) $ instead of their locations as in the spatial kernel computation. In this case a the input $ U $ is separated into the three CIELab weight\+Channels and each channel is processed as an individual input $ U_{\text channel} $
+
+Convolve the spatial and range gaussian kernels to obtain the bilateral filter kernel $ \phi_{\text SBF}(U, m, p) = G_{\text spatial}(|m-p|) \, G_{\text range}(|U(m)-U(p)|) $
+
+Calculate the Bilateral filter\textquotesingle{}s norm $ \left( \sum_{m \subseteq \Omega} \phi_{\text{SBF}}(U, m, p) \right)^{-1} $
+
+Apply the bilateral filter kernel to the laplacian input\+: $ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, m, p) \right)^{-1} \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) $\mbox{\label{class_filter_a7d447e30142261e65476e940227cf2b4}} 
+\index{Filter@{Filter}!NonLocalMeansFilter@{NonLocalMeansFilter}}
+\index{NonLocalMeansFilter@{NonLocalMeansFilter}!Filter@{Filter}}
+\doxyparagraph{NonLocalMeansFilter()}
+{\footnotesize\ttfamily Mat Filter\+::\+Non\+Local\+Means\+Filter (\begin{DoxyParamCaption}\item[{const Mat \&}]{weighting\+Image,  }\item[{const Mat \&}]{input\+Image,  }\item[{const int}]{window\+Size,  }\item[{const int}]{patch\+Size,  }\item[{const double}]{range\+Sigma }\end{DoxyParamCaption})}
+
+
+
+Apply a Non Local Means \doxyref{Filter}{p.}{class_filter} to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em weighting\+Image} & image used to calculate the kernel\textquotesingle{}s weight \\
+\hline
+{\em input\+Image} & image used as input for the filter \\
+\hline
+{\em window\+Size} & processing window size, has to be odd numbered and greater or equal than 3 \\
+\hline
+{\em range\+Sigma} & range or radiometric standard deviation. Used to calculate $ h = \frac{\sqrt(\sigma)}{2} $ \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mat output image 
+\end{DoxyReturn}
+Compute the Non Local Means \doxyref{Filter}{p.}{class_filter} $ \phi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{|B(m) - B(p)|^2}{h^2} \right)$ where $B(p)$ is a patch of the window $\Omega$ centered at pixel $p$. $B(m)$ is the rest of the patches in $\Omega$ centered at each $m$ pixel. The Non Local Means \doxyref{Filter}{p.}{class_filter} calculates the Euclidean distance between each patch $B(m)$ and $B(p)$ for each window $\Omega \subseteq U$. This is why this algorithm is highly demanding in computational terms. Each Euclidean distance matrix obtained from each patch pair is the input for a Gaussian decreasing function with standard deviation $h$ that generates the new pixel $p$ value
+
+Calculate the Non Local Means filter\textquotesingle{}s norm $ \phi_{\text NLM}(U, m, p) \left( \sum_{m \subseteq \Omega} \phi_{\text{NLM}}(U, m, p) \right)^{-1} $
+
+Apply the NLM filter kernel to the laplacian image. $ Y_{\phi_{\text NLM}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text NLM}(U, m, p) \right)^{-1} \left( \sum_{m \subseteq \Omega} \phi_{\text NLM}(U, p, m) \, \hat{f}_{\text USM}(m) \right) $\mbox{\label{class_filter_aa49af5e7dd383c0f64d761eb7ca799ea}} 
+\index{Filter@{Filter}!ScaledBilateralFilter@{ScaledBilateralFilter}}
+\index{ScaledBilateralFilter@{ScaledBilateralFilter}!Filter@{Filter}}
+\doxyparagraph{ScaledBilateralFilter()}
+{\footnotesize\ttfamily Mat Filter\+::\+Scaled\+Bilateral\+Filter (\begin{DoxyParamCaption}\item[{const Mat \&}]{weighting\+Image,  }\item[{const Mat \&}]{input\+Image,  }\item[{const int}]{window\+Size,  }\item[{const double}]{spatial\+Sigma,  }\item[{const int}]{range\+Sigma }\end{DoxyParamCaption})}
+
+
+
+Apply a Scaled Bilateral \doxyref{Filter}{p.}{class_filter} to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The difference between this filter and the not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter to have better performance under heavy AWGN. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em weighting\+Image} & image used to calculate the kernel\textquotesingle{}s weight \\
+\hline
+{\em input\+Image} & image used as input for the filter \\
+\hline
+{\em window\+Size} & processing window size, has to be odd numbered and greater or equal than 3 \\
+\hline
+{\em spatial\+Sigma} & spatial standard deviation \\
+\hline
+{\em range\+Sigma} & range or radiometric standard deviation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Mat output image 
+\end{DoxyReturn}
+Compute a range Gaussian kernel $ G_{\text range}(U, U^s, m, p) = \exp\left( -\frac{ |U^s(m) - U(p)|^2 }{ 2{\sigma_s^2} } \right) $ with the range values (pixel intensities) from an image region $ \Omega \subseteq U $. The range kernel uses the $ m_i \subseteq \Omega $ pixels intensities as weighting values for the pixel $ p = (x, y) $ instead of their locations as in the spatial kernel computation. In this case a the image $ U $ is separated into the three CIELab scaled\+Channels and each channel is processed as an individual image $ U_{\text channel} $
+
+Convolve the spatial and range gaussian kernels to obtain the bilateral filter kernel $ \phi_{\text SBF}(U, U^s, m, p) = G_{\text spatial}(|m-p|) \, G_{\text range}(|U^s(m)-U(p)|) $
+
+Calculate the Bilateral filter\textquotesingle{}s norm $ \left( \sum_{m \subseteq \Omega} \phi_{\text{SBF}}(U, U^s, m, p) \right)^{-1} $
+
+Apply the bilateral filter kernel to the laplacian image. The Laplacian deceive consists on weighting the Bilateral \doxyref{Filter}{p.}{class_filter} kernel with the original image and use the USM image as input for the filter $ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, U^s, m, p) \right)^{-1} \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) $
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/isaac/\+Desktop/\+De\+WAFF/include/\textbf{ Filter.\+hpp}\item 
+/home/isaac/\+Desktop/\+De\+WAFF/src/Filter.\+cpp\end{DoxyCompactItemize}
