@@ -1,6 +1,7 @@
 name: Doxygen GitHub Pages Deploy Action
 
-on: workflow_dispatch:
+on:
+workflow_dispatch:
   jobs:
     deploy:
       runs-on: ubuntu-latest
