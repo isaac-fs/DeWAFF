@@ -38,7 +38,7 @@ After these steps binary named `DeWAFF` should appear in the directory. To recom
 
 ## Execution
 To execute the framework run `./DeWAFF` accompanied of one or more of the following options:
-
+```terminal
         --------------------------------------------------------------------
         | Options  | Description                                           |
         --------------------------------------------------------------------
@@ -47,6 +47,7 @@ To execute the framework run `./DeWAFF` accompanied of one or more of the follow
         | -b < N > | Run a series of N benchmarks for a video or an image. |
         | -h       | Display this help message                             |
         --------------------------------------------------------------------
+```
 
 For example, to process an image the command looks like this
 ```bash
