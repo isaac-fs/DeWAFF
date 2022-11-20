@@ -4,7 +4,7 @@ name: Doxygen GitHub Pages Deploy Action
   uses: DenverCoder1/doxygen-github-pages-action@v1.1.0
   with:
     # A GitHub token for pushing to the repo. Example: https://git.io/passing-token
-    # github_token: ${{secrets.GITHUB_TOKEN}}
+    github_token: ${{ secrets.GITHUB_TOKEN }}
     # Branch name for pushing GitHub pages files
     branch: main
     # Folder where Doxygen will generate the HTML build files
