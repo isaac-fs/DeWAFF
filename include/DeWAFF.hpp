@@ -17,7 +17,7 @@
 using namespace cv;
 
 /**
- * @brief Deceived Weighted Average Filters Framework class
+ * @brief Deceived Weighted Average Filters Framework class.
  * It applies a filter which intput and weighting input are decoupled, so it is possible
  * deceive the input and to still use the original input weighting values
  *
