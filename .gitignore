@@ -47,9 +47,6 @@ docs/latex/
 docs/doxygen-awesome-css-main
 docs/header.html
 
-# GH Workflow
-.github
-
 # Binary
 DeWAFF
 
