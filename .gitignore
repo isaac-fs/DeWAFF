@@ -42,8 +42,8 @@ build/
 Makefile
 
 # Doxygen
-doxygen/html/*
-doxygen/latex/*
+Doxygen/html/*
+Doxygen/latex/*
 
 # Binary
 DeWAFF
