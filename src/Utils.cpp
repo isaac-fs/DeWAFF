@@ -133,7 +133,6 @@ Mat Utils::LoGKernel(int windowSize, double sigma) {
  * Here \f$ g \f$ is a Gaussian kernel and \f$ l \f$ a Laplacian kernel, hence the name "Laplacian of Gaussian"
  * @param image Image to apply the mask
  * @return Filtered image
- *
  */
 Mat Utils::NonAdaptiveUSM(const Mat &image, int windowSize, int lambda, double sigma) {
 	// Generate the Laplacian kernel
@@ -204,7 +203,6 @@ Mat Utils::EuclideanDistanceMatrix(const Mat& inputImage, int patchSize) {
 
 /**
  * @brief Starts the timer and resets the elapsed time
- *
  */
 void Timer::start() {
 	struct timeval timeOfDay;
