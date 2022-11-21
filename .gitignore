@@ -41,8 +41,8 @@ cmake*
 build/
 Makefile
 
-# Doc generation
-docs/
+# Doxygen
+doxygen/
 
 # Binary
 DeWAFF
