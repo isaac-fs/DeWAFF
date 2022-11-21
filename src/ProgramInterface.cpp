@@ -6,20 +6,44 @@
  * @param argc argument count from the terminal
  * @param argv arguments from the terminal
  */
-ProgramInterface::ProgramInterface(int argc, char** argv): framework(DeWAFF()), lib(Utils()), timer(Timer()) {
+ProgramInterface::ProgramInterface(int argc, char** argv):
+	// Initializer list
+	// Class
+	mode(start),
+	benchmarkIterations(0),
+	// Framework
+	framework(DeWAFF()),
+	filterType(DeWAFF::DBF),
+	windowSize(15),
+	spatialSigma(windowSize / 1.5),
+	rangeSigma(10),
+	patchSize(windowSize/2),
+	// Libraries
+	lib(Utils()),
+	timer(Timer()) {
 	// Incomplete command catch
 	if (argc == 1) help();
 	else if((mode & benchmark) && argc == 3) errorMessage("Incomplete command. Use the -h flag to see the options");
 
+	// Set the program name
 	programName = argv[0];
-	mode = start;
-	benchmarkIterations = 0;
 
-	filterType = DeWAFF::DGF;
-	windowSize = 11;
-	spatialSigma = windowSize / 1.5;
-	rangeSigma = 10;
-	patchSize = windowSize/2;
+	/*
+	unsigned int filterType;
+	int windowSize, rangeSigma, patchSize;
+	double spatialSigma;
+	*/
+
+	const std::string filterOpts[] = {
+		"f",		/// filter_type,
+		"ws",		/// window_size,
+		"rs",		/// range_sigma,
+		"ss",		/// spatial_sigma,
+		"lambda",	/// lambda,
+		"ps",		/// patch_size,
+		nullptr
+	};
+
 
 	// Check the windows size
     if (windowSize < 3 || windowSize % 2 == 0) {

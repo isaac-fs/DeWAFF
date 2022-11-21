@@ -23,11 +23,9 @@ using namespace cv;
  *
  */
 class DeWAFF : protected Filters {
-	private:
-		int usmLambda; /// Parameter for the Laplacian deceive
 	public:
 		DeWAFF();
-		enum FilterType : unsigned int {DBF, DSBF, DNLM, DGF};
+		int usmLambda; /// Parameter for the Laplacian deceive
 		Mat DeceivedBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma);
 		Mat DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma);
 		Mat DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int patchSize, double spatialSigma, int rangeSigma);

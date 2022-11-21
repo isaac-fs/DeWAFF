@@ -28,51 +28,56 @@ public:
 	int run();
 
 private:
-	DeWAFF framework;
-	Utils lib;
-	Timer timer;
-
-	enum modes : unsigned int { // Processing modes
-		start = 0,
-		image = 1,
-		video = 2,
-		benchmark = 4};
-
-	std::string programName;
-	std::string inputFileName;
-	std::string outputFileName;
+	// Class configuration
+	unsigned int mode;
+	int benchmarkIterations;
+	enum programModes : unsigned int {
+		start = 0, 		// 000
+		image = 1, 		// 001
+		video = 2, 		// 010
+		benchmark = 4 	// 100
+	};
+	std::string programName, inputFileName, outputFileName;
 	std::string::size_type dotPos;
-	int benchmarkIterations; // Number of iterations for benchmark mode
 	Size frameSize;
 	int codec, frameCount, frameRate;
 	std::string codecType;
-	unsigned int mode;
-	unsigned int filterType;
+
+	// Framework configuration
+	DeWAFF framework;
+	Utils lib;
+	Timer timer;
 	int windowSize, rangeSigma, patchSize;
 	double spatialSigma;
+	unsigned int filterType;
+	enum filterTypes : unsigned int {
+		DBF,
+		DSBF,
+		DNLM,
+		DGF
+	};
 
-
+	// Input processing
 	Mat inputPreProcessor(const Mat &inputImage);
 	Mat outputPosProcessor(const Mat &inputImage);
 	Mat processFrame(const Mat &frame);
-
 	void processImage();
 	void processVideo();
 	void benchmarkImage();
 	void benchmarkVideo();
 
+	// Helper methods
 	void getVideoInfo(VideoCapture inputVideo);
 	void printVideoInfo();
 	void printImageInfo();
-
 	void printBenchmarkHeader();
 	void printBenchmarkFooter();
-
-	void help();
-	void errorMessage(std::string msg);
 	void setOutputFileName();
+	void errorMessage(std::string msg);
+	void help();
 
-	enum SPACE {
+	// Output spacing
+	enum spacing {
         VIDEO_LINE = 27,
         DATA_SPACE = 11,
         VALUE_SPACE = 8,
@@ -81,7 +86,8 @@ private:
         TIME_SPACE = 9,
 		HELP_SPACE = 69,
 		HELP_OPTION = 8,
-		HELP_DESCR = 53};
+		HELP_DESCR = 53
+	};
 };
 
 #endif /* PROGRAM_INTERFACE_HPP_ */

@@ -4,12 +4,10 @@
  * @brief DeWAFF class constructor. Sets the lambda parameter for the Laplacian deceive
  *
  */
-DeWAFF::DeWAFF(){
-    this->usmLambda = 2;
-}
+DeWAFF::DeWAFF(): usmLambda(2){}
 
 /**
- * @brief Apply the DeceivedBilateralFilter to an image. Uses an UnSharp mask as deceiver
+ * @brief Apply the Deceived Bilateral Filter to an image. Uses an UnSharp mask as deceiver
  *
  * @param inputImage input image
  * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
@@ -25,7 +23,7 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, doubl
 }
 
 /**
- * @brief Apply the DeceivedScaledBilateral Filter to an image. Uses an UnSharp mask as deceiver.
+ * @brief Apply the Deceived Scaled Bilateral Filter to an image. Uses an UnSharp mask as deceiver.
  * Similar to the Deceived Bilateral Filter, but the weighting image is low pass filtered
  *
  * @param inputImage input image
@@ -42,7 +40,7 @@ Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize,
 }
 
 /**
- * @brief Apply the DeceivedNonLocalMeansFilter to an image. Uses an UnSharp mask as deceiver.
+ * @brief Apply the Deceived Non Local Means Filter to an image. Uses an UnSharp mask as deceiver.
  * Computationally demanding algorithm, can take as much as ten times more than the other filters
  * in the framework
  *
@@ -61,7 +59,7 @@ Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, i
 }
 
 /**
- * @brief Apply the DeceivedGuidedFilter to an image. Uses an UnSharp mask as deceiver.
+ * @brief Apply the Deceived Guided Filter to an image. Uses an UnSharp mask as deceiver.
  * The fastest WAF for the DeWAFF yet
  *
  * @param inputImage input image
