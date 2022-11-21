@@ -17,7 +17,7 @@ DeWAFF::DeWAFF(): usmLambda(2){}
  */
 Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma) {
     // Pre-process the laplacian masked image
-    Mat usmImage = lib.NonAdaptiveUSM(inputImage, windowSize, usmLambda, spatialSigma);
+    Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
     return BilateralFilter(inputImage, usmImage, windowSize, spatialSigma, rangeSigma);
 }
@@ -34,7 +34,7 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, doubl
  */
 Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma) {
     // Pre-process the laplacian masked image
-    Mat usmImage = lib.NonAdaptiveUSM(inputImage, windowSize, usmLambda, spatialSigma);
+    Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
     return ScaledBilateralFilter(inputImage, usmImage, windowSize, spatialSigma, rangeSigma);
 }
@@ -53,7 +53,7 @@ Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize,
  */
 Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int patchSize, double spatialSigma, int rangeSigma) {
     // Pre-process the laplacian masked image
-    Mat usmImage = lib.NonAdaptiveUSM(inputImage, windowSize, usmLambda, spatialSigma);
+    Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
     return NonLocalMeansFilter(inputImage, usmImage, windowSize, patchSize, rangeSigma);
 }
@@ -69,7 +69,7 @@ Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, i
  * @return Mat output image
  */
 Mat DeWAFF::DeceivedGuidedFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma) {
-    Mat usmImage = lib.NonAdaptiveUSM(inputImage, windowSize, usmLambda, spatialSigma);
+    Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
     return GuidedFilter(usmImage, inputImage, windowSize, rangeSigma);
 }
