@@ -31,6 +31,8 @@ void Utils::MeshGrid(const Range &range, Mat &X, Mat &Y) {
 	for (int i = range.start; i < range.end; i++) x.push_back(i);
 	repeat(Mat(x).reshape(1,1), range.size(), 1, X);
 	Y = X.t();
+	X.convertTo(X, CV_32F);
+	Y.convertTo(Y, CV_32F);
 }
 
 /**
@@ -53,17 +55,22 @@ void Utils::MinMax(const Mat& A, double* minA, double* maxA) {
 	*maxA = std::max(*maxA,maxT);
 }
 
+/**
+ * @brief Compute the Gaussian function of an input \f$ X \f$
+ * \f$ G(X) = \exp\left(-\frac{X^2}{2\sigma_s^2} \right) \f$
+ * @param input Matrix input
+ * @param sigma Desired standard deviation
+ * @return Mat
+ */
 Mat Utils::GaussianFunction(Mat input, double sigma){
 	Mat output;
 	double variance = pow(sigma, 2);
-
 	exp(input * (-1 / (2 * variance)), output);
-
 	return output;
 }
 
 /**
- * @brief Computes a spatial Gaussian kernel \f$ G(X, Y) = \exp\left(-\frac{|X + Y|^2 }{ 2 {\sigma_s^2} } \right) \f$
+ * @brief Computes a normalized Gaussian kernel \f$ G(X, Y) = \frac{\exp\left(-\frac X^2 + Y^2 { 2 {\sigma_s^2} } \right)}{|G(X, Y)|} \f$
  * where X + Y are the horizontal and vertical coordinates on a \f$ \text{windowSize} \times \text{windowSize} \f$ 2D plane.
  * The result can be interpreted as looking at a Gaussian distribution from a top view
  *
@@ -73,84 +80,70 @@ Mat Utils::GaussianFunction(Mat input, double sigma){
  */
 Mat Utils::GaussianKernel(int windowSize, double sigma) {
 	// Pre computation of meshgrid values
-    Mat1f X, Y, S;
+    Mat1f X, Y;
     Range range = Range(-(windowSize/2), (windowSize/2) + 1);
     MeshGrid(range, X, Y);
-
-    /**
-     * @brief Pre computates the spatial Gaussian kernel
-     *  Calculate the kernel variable \f$ S = X^2 + Y^2 \f$
-     */
     pow(X, 2, X);
     pow(Y, 2, Y);
-    S = X + Y;
 
-	double variance = pow(sigma, 2);
+	// Compute the Gaussian kernel
+	Mat gaussianKernel = GaussianFunction(X, sigma).mul(GaussianFunction(Y, sigma));
 
-	Mat gaussianKernel = (1 / (2 * CV_PI * variance)) * GaussianFunction(S, sigma);
+	// Normalization
 	gaussianKernel /= sum(gaussianKernel).val[0];
 
 	return gaussianKernel;
 }
 
 /**
- * @brief Computes a Laplacian of Gaussian kernel. Same as fspecial('log',..) in Matlab.
- * \f$ \text{LoG}_{\text kernel} = - \frac{1}{\pi \sigma^4} \left[ 1 - \frac{X^2 + Y^2}{2 \sigma^2} \right] \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \f$
- * and normalize it with \f$ \frac{\sum \text{LoG} }{|\text{LoG}|}\f$ where \f$ |\text{LoG}| \f$ is the number of elements in \f$ \text{LoG} \f$ so it
- * sums to 0 for high pass filter behavior consistency
+ * @brief Filter an image through a Laplacian of Gaussian filter
+ * \f$ \text{LoG}(X,Y) = \left( \frac{1}{\sigma^2} \right) \left( \frac{X^2 + Y^2}{\sigma^2} - 2 \right) \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \f$
  */
-Mat Utils::LoGKernel(int windowSize, double sigma) {
+Mat Utils::LoGFilter(const Mat &image, int windowSize, double sigma) {
+	// Get the Gaussian kernel
+	Mat gaussianKernel = GaussianKernel(windowSize, sigma);
+
 	// Pre computation of meshgrid values
-    Mat1f X, Y, S;
+    Mat X, Y, S;
     Range range = Range(-(windowSize/2), (windowSize/2) + 1);
     MeshGrid(range, X, Y);
-
-    /**
-     * @brief Pre computates the spatial Gaussian kernel
-     *  Calculate the kernel variable \f$ S = X^2 + Y^2 \f$
-     */
     pow(X, 2, X);
     pow(Y, 2, Y);
-    S = X + Y;
-
-	// Gaussian kernel
-	Mat gaussianKernel = GaussianKernel(windowSize, sigma);
 
 	// Variance
 	double variance = pow(sigma, 2);
+    Mat laplacianOfGaussianKernel = (1 / variance) * (((X+Y)/variance) - 2).mul(gaussianKernel);
 
-	// (-1 / (CV_PI * pow(variance, 2))) * (1 - (S / (2 * variance))).mul(gaussianKernel);
-    Mat logKernel = (-2 / variance) * (1 - (S/(2*variance))) * gaussianKernel;
-    double deltaFactor = sum(logKernel).val[0] / pow(windowSize, 2);
-	logKernel = logKernel - deltaFactor;
+	// Normalization
+	laplacianOfGaussianKernel -= sum(laplacianOfGaussianKernel).val[0] / pow(windowSize, 2);
 
-	return logKernel;
+	// Create a new image with the size and type of the input image
+	Mat LoGFilteredImage(image.size(), image.type());
+
+	// Apply the Laplacian filter
+	filter2D(image, LoGFilteredImage, -1, laplacianOfGaussianKernel, Point(-1,-1), 0, BORDER_CONSTANT);
+
+	return LoGFilteredImage;
 }
 
 /**
- * @brief Applies a regular non adaptive UnSharp mask (USM) with a Laplacian of Gaussian kernel
- * \f$ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \text{ where } \mathcal{L} = l * g \f$.
- * Here \f$ g \f$ is a Gaussian kernel and \f$ l \f$ a Laplacian kernel, hence the name "Laplacian of Gaussian"
+ * @brief Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter
+ * \f$ \hat{f}_{\text USM} = U - \lambda \ \mathcal{L} \text{ where } \mathcal{L} = l * g \f$.
  * @param image Image to apply the mask
  * @return Filtered image
  */
-Mat Utils::NonAdaptiveUSM(const Mat &image, int windowSize, int lambda, double sigma) {
+Mat Utils::NonAdaptiveUSMFilter(const Mat &image, int windowSize, int lambda, double sigma) {
 	// Generate the Laplacian kernel
-	Mat logKernel = -1 * LoGKernel(windowSize, sigma);
-
-	// Create a new image with the size and type of the input image
-	Mat LoG(image.size(), image.type());
-
-	// Apply the Laplacian filter
-	filter2D(image, LoG, -1, logKernel, Point(-1,-1), 0, BORDER_DEFAULT);
+	Mat LoGFilteredImage = LoGFilter(image, windowSize, sigma);
 
 	// Normalize the Laplacian filtered image
 	double minL, maxL, minI, maxI;
-	Utils::MinMax(abs(LoG), &minL, &maxL);
+	Utils::MinMax(abs(LoGFilteredImage), &minL, &maxL);
 	Utils::MinMax(image, &minI, &maxI);
-	LoG = maxI * (LoG / maxL);
+	LoGFilteredImage = maxI * (LoGFilteredImage / maxL);
 
-	return (image + lambda * LoG);
+	// Return the filtered image
+	return (image - lambda * LoGFilteredImage);
 }
 
 /**
