@@ -58,10 +58,10 @@ usage: ./DeWAFF [-f <filter type>] [-p <filter parameters>]
 
 	DEFAULT PARAMETERS
 	- Filter:        dbf (Deceived Bilateral Filter)
-	- Window size:   3
+	- Window size:   11
 	- Patch size:    3
-	- Range Sigma:   5
-	- Spatial Sigma: 5
+	- Range Sigma:   10
+	- Spatial Sigma: 10
 	- USM Lambda:    2
 
 	PROGRAM OPTIONS

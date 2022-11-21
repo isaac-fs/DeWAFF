@@ -14,9 +14,9 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 	// Framework
 	framework = DeWAFF();
 	filterType = DBF;
-	windowSize = 3;
-	spatialSigma = 5; // = windowSize / 1.5
-	rangeSigma = 5;
+	windowSize = 11;
+	spatialSigma = 10; // = windowSize / 1.5
+	rangeSigma = 10;
 	patchSize = 3;
 
 	// Libraries
@@ -509,10 +509,10 @@ void ProgramInterface::help() {
 
 	<< "\t" << std::left << "DEFAULT PARAMETERS"
 	<< "\n\t" << std::setw(17) << "- Filter:" << "dbf (Deceived Bilateral Filter)"
-	<< "\n\t" << std::setw(17) << "- Window size:" << 3
+	<< "\n\t" << std::setw(17) << "- Window size:" << 11
 	<< "\n\t" << std::setw(17) << "- Patch size:" << 3
-	<< "\n\t" << std::setw(17) << "- Range Sigma:" << 5
-	<< "\n\t" << std::setw(17) << "- Spatial Sigma:" << 5
+	<< "\n\t" << std::setw(17) << "- Range Sigma:" << 10
+	<< "\n\t" << std::setw(17) << "- Spatial Sigma:" << 10
 	<< "\n\t" << std::setw(17) << "- USM Lambda:" << 2
 	<< "\n" << std::endl
 
