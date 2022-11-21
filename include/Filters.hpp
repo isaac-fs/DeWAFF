@@ -36,7 +36,7 @@ class Filters {
     public:
         Mat BilateralFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const double spatialSigma, const int rangeSigma);
         Mat ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const double spatialSigma, const int rangeSigma);
-        Mat NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const int patchSize, const int rangeSigma);
+        Mat NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const int neighborhoodSize, const int rangeSigma);
         Mat GuidedFilter(const Mat &inputImage, const Mat &guidingImage, const int windowSize, const int rangeSigma);
 };
 

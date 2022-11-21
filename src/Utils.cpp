@@ -57,7 +57,7 @@ void Utils::MinMax(const Mat& A, double* minA, double* maxA) {
 
 /**
  * @brief Compute the Gaussian function of an input \f$ X \f$
- * \f$ G(X) = \exp\left(-\frac{X^2}{2\sigma_s^2} \right) \f$
+ * \f$ G(X) = \exp\left(-\frac{X}{2\sigma_s^2} \right) \f$
  * @param input Matrix input
  * @param sigma Desired standard deviation
  * @return Mat
@@ -152,45 +152,44 @@ Mat Utils::NonAdaptiveUSMFilter(const Mat &image, int windowSize, int lambda, do
  * image and a patch centered in every other pixel in the input image, mathematically, for
  * an input matrix \f$A = (a_{ij})\f$ every element will take the corresponding Euclidean distance value
  * \f$a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\f$
- * @param inputImage input image to obtain the patches to compute the matrix
- * @param patchSize size of the used patch. Analog to window size
+ * @param inputImage_ input image to obtain the patches to compute the matrix
+ * @param neighborhoodSize size of the used patch. Analog to window size
  * @return Mat Euclidean distance matrix
  */
-Mat Utils::EuclideanDistanceMatrix(const Mat& inputImage, int patchSize) {
+Mat Utils::EuclideanDistanceMatrix(const Mat& inputImage_, int neighborhoodSize) {
     // Fixed pixel sub region (must be a square region)
-	Mat image;
-	int windowSize = inputImage.rows;
+	Mat inputImage;
+	int windowSize = inputImage_.rows;
     int padding = (windowSize-1)/2;
-	copyMakeBorder(inputImage, image, padding, padding, padding, padding, BORDER_CONSTANT);
+	copyMakeBorder(inputImage_, inputImage, padding, padding, padding, padding, BORDER_REPLICATE);
 
 	// Ranges
     Range xRange, yRange;
-	xRange = Range(padding, padding + patchSize);
-	yRange = Range(padding, padding + patchSize);
+	xRange = Range(windowSize/2, windowSize/2 + neighborhoodSize);
+	yRange = Range(windowSize/2, windowSize/2 + neighborhoodSize);
 
 	// Fixed patch at the center of the image
-    Mat fixedPatch = image(xRange, yRange);
+    Mat fixedWindow = inputImage(xRange, yRange);
 
 	// Moving pixel sub region
-    Mat movingPatch(fixedPatch.size(), fixedPatch.type());
+    Mat slidingWindow(fixedWindow.size(), fixedWindow.type());
 
     // Initialize the output matrix
-    Mat euclideanDistanceMatrix(inputImage.size(), inputImage.type());
+    Mat euclideanDistanceMatrix(inputImage_.size(), inputImage_.type());
 
     // Visit each pixel in the image region
     for(int i = 0; i < windowSize; i++) {
-        xRange = Range(i, i + patchSize);
+        xRange = Range(i, i + neighborhoodSize);
         for(int j = 0; j < windowSize; j++) {
-            yRange = Range(j, j + patchSize);
+            yRange = Range(j, j + neighborhoodSize);
 
             //Extract pixel w neighborhood local region
-            movingPatch = image(xRange, yRange);
+            slidingWindow = inputImage(xRange, yRange);
 
             // Calculate the euclidean distance between patches
-            euclideanDistanceMatrix.at<float>(i, j) = (float) norm(fixedPatch, movingPatch, NORM_L2);
+            euclideanDistanceMatrix.at<float>(i, j) = norm(fixedWindow, slidingWindow, NORM_L2SQR);
         }
     }
-
     return euclideanDistanceMatrix;
 }
 

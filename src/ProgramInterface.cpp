@@ -17,7 +17,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 	windowSize = 11;
 	spatialSigma = 10; // = windowSize / 1.5
 	rangeSigma = 10;
-	patchSize = 3;
+	neighborhoodSize = 3;
 
 	// Libraries
 	lib = Utils();
@@ -32,7 +32,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 		RANGE_SIGMA,
 		SPATIAL_SIGMA,
 		LAMBDA,
-		PATCH_SIZE,
+		NEIGHBORHOOD_SIZE,
 	};
 
 	// Filter options
@@ -41,7 +41,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 		"rs",		/// range_sigma,
 		"ss",		/// spatial_sigma,
 		"lambda",	/// lambda,
-		"ps",		/// patch_size,
+		"ns",		/// neighborhood_size,
 		NULL
 	};
 
@@ -127,14 +127,14 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 							else framework.usmLambda = l;
                         	break;
 						}
-						case PATCH_SIZE: {
+						case NEIGHBORHOOD_SIZE: {
 							if (value == NULL) abort();
 							if(filterType != DNLMF)
-								errorMessage("Patch size option only applies when the filter type is set to Deceived Non Local Means Filter");
-							int ps = atoi(value);
-							if(ps > windowSize) errorMessage("Patch size must be smaller than the window size");
-							if(ps < 3 || ps % 2 == 0) errorMessage("Patch size must be an odd number equal or greater than 3");
-							else patchSize = ps;
+								errorMessage("Neighborhoodsize option only applies when the filter type is set to Deceived Non Local Means Filter");
+							int ns = atoi(value);
+							if(ns > windowSize) errorMessage("Neighborhood size must be smaller than the window size");
+							if(ns < 3 || ns % 2 == 0) errorMessage("Neighborhood size must be an odd number equal or greater than 3");
+							else neighborhoodSize = ns;
 							break;
 						}
 						default:
@@ -249,7 +249,7 @@ Mat ProgramInterface::processFrame(const Mat &inputFrame) {
 		output = framework.DeceivedScaledBilateralFilter(input, windowSize, spatialSigma, rangeSigma);
 		break;
 	case DNLMF:
-		output = framework.DeceivedNonLocalMeansFilter(input, windowSize, patchSize, spatialSigma, rangeSigma);
+		output = framework.DeceivedNonLocalMeansFilter(input, windowSize, neighborhoodSize, spatialSigma, rangeSigma);
 		break;
 	case DGF:
 		output = framework.DeceivedGuidedFilter(input, windowSize, spatialSigma, rangeSigma);
@@ -510,7 +510,7 @@ void ProgramInterface::help() {
 	<< "\t" << std::left << "DEFAULT PARAMETERS"
 	<< "\n\t" << std::setw(17) << "- Filter:" << "dbf (Deceived Bilateral Filter)"
 	<< "\n\t" << std::setw(17) << "- Window size:" << 11
-	<< "\n\t" << std::setw(17) << "- Patch size:" << 3
+	<< "\n\t" << std::setw(17) << "- Neighborhood size:" << 3
 	<< "\n\t" << std::setw(17) << "- Range Sigma:" << 10
 	<< "\n\t" << std::setw(17) << "- Spatial Sigma:" << 10
 	<< "\n\t" << std::setw(17) << "- USM Lambda:" << 2
@@ -541,10 +541,10 @@ void ProgramInterface::help() {
 	<< "\n\t\t" << std::setw(9) << "- rs:" << "Range Sigma"
 	<< "\n\t\t" << std::setw(9) << "- ss:" << "Spatial Sigma"
 	<< "\n\t\t" << std::setw(9) << "- lambda:" << "Lambda value for the Laplacian deceive"
-	<< "\n\t\t" << std::setw(9) << "- ps:" << "Patch size for the DNLM filter"
+	<< "\n\t\t" << std::setw(9) << "- ns:" << "Neighborhood size for the DNLM filter"
 	<< "\n\t" << "It is possible to change one or more parameters in the same line, for example \'-p ws=15,rs=10,ss=10\' "
 	<< "would change the window size and the range and spatial sigma values for the filter. Using just \'-p ws=15\' would only change its window size "
-	<< "The \'ps\' option Only works with the filter set to \'dnlm\'"
+	<< "The \'ns\' option Only works with the filter set to \'dnlm\'"
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-b, --benchmark"
@@ -620,7 +620,7 @@ void ProgramInterface::displayFilterParams() {
 	std::cout << std::setw(PARAMS_LINE) << std::setfill('-') << '\n' << std::setfill(' ') << std::endl;
 	std::cout << "| " << std::setw(PARAM_DESC_SPACE) << std::left  << "Filter"  << " | "  << std::setw(PARAM_VAL_SPACE) << std::left << filteNameMap[filterType] << " |" << std::endl;
 	std::cout << "| " << std::setw(PARAM_DESC_SPACE) << std::left  << "Window size"  << " | "  << std::setw(PARAM_VAL_SPACE) << std::left << windowSize	<< " |" << std::endl;
-	if(filterType == DNLMF) std::cout << "| " << std::setw(PARAM_DESC_SPACE) << std::left  << "Patch size"  << " | "  << std::setw(PARAM_VAL_SPACE) << std::left << patchSize	<< " |" << std::endl;
+	if(filterType == DNLMF) std::cout << "| " << std::setw(PARAM_DESC_SPACE) << std::left  << "Neighborhood size"  << " | "  << std::setw(PARAM_VAL_SPACE) << std::left << neighborhoodSize	<< " |" << std::endl;
 	std::cout << "| " << std::setw(PARAM_DESC_SPACE) << std::left  << "Range Sigma"  << " | "  << std::setw(PARAM_VAL_SPACE) << std::left << rangeSigma	<< " |" << std::endl;
 	std::cout << "| " << std::setw(PARAM_DESC_SPACE) << std::left  << "Spatial Sigma"  << " | "  << std::setw(PARAM_VAL_SPACE) << std::left << spatialSigma	<< " |" << std::endl;
 	std::cout << "| " << std::setw(PARAM_DESC_SPACE) << std::left  << "USM Lambda"  << " | "  << std::setw(PARAM_VAL_SPACE) << std::left << framework.usmLambda	<< " |";

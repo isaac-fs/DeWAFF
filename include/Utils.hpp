@@ -33,7 +33,7 @@ class Utils {
         Mat GaussianKernel(int windowSize, double sigma);
         Mat LoGFilter(const Mat &image, int windowSize, double sigma);
         Mat NonAdaptiveUSMFilter(const Mat &image, int windowSize, int lambda, double sigma);
-		Mat EuclideanDistanceMatrix(const Mat& image, int patchSize);
+		Mat EuclideanDistanceMatrix(const Mat& image, int neighborhoodSize);
 };
 
 /**

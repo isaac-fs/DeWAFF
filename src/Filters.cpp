@@ -147,7 +147,7 @@ Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputIm
  * @param rangeSigma range or radiometric standard deviation. Used to calculate the parameter \f$ h = 2 \sigma^2 \f$
  * @return Mat output image
  */
-Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const int patchSize, const int rangeSigma) {
+Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const int neighborhoodSize, const int rangeSigma) {
      // Set the padding value
     int padding = (windowSize - 1) / 2;
 
@@ -165,8 +165,8 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
     Mat output(input.size(), input.type());
     Mat inputRegion, weightRegion;
     Mat dL, da, db;
-    Mat nonLocalMeansKernel;
-	double nonLocalMeansKernelNorm;
+    Mat nonLocalMeansFilter;
+	double nonLocalMeansFilterNorm;
     Range xRange, yRange;
 	Vec3f pixel;
     Mat inputChannels[3], weightChannels[3], nlmChannels[3];
@@ -176,10 +176,10 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
     #pragma omp parallel for\
     private(iMin, iMax, jMin, jMax, xRange, yRange,\
             pixel, dL, da, db,\
-            nlmChannels, nonLocalMeansKernel, nonLocalMeansKernelNorm,\
+            nlmChannels, nonLocalMeansFilter, nonLocalMeansFilterNorm,\
             weightRegion, weightChannels, inputRegion, inputChannels)\
 	shared( input, weight, output,\
-            windowSize, patchSize, rangeSigma)
+            windowSize, neighborhoodSize, rangeSigma)
     for(int i = padding; i < input.rows - padding; i++) {
         iMin = i - padding;
         iMax = iMin + windowSize;
@@ -203,16 +203,16 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
             * a Gaussian decreasing function with standard deviation \f$h\f$ that generates the new pixel \f$p\f$ value
             */
             cv::split(weightRegion, weightChannels);
-            nlmChannels[L] = lib.GaussianFunction(lib.EuclideanDistanceMatrix(weightChannels[L], patchSize), h);
-            nlmChannels[a] = lib.GaussianFunction(lib.EuclideanDistanceMatrix(weightChannels[a], patchSize), h);
-            nlmChannels[b] = lib.GaussianFunction(lib.EuclideanDistanceMatrix(weightChannels[b], patchSize), h);
-            nonLocalMeansKernel = (nlmChannels[L] + nlmChannels[a] + nlmChannels[b]);
+            nlmChannels[L] = lib.GaussianFunction(lib.EuclideanDistanceMatrix(weightChannels[L], neighborhoodSize), h);
+            nlmChannels[a] = lib.GaussianFunction(lib.EuclideanDistanceMatrix(weightChannels[a], neighborhoodSize), h);
+            nlmChannels[b] = lib.GaussianFunction(lib.EuclideanDistanceMatrix(weightChannels[b], neighborhoodSize), h);
+            nonLocalMeansFilter = (nlmChannels[L] + nlmChannels[a] + nlmChannels[b]);
 
             /**
             * The Non Local Means filter's norm is calculated with
             * \f$ \phi_{\text NLM}(U, m, p) \left( \sum_{m \subseteq \Omega} \phi_{\text{NLM}}(U, m, p) \right)^{-1} \f$
             */
-            nonLocalMeansKernelNorm = sum(nonLocalMeansKernel).val[0];
+            nonLocalMeansFilterNorm = sum(nonLocalMeansFilter).val[0];
 
             /**
              * The NLM filter kernel is applied to the laplacian image
@@ -221,9 +221,9 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
             */
             inputRegion = input(xRange, yRange);
             cv::split(inputRegion, inputChannels);
-            output.at<Vec3f>(i,j)[L] = (1/nonLocalMeansKernelNorm) * sum(nonLocalMeansKernel.mul(inputChannels[L])).val[0];
-            output.at<Vec3f>(i,j)[a] = (1/nonLocalMeansKernelNorm) * sum(nonLocalMeansKernel.mul(inputChannels[a])).val[0];
-            output.at<Vec3f>(i,j)[b] = (1/nonLocalMeansKernelNorm) * sum(nonLocalMeansKernel.mul(inputChannels[b])).val[0];
+            output.at<Vec3f>(i,j)[L] = (1/nonLocalMeansFilterNorm) * sum(nonLocalMeansFilter.mul(inputChannels[L])).val[0];
+            output.at<Vec3f>(i,j)[a] = (1/nonLocalMeansFilterNorm) * sum(nonLocalMeansFilter.mul(inputChannels[a])).val[0];
+            output.at<Vec3f>(i,j)[b] = (1/nonLocalMeansFilterNorm) * sum(nonLocalMeansFilter.mul(inputChannels[b])).val[0];
         }
     }
 

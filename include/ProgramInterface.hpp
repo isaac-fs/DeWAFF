@@ -48,7 +48,7 @@ private:
 	DeWAFF framework;
 	Utils lib;
 	Timer timer;
-	int windowSize, rangeSigma, patchSize;
+	int windowSize, rangeSigma, neighborhoodSize;
 	double spatialSigma;
 	int filterType;
 	enum filterTypes {
@@ -86,8 +86,8 @@ private:
         BENCHMARK_LINE = 20,
         NUMBER_SPACE = 3,
         TIME_SPACE = 9,
-		PARAMS_LINE = 55,
-		PARAM_DESC_SPACE = 15,
+		PARAMS_LINE = 57,
+		PARAM_DESC_SPACE = 17,
 		PARAM_VAL_SPACE = 32
 	};
 };

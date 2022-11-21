@@ -46,16 +46,16 @@ Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize,
  *
  * @param inputImage input image
  * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
- * @param patchSize spatial standard deviation
+ * @param neighborhoodSize spatial standard deviation
  * @param spatialSigma range or radiometric standard deviation
  * @param rangeSigma output image
  * @return Mat
  */
-Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int patchSize, double spatialSigma, int rangeSigma) {
+Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int neighborhoodSize, double spatialSigma, int rangeSigma) {
     // Pre-process the laplacian masked image
     Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
-    return NonLocalMeansFilter(inputImage, usmImage, windowSize, patchSize, rangeSigma);
+    return NonLocalMeansFilter(inputImage, usmImage, windowSize, neighborhoodSize, rangeSigma);
 }
 
 /**
