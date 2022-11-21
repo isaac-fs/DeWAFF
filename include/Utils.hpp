@@ -31,8 +31,8 @@ class Utils {
         void MinMax(const Mat& A, double* minA, double* maxA);
         Mat GaussianFunction(Mat input, double sigma);
         Mat GaussianKernel(int windowSize, double sigma);
-		Mat LoGKernel(int windowSize, double sigma);
-        Mat NonAdaptiveUSM(const Mat &image, int windowSize, int lambda, double sigma);
+        Mat LoGFilter(const Mat &image, int windowSize, double sigma);
+        Mat NonAdaptiveUSMFilter(const Mat &image, int windowSize, int lambda, double sigma);
 		Mat EuclideanDistanceMatrix(const Mat& image, int patchSize);
 };
 
