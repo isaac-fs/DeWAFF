@@ -42,10 +42,11 @@ build/
 Makefile
 
 # Doxygen
-doxygen/latex/*
+doxygen/
+docs/
 
 # Binary
 DeWAFF
 
 # Testing files
-vid/*
+vid/
