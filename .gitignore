@@ -42,7 +42,7 @@ build/
 Makefile
 
 # Doxygen
-doxygen/*
+doxygen/latex/
 
 # Binary
 DeWAFF
