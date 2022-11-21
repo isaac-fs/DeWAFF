@@ -151,7 +151,6 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 				exit(-1);
 				break;
 			case '?':
-				help();
 				exit(-1);
 		        break;
 			default:
