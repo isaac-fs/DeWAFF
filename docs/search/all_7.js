@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['nonadaptiveusm_16',['NonAdaptiveUSM',['../class_utils.html#a2f186a4cf3bafaa09b6cf14c23f9cfae',1,'Utils']]],
-  ['nonlocalmeansfilter_17',['NonLocalMeansFilter',['../class_filters.html#a1deec2de78c18f40eb89538d79d8e8e8',1,'Filters']]]
+  ['nonadaptiveusmfilter_17',['NonAdaptiveUSMFilter',['../class_utils.html#a65a7038fa77057d38cbb66e0c4f3d56b',1,'Utils']]],
+  ['nonlocalmeansfilter_18',['NonLocalMeansFilter',['../class_filters.html#ad28ccdfcbd403a5a5d8276806a8badc0',1,'Filters']]]
 ];

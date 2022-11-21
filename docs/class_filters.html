@@ -138,9 +138,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a420055db9cf1ecf8a0457bc5d192f208"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a420055db9cf1ecf8a0457bc5d192f208">ScaledBilateralFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const double spatialSigma, const int rangeSigma)</td></tr>
 <tr class="memdesc:a420055db9cf1ecf8a0457bc5d192f208"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The difference between this filter and the not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter to have better performance under heavy AWGN.  <a href="class_filters.html#a420055db9cf1ecf8a0457bc5d192f208">More...</a><br /></td></tr>
 <tr class="separator:a420055db9cf1ecf8a0457bc5d192f208"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1deec2de78c18f40eb89538d79d8e8e8"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a1deec2de78c18f40eb89538d79d8e8e8">NonLocalMeansFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const int patchSize, const int rangeSigma)</td></tr>
-<tr class="memdesc:a1deec2de78c18f40eb89538d79d8e8e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding.  <a href="class_filters.html#a1deec2de78c18f40eb89538d79d8e8e8">More...</a><br /></td></tr>
-<tr class="separator:a1deec2de78c18f40eb89538d79d8e8e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad28ccdfcbd403a5a5d8276806a8badc0"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#ad28ccdfcbd403a5a5d8276806a8badc0">NonLocalMeansFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const int neighborhoodSize, const int rangeSigma)</td></tr>
+<tr class="memdesc:ad28ccdfcbd403a5a5d8276806a8badc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding.  <a href="class_filters.html#ad28ccdfcbd403a5a5d8276806a8badc0">More...</a><br /></td></tr>
+<tr class="separator:ad28ccdfcbd403a5a5d8276806a8badc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e7acfe426ce8619c2fc1dbcbae5e5e0"><td class="memItemLeft" align="right" valign="top"><a id="a0e7acfe426ce8619c2fc1dbcbae5e5e0"></a>
 Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (const Mat &amp;inputImage, const Mat &amp;guidingImage, const int windowSize, const int rangeSigma)</td></tr>
 <tr class="separator:a0e7acfe426ce8619c2fc1dbcbae5e5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,13 +164,13 @@ Protected Attributes</h2></td></tr>
           <td class="memname">Mat Filters::BilateralFilter </td>
           <td>(</td>
           <td class="paramtype">const Mat &amp;&#160;</td>
-          <td class="paramname"><em>weightingImage</em>, </td>
+          <td class="paramname"><em>weightingImage_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const Mat &amp;&#160;</td>
-          <td class="paramname"><em>inputImage</em>, </td>
+          <td class="paramname"><em>inputImage_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -212,14 +212,14 @@ Protected Attributes</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Mat output image </dd></dl>
 <p>This filter uses two Gaussian kernels, one of them is the spatial Gaussian kernel \( G_{\text spatial}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \) with the spatial values from an image region \( \Omega \subseteq U \). The spatial kernel uses the \( m_i \subseteq \Omega \) pixels coordinates as weighting values for the pixel \( p = (x, y) \)</p>
 <p>The other Gaussian kernel is the range Gaussian kernel \( G_{\text range}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \) with the intensity (range) values from an image region \( \Omega \subseteq U \). The range kernel uses the \( m_i \subseteq \Omega \) pixels intensities as weighting values for the pixel \( p = (x, y) \) instead of their locations as in the spatial kernel computation. In this case a the input \( U \) is separated into the three CIELab weightChannels and each channel is processed as an individual input \( U_{\text channel} \)</p>
-<p>The two kernels convolve to obtain the Bilateral Filter kernel \( \phi_{\text SBF}(U, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U(m)-U(p)||) \)</p>
-<p>The Bilateral filter's norm corresponds to \( \left( \sum_{m \subseteq \Omega} \phi_{\text{SBF}}(U, m, p) \right)^{-1} \)</p>
-<p>Finally the bilateral filter kernel can be convolved with the input as follows \( Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, m, p) \right)^{-1} \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \)</p>
+<p>The two kernels convolve to obtain the Bilateral Filter kernel \( \phi_{\text BF}(U, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U(m)-U(p)||) \)</p>
+<p>The Bilateral filter's norm corresponds to \( \left( \sum_{m \subseteq \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \)</p>
+<p>Finally the bilateral filter kernel can be convolved with the input as follows \( Y_{\phi_{\text BF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text BF}(U, m, p) \right)^{-1} \left( \sum_{m \subseteq \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \)</p>
 
 </div>
 </div>
-<a id="a1deec2de78c18f40eb89538d79d8e8e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1deec2de78c18f40eb89538d79d8e8e8">&#9670;&nbsp;</a></span>NonLocalMeansFilter()</h2>
+<a id="ad28ccdfcbd403a5a5d8276806a8badc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad28ccdfcbd403a5a5d8276806a8badc0">&#9670;&nbsp;</a></span>NonLocalMeansFilter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,7 +246,7 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>patchSize</em>, </td>
+          <td class="paramname"><em>neighborhoodSize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -335,11 +335,6 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat output image </dd></dl>
-<p>This filter uses two Gaussian kernels, one of them is the spatial Gaussian kernel \( G_{\text spatial}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \) with the spatial values from an image region \( \Omega \subseteq U \). The spatial kernel uses the \( m_i \subseteq \Omega \) pixels coordinates as weighting values for the pixel \( p = (x, y) \)</p>
-<p>The other Gaussian kernel is the range Gaussian kernel \( G_{\text range}(U, U^s, m, p) = \exp\left( -\frac{ ||U^s(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \) with the intensity (range) values from an image region \( \Omega \subseteq U \). The range kernel uses the \( m_i \subseteq \Omega \) pixels intensities as weighting values for the pixel \( p = (x, y) \) instead of their locations as in the spatial kernel computation. In this case a the image \( U \) is separated into the three CIELab scaledChannels and each channel is processed as an individual image \( U_{\text channel} \)</p>
-<p>The two kernels convolve to obtain the Scaled Bilateral Filter kernel \( \phi_{\text SBF}(U, U^s, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U^s(m)-U(p)||) \)</p>
-<p>The Scaled Bilateral filter's norm corresponds to \( \left( \sum_{m \subseteq \Omega} \phi_{\text{SBF}}(U, U^s, m, p) \right)^{-1} \)</p>
-<p>Finally the bilateral filter kernel can be convolved with the input as follows \( Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, U^s, m, p) \right)^{-1} \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \)</p>
 
 </div>
 </div>

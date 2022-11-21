@@ -126,27 +126,28 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a012b8177e7e05918d805620bf736ee9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a012b8177e7e05918d805620bf736ee9f">MinMax</a> (const Mat &amp;A, double *minA, double *maxA)</td></tr>
 <tr class="memdesc:a012b8177e7e05918d805620bf736ee9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the global min and max values of a 3 channel Matrix.  <a href="class_utils.html#a012b8177e7e05918d805620bf736ee9f">More...</a><br /></td></tr>
 <tr class="separator:a012b8177e7e05918d805620bf736ee9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaed701e60ee9310481dcf1c5758aed77"><td class="memItemLeft" align="right" valign="top"><a id="aaed701e60ee9310481dcf1c5758aed77"></a>
-Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GaussianFunction</b> (Mat input, double sigma)</td></tr>
+<tr class="memitem:aaed701e60ee9310481dcf1c5758aed77"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a> (Mat input, double sigma)</td></tr>
+<tr class="memdesc:aaed701e60ee9310481dcf1c5758aed77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Gaussian function of an input \( X \) \( G(X) = \exp\left(-\frac{X}{2\sigma_s^2} \right) \).  <a href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">More...</a><br /></td></tr>
 <tr class="separator:aaed701e60ee9310481dcf1c5758aed77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94be617a9fa88444e5be1a0da341669f"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a94be617a9fa88444e5be1a0da341669f">GaussianKernel</a> (int windowSize, double sigma)</td></tr>
-<tr class="memdesc:a94be617a9fa88444e5be1a0da341669f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a spatial Gaussian kernel \( G(X, Y) = \exp\left(-\frac{|X + Y|^2 }{ 2 {\sigma_s^2} } \right) \) where X + Y are the horizontal and vertical coordinates on a \( \text{windowSize} \times \text{windowSize} \) 2D plane. The result can be interpreted as looking at a Gaussian distribution from a top view.  <a href="class_utils.html#a94be617a9fa88444e5be1a0da341669f">More...</a><br /></td></tr>
+<tr class="memdesc:a94be617a9fa88444e5be1a0da341669f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a normalized Gaussian kernel \( G(X, Y) = \frac{\exp\left(-\frac X^2 + Y^2 { 2 {\sigma_s^2} } \right)}{|G(X, Y)|} \) where X + Y are the horizontal and vertical coordinates on a \( \text{windowSize} \times \text{windowSize} \) 2D plane. The result can be interpreted as looking at a Gaussian distribution from a top view.  <a href="class_utils.html#a94be617a9fa88444e5be1a0da341669f">More...</a><br /></td></tr>
 <tr class="separator:a94be617a9fa88444e5be1a0da341669f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33e004a9e2d65706d5aeee81c3a35b8b"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a33e004a9e2d65706d5aeee81c3a35b8b">LoGKernel</a> (int windowSize, double sigma)</td></tr>
-<tr class="memdesc:a33e004a9e2d65706d5aeee81c3a35b8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a Laplacian of Gaussian kernel. Same as fspecial('log',..) in Matlab. \( \text{LoG}_{\text kernel} = - \frac{1}{\pi \sigma^4} \left[ 1 - \frac{X^2 + Y^2}{2 \sigma^2} \right] \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \) and normalize it with \( \frac{\sum \text{LoG} }{|\text{LoG}|}\) where \( |\text{LoG}| \) is the number of elements in \( \text{LoG} \) so it sums to 0 for high pass filter behavior consistency.  <a href="class_utils.html#a33e004a9e2d65706d5aeee81c3a35b8b">More...</a><br /></td></tr>
-<tr class="separator:a33e004a9e2d65706d5aeee81c3a35b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f186a4cf3bafaa09b6cf14c23f9cfae"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a2f186a4cf3bafaa09b6cf14c23f9cfae">NonAdaptiveUSM</a> (const Mat &amp;image, int windowSize, int lambda, double sigma)</td></tr>
-<tr class="memdesc:a2f186a4cf3bafaa09b6cf14c23f9cfae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a regular non adaptive UnSharp mask (USM) with a Laplacian of Gaussian kernel \( \hat{f}_{\text USM} = U + \lambda \mathcal{L} \text{ where } \mathcal{L} = l * g \). Here \( g \) is a Gaussian kernel and \( l \) a Laplacian kernel, hence the name "Laplacian of Gaussian".  <a href="class_utils.html#a2f186a4cf3bafaa09b6cf14c23f9cfae">More...</a><br /></td></tr>
-<tr class="separator:a2f186a4cf3bafaa09b6cf14c23f9cfae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23e29d1c22b01cdfa199ca8b5812755e"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a23e29d1c22b01cdfa199ca8b5812755e">EuclideanDistanceMatrix</a> (const Mat &amp;image, int patchSize)</td></tr>
-<tr class="memdesc:a23e29d1c22b01cdfa199ca8b5812755e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes an Euclidean distance matrix from an input matrix. This is achieved by calculating the Euclidean distance between a fixed patch at the center of the input image and a patch centered in every other pixel in the input image, mathematically, for an input matrix \(A = (a_{ij})\) every element will take the corresponding Euclidean distance value \(a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\).  <a href="class_utils.html#a23e29d1c22b01cdfa199ca8b5812755e">More...</a><br /></td></tr>
-<tr class="separator:a23e29d1c22b01cdfa199ca8b5812755e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a27ea9fba4632480b0a2fb33e5157ecbb"><td class="memItemLeft" align="right" valign="top"><a id="a27ea9fba4632480b0a2fb33e5157ecbb"></a>
+Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a27ea9fba4632480b0a2fb33e5157ecbb">LoGFilter</a> (const Mat &amp;image, int windowSize, double sigma)</td></tr>
+<tr class="memdesc:a27ea9fba4632480b0a2fb33e5157ecbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Filter an image through a Laplacian of Gaussian filter \( \text{LoG}(X,Y) = \left( \frac{1}{\sigma^2} \right) \left( \frac{X^2 + Y^2}{\sigma^2} - 2 \right) \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \). <br /></td></tr>
+<tr class="separator:a27ea9fba4632480b0a2fb33e5157ecbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a65a7038fa77057d38cbb66e0c4f3d56b"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a65a7038fa77057d38cbb66e0c4f3d56b">NonAdaptiveUSMFilter</a> (const Mat &amp;image, int windowSize, int lambda, double sigma)</td></tr>
+<tr class="memdesc:a65a7038fa77057d38cbb66e0c4f3d56b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter \( \hat{f}_{\text USM} = U - \lambda \ \mathcal{L} \text{ where } \mathcal{L} = l * g \).  <a href="class_utils.html#a65a7038fa77057d38cbb66e0c4f3d56b">More...</a><br /></td></tr>
+<tr class="separator:a65a7038fa77057d38cbb66e0c4f3d56b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a175bde5d9e286e4a3dd188af117d0d95"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a175bde5d9e286e4a3dd188af117d0d95">EuclideanDistanceMatrix</a> (const Mat &amp;image, int neighborhoodSize)</td></tr>
+<tr class="memdesc:a175bde5d9e286e4a3dd188af117d0d95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes an Euclidean distance matrix from an input matrix. This is achieved by calculating the Euclidean distance between a fixed patch at the center of the input image and a patch centered in every other pixel in the input image, mathematically, for an input matrix \(A = (a_{ij})\) every element will take the corresponding Euclidean distance value \(a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\).  <a href="class_utils.html#a175bde5d9e286e4a3dd188af117d0d95">More...</a><br /></td></tr>
+<tr class="separator:a175bde5d9e286e4a3dd188af117d0d95"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Useful tools for image processing These tools are statics objects to use them in the lifetime of the program without the need of constinuous instantiation. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a23e29d1c22b01cdfa199ca8b5812755e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a23e29d1c22b01cdfa199ca8b5812755e">&#9670;&nbsp;</a></span>EuclideanDistanceMatrix()</h2>
+<a id="a175bde5d9e286e4a3dd188af117d0d95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a175bde5d9e286e4a3dd188af117d0d95">&#9670;&nbsp;</a></span>EuclideanDistanceMatrix()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -155,13 +156,13 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GaussianFunction</b> (
           <td class="memname">Mat Utils::EuclideanDistanceMatrix </td>
           <td>(</td>
           <td class="paramtype">const Mat &amp;&#160;</td>
-          <td class="paramname"><em>inputImage</em>, </td>
+          <td class="paramname"><em>inputImage_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>patchSize</em>&#160;</td>
+          <td class="paramname"><em>neighborhoodSize</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -174,12 +175,50 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GaussianFunction</b> (
 <p>Computes an Euclidean distance matrix from an input matrix. This is achieved by calculating the Euclidean distance between a fixed patch at the center of the input image and a patch centered in every other pixel in the input image, mathematically, for an input matrix \(A = (a_{ij})\) every element will take the corresponding Euclidean distance value \(a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\). </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">inputImage</td><td>input image to obtain the patches to compute the matrix </td></tr>
-    <tr><td class="paramname">patchSize</td><td>size of the used patch. Analog to window size </td></tr>
+    <tr><td class="paramname">inputImage_</td><td>input image to obtain the patches to compute the matrix </td></tr>
+    <tr><td class="paramname">neighborhoodSize</td><td>size of the used patch. Analog to window size </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat Euclidean distance matrix </dd></dl>
+
+</div>
+</div>
+<a id="aaed701e60ee9310481dcf1c5758aed77"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaed701e60ee9310481dcf1c5758aed77">&#9670;&nbsp;</a></span>GaussianFunction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Mat Utils::GaussianFunction </td>
+          <td>(</td>
+          <td class="paramtype">Mat&#160;</td>
+          <td class="paramname"><em>input</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sigma</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute the Gaussian function of an input \( X \) \( G(X) = \exp\left(-\frac{X}{2\sigma_s^2} \right) \). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>Matrix input </td></tr>
+    <tr><td class="paramname">sigma</td><td>Desired standard deviation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Mat </dd></dl>
 
 </div>
 </div>
@@ -209,7 +248,7 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GaussianFunction</b> (
       </table>
 </div><div class="memdoc">
 
-<p>Computes a spatial Gaussian kernel \( G(X, Y) = \exp\left(-\frac{|X + Y|^2 }{ 2 {\sigma_s^2} } \right) \) where X + Y are the horizontal and vertical coordinates on a \( \text{windowSize} \times \text{windowSize} \) 2D plane. The result can be interpreted as looking at a Gaussian distribution from a top view. </p>
+<p>Computes a normalized Gaussian kernel \( G(X, Y) = \frac{\exp\left(-\frac X^2 + Y^2 { 2 {\sigma_s^2} } \right)}{|G(X, Y)|} \) where X + Y are the horizontal and vertical coordinates on a \( \text{windowSize} \times \text{windowSize} \) 2D plane. The result can be interpreted as looking at a Gaussian distribution from a top view. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">windowSize</td><td>2D plane dimension </td></tr>
@@ -218,38 +257,6 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GaussianFunction</b> (
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat A Gaussian kernel </dd></dl>
-<p>Pre computates the spatial Gaussian kernel Calculate the kernel variable \( S = X^2 + Y^2 \)</p>
-
-</div>
-</div>
-<a id="a33e004a9e2d65706d5aeee81c3a35b8b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33e004a9e2d65706d5aeee81c3a35b8b">&#9670;&nbsp;</a></span>LoGKernel()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Mat Utils::LoGKernel </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>windowSize</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>sigma</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes a Laplacian of Gaussian kernel. Same as fspecial('log',..) in Matlab. \( \text{LoG}_{\text kernel} = - \frac{1}{\pi \sigma^4} \left[ 1 - \frac{X^2 + Y^2}{2 \sigma^2} \right] \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \) and normalize it with \( \frac{\sum \text{LoG} }{|\text{LoG}|}\) where \( |\text{LoG}| \) is the number of elements in \( \text{LoG} \) so it sums to 0 for high pass filter behavior consistency. </p>
-<p>Pre computates the spatial Gaussian kernel Calculate the kernel variable \( S = X^2 + Y^2 \)</p>
 
 </div>
 </div>
@@ -355,14 +362,14 @@ Wich would form the following mesh grid</p>
 
 </div>
 </div>
-<a id="a2f186a4cf3bafaa09b6cf14c23f9cfae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f186a4cf3bafaa09b6cf14c23f9cfae">&#9670;&nbsp;</a></span>NonAdaptiveUSM()</h2>
+<a id="a65a7038fa77057d38cbb66e0c4f3d56b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65a7038fa77057d38cbb66e0c4f3d56b">&#9670;&nbsp;</a></span>NonAdaptiveUSMFilter()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Mat Utils::NonAdaptiveUSM </td>
+          <td class="memname">Mat Utils::NonAdaptiveUSMFilter </td>
           <td>(</td>
           <td class="paramtype">const Mat &amp;&#160;</td>
           <td class="paramname"><em>image</em>, </td>
@@ -393,7 +400,7 @@ Wich would form the following mesh grid</p>
       </table>
 </div><div class="memdoc">
 
-<p>Applies a regular non adaptive UnSharp mask (USM) with a Laplacian of Gaussian kernel \( \hat{f}_{\text USM} = U + \lambda \mathcal{L} \text{ where } \mathcal{L} = l * g \). Here \( g \) is a Gaussian kernel and \( l \) a Laplacian kernel, hence the name "Laplacian of Gaussian". </p>
+<p>Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter \( \hat{f}_{\text USM} = U - \lambda \ \mathcal{L} \text{ where } \mathcal{L} = l * g \). </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">image</td><td>Image to apply the mask </td></tr>

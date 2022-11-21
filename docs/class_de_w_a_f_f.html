@@ -143,9 +143,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a849d1036d82f6cc2c99fc07238af287a"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_de_w_a_f_f.html#a849d1036d82f6cc2c99fc07238af287a">DeceivedScaledBilateralFilter</a> (const Mat &amp;inputImage, int windowSize, double spatialSigma, int rangeSigma)</td></tr>
 <tr class="memdesc:a849d1036d82f6cc2c99fc07238af287a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the Deceived Scaled Bilateral Filter to an image. Uses an UnSharp mask as deceiver. Similar to the Deceived Bilateral Filter, but the weighting image is low pass filtered.  <a href="class_de_w_a_f_f.html#a849d1036d82f6cc2c99fc07238af287a">More...</a><br /></td></tr>
 <tr class="separator:a849d1036d82f6cc2c99fc07238af287a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf070e33324b2a11f2e4feff88fac292"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_de_w_a_f_f.html#acf070e33324b2a11f2e4feff88fac292">DeceivedNonLocalMeansFilter</a> (const Mat &amp;inputImage, int windowSize, int patchSize, double spatialSigma, int rangeSigma)</td></tr>
-<tr class="memdesc:acf070e33324b2a11f2e4feff88fac292"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the Deceived Non Local Means Filter to an image. Uses an UnSharp mask as deceiver. Computationally demanding algorithm, can take as much as ten times more than the other filters in the framework.  <a href="class_de_w_a_f_f.html#acf070e33324b2a11f2e4feff88fac292">More...</a><br /></td></tr>
-<tr class="separator:acf070e33324b2a11f2e4feff88fac292"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a734aa69a3e25d5c333d582f5f04d3c0e"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_de_w_a_f_f.html#a734aa69a3e25d5c333d582f5f04d3c0e">DeceivedNonLocalMeansFilter</a> (const Mat &amp;inputImage, int windowSize, int neighborhoodSize, double spatialSigma, int rangeSigma)</td></tr>
+<tr class="memdesc:a734aa69a3e25d5c333d582f5f04d3c0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the Deceived Non Local Means Filter to an image. Uses an UnSharp mask as deceiver. Computationally demanding algorithm, can take as much as ten times more than the other filters in the framework.  <a href="class_de_w_a_f_f.html#a734aa69a3e25d5c333d582f5f04d3c0e">More...</a><br /></td></tr>
+<tr class="separator:a734aa69a3e25d5c333d582f5f04d3c0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af501bd0b89d846dfab170b6faf12985c"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_de_w_a_f_f.html#af501bd0b89d846dfab170b6faf12985c">DeceivedGuidedFilter</a> (const Mat &amp;inputImage, int windowSize, double spatialSigma, int rangeSigma)</td></tr>
 <tr class="memdesc:af501bd0b89d846dfab170b6faf12985c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply the Deceived Guided Filter to an image. Uses an UnSharp mask as deceiver. The fastest WAF for the <a class="el" href="class_de_w_a_f_f.html" title="Deceived Weighted Average Filters Framework class. It applies a filter which intput and weighting inp...">DeWAFF</a> yet.  <a href="class_de_w_a_f_f.html#af501bd0b89d846dfab170b6faf12985c">More...</a><br /></td></tr>
 <tr class="separator:af501bd0b89d846dfab170b6faf12985c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -165,9 +165,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a420055db9cf1ecf8a0457bc5d192f208 inherit pro_methods_class_filters"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a420055db9cf1ecf8a0457bc5d192f208">ScaledBilateralFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const double spatialSigma, const int rangeSigma)</td></tr>
 <tr class="memdesc:a420055db9cf1ecf8a0457bc5d192f208 inherit pro_methods_class_filters"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The difference between this filter and the not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter to have better performance under heavy AWGN.  <a href="class_filters.html#a420055db9cf1ecf8a0457bc5d192f208">More...</a><br /></td></tr>
 <tr class="separator:a420055db9cf1ecf8a0457bc5d192f208 inherit pro_methods_class_filters"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1deec2de78c18f40eb89538d79d8e8e8 inherit pro_methods_class_filters"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a1deec2de78c18f40eb89538d79d8e8e8">NonLocalMeansFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const int patchSize, const int rangeSigma)</td></tr>
-<tr class="memdesc:a1deec2de78c18f40eb89538d79d8e8e8 inherit pro_methods_class_filters"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding.  <a href="class_filters.html#a1deec2de78c18f40eb89538d79d8e8e8">More...</a><br /></td></tr>
-<tr class="separator:a1deec2de78c18f40eb89538d79d8e8e8 inherit pro_methods_class_filters"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad28ccdfcbd403a5a5d8276806a8badc0 inherit pro_methods_class_filters"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#ad28ccdfcbd403a5a5d8276806a8badc0">NonLocalMeansFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const int neighborhoodSize, const int rangeSigma)</td></tr>
+<tr class="memdesc:ad28ccdfcbd403a5a5d8276806a8badc0 inherit pro_methods_class_filters"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding.  <a href="class_filters.html#ad28ccdfcbd403a5a5d8276806a8badc0">More...</a><br /></td></tr>
+<tr class="separator:ad28ccdfcbd403a5a5d8276806a8badc0 inherit pro_methods_class_filters"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e7acfe426ce8619c2fc1dbcbae5e5e0 inherit pro_methods_class_filters"><td class="memItemLeft" align="right" valign="top"><a id="a0e7acfe426ce8619c2fc1dbcbae5e5e0"></a>
 Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (const Mat &amp;inputImage, const Mat &amp;guidingImage, const int windowSize, const int rangeSigma)</td></tr>
 <tr class="separator:a0e7acfe426ce8619c2fc1dbcbae5e5e0 inherit pro_methods_class_filters"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -284,8 +284,8 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (cons
 
 </div>
 </div>
-<a id="acf070e33324b2a11f2e4feff88fac292"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acf070e33324b2a11f2e4feff88fac292">&#9670;&nbsp;</a></span>DeceivedNonLocalMeansFilter()</h2>
+<a id="a734aa69a3e25d5c333d582f5f04d3c0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a734aa69a3e25d5c333d582f5f04d3c0e">&#9670;&nbsp;</a></span>DeceivedNonLocalMeansFilter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -306,7 +306,7 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (cons
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>patchSize</em>, </td>
+          <td class="paramname"><em>neighborhoodSize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -333,7 +333,7 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (cons
   <table class="params">
     <tr><td class="paramname">inputImage</td><td>input image </td></tr>
     <tr><td class="paramname">windowSize</td><td>processing window size, has to be odd numbered and greater or equal than 3 </td></tr>
-    <tr><td class="paramname">patchSize</td><td>spatial standard deviation </td></tr>
+    <tr><td class="paramname">neighborhoodSize</td><td>spatial standard deviation </td></tr>
     <tr><td class="paramname">spatialSigma</td><td>range or radiometric standard deviation </td></tr>
     <tr><td class="paramname">rangeSigma</td><td>output image </td></tr>
   </table>
