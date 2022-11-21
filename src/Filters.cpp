@@ -257,7 +257,7 @@ Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputIm
  * @param weightingImage image used to calculate the kernel's weight
  * @param inputImage image used as input for the filter
  * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
- * @param rangeSigma range or radiometric standard deviation. Used to calculate the parameter \f$ h = 2 sigma^2 \f$
+ * @param rangeSigma range or radiometric standard deviation. Used to calculate the parameter \f$ h = 2 \sigma^2 \f$
  * @return Mat output image
  */
 Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const int patchSize, const int rangeSigma) {
