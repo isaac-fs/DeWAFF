@@ -257,10 +257,10 @@ Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputIm
  * @param weightingImage image used to calculate the kernel's weight
  * @param inputImage image used as input for the filter
  * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
- * @param rangeSigma range or radiometric standard deviation. Used to calculate the parameter \f$ h = \frac{\sqrt(\sigma)}{2} \f$
+ * @param rangeSigma range or radiometric standard deviation. Used to calculate the parameter \f$ h = 2 sigma^2 \f$
  * @return Mat output image
  */
-Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const int patchSize, const double rangeSigma) {
+Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const int patchSize, const int rangeSigma) {
      // Set the padding value
     int padding = (windowSize - 1) / 2;
 
@@ -272,7 +272,7 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
     copyMakeBorder(weightingImage, weight, padding, padding, padding, padding, BORDER_CONSTANT);
 
     // NML standard deviation h
-    double h = sqrt(rangeSigma)/2;
+    double h = 2*pow(rangeSigma,2);
 
     // Prepare variables for the bilateral filtering
     Mat output(input.size(), input.type());

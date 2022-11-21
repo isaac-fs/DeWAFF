@@ -13,11 +13,11 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 
 	// Framework
 	framework = DeWAFF();
-	filterType = DGF;
-	windowSize = 15;
-	spatialSigma = 10; // = windowSize / 1.5
-	rangeSigma = 10;
-	patchSize = 7;
+	filterType = DBF;
+	windowSize = 3;
+	spatialSigma = 5; // = windowSize / 1.5
+	rangeSigma = 5;
+	patchSize = 3;
 
 	// Libraries
 	lib = Utils();
@@ -508,12 +508,12 @@ void ProgramInterface::help() {
 	<< std::endl
 
 	<< "\t" << std::left << "DEFAULT PARAMETERS"
-	<< "\n\t" << std::setw(16) << "- Filter:" << "dgf (Deceived Guided Filter)"
-	<< "\n\t" << std::setw(16) << "- Window size:" << 15
-	<< "\n\t" << std::setw(16) << "- Patch size:" << 7
-	<< "\n\t" << std::setw(16) << "- Range Sigma:" << 10
-	<< "\n\t" << std::setw(16) << "- Spatial Sigma:" << 10
-	<< "\n\t" << std::setw(16) << "- USM Lambda:" << 2
+	<< "\n\t" << std::setw(17) << "- Filter:" << "dbf (Deceived Bilateral Filter)"
+	<< "\n\t" << std::setw(17) << "- Window size:" << 3
+	<< "\n\t" << std::setw(17) << "- Patch size:" << 3
+	<< "\n\t" << std::setw(17) << "- Range Sigma:" << 5
+	<< "\n\t" << std::setw(17) << "- Spatial Sigma:" << 5
+	<< "\n\t" << std::setw(17) << "- USM Lambda:" << 2
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "PROGRAM OPTIONS\n"

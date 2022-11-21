@@ -2,12 +2,12 @@
 
 ## Table of contents
 - [Deceived Weighted Average Filters Framework](#deceived-weighted-average-filters-framework)
-  - [Table of contents](#table-of-contents)
-  - [Description](#description)
-  - [Documentation](#documentation)
-  - [Installation](#installation)
-  - [Execution](#execution)
-  - [Benchmark mode](#benchmark-mode)
+	- [Table of contents](#table-of-contents)
+	- [Description](#description)
+	- [Documentation](#documentation)
+	- [Installation](#installation)
+	- [Execution](#execution)
+	- [Benchmark mode](#benchmark-mode)
 
 ## Description
 Implementation of the image abstraction framework DeWAFF in C++. This framework allows to use WAF (Weighted Average Filters) with their input decoupled as a weigthing input and a processing input. The weighthing input is used to generate the kernel values for the WAFF and  the processing input serves as input for the filter. This tehcnique is known as "deceiving", hence the name of the framework. With this approach the filter's kernel is weighted with the original input and as input it takes the original input filtered through an UnSharp Mask (Laplacian deceive). Normal WAFs use the same image for both processes. This is the novelty of this framework, to avoid a pipelined approach by applying two different techniques to an image, but instead combine them and apply them as one.
@@ -57,12 +57,12 @@ usage: ./DeWAFF [-f <filter type>] [-p <filter parameters>]
 		-i <file name> | -v <file name>
 
 	DEFAULT PARAMETERS
-	- Filter:       dgf (Deceived Guided Filter)
-	- Window size:  15
-	- Patch size:   7
-	- Range Sigma:  10
-	- Spatial Sigma:10
-	- USM Lambda:   2
+	- Filter:        dbf (Deceived Bilateral Filter)
+	- Window size:   3
+	- Patch size:    3
+	- Range Sigma:   5
+	- Spatial Sigma: 5
+	- USM Lambda:    2
 
 	PROGRAM OPTIONS
 	-i, --image: Process an image given a file name. The file name goes after the option. Example: '-i picture.png'
