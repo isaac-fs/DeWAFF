@@ -12,24 +12,13 @@
  * @return Mat output image
  */
 Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const double spatialSigma, const int rangeSigma) {
-    // Set the padding value
-    int padding = (windowSize - 1) / 2;
-
-    // Working images
-    Mat input, weight;
-
-    // Add padding to the input for kernel consistency
-    copyMakeBorder(inputImage, input, padding, padding, padding, padding, BORDER_CONSTANT);
-    copyMakeBorder(weightingImage, weight, padding, padding, padding, padding, BORDER_CONSTANT);
-
-    // Pre computation of meshgrid values
-    Mat1f X, Y, S;
-    Range range = Range(-(windowSize/2), (windowSize/2) + 1);
+    // Pre compute the m - p = |m-p| factors
+    Mat X, Y;
+    Range range = Range(-windowSize, windowSize + 1);
     lib.MeshGrid(range, X, Y);
-
     pow(X, 2, X);
     pow(Y, 2, Y);
-    S = X + Y;
+    Mat euclideanDistances = X + Y;
 
     /**
     * This filter uses two Gaussian kernels, one of them is the spatial Gaussian kernel
@@ -37,42 +26,38 @@ Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, c
     * with the spatial values from an image region \f$ \Omega \subseteq U \f$.
     * The spatial kernel uses the \f$ m_i \subseteq \Omega \f$ pixels coordinates as weighting values for the pixel \f$ p = (x, y) \f$
     */
-    Mat spatialGaussian = lib.GaussianFunction(S, spatialSigma);
-
-    // Variance calculation
-    int rangeVariance = std::pow(rangeSigma, 2);
+    Mat spatialGaussian = lib.GaussianFunction(euclideanDistances, spatialSigma);
 
     // Prepare variables for the bilateral filtering
-    Mat output(input.size(), input.type());
-    Mat weightRegion, inputRegion;
-    Mat dL, da, db, bilateralFilterKernel, rangeGaussian;
-	double bilateralFilterKernelNorm;
+    Mat output(inputImage.size(), inputImage.type());
+    Mat weightingRegion, inputRegion;
+    Mat dL, da, db, bilateralFilter, rangeGaussian;
+	double bilateralFilterNorm;
     int iMin, iMax, jMin, jMax;
     Range xRange, yRange;
 	Vec3f pixel;
-    Mat weightChannels[3], inputChannels[3];
+    Mat weightingChannels[3], inputChannels[3];
 
     // Set the parallelization pragma for OpenMP
     #pragma omp parallel for\
     private(iMin, iMax, jMin, jMax, xRange, yRange,\
-            weightRegion, weightChannels, inputRegion, inputChannels,\
+            weightingRegion, weightingChannels, inputRegion, inputChannels,\
             pixel, dL, da, db, rangeGaussian,\
-            bilateralFilterKernel, bilateralFilterKernelNorm)\
-	shared( input, weight, output,\
+            bilateralFilter, bilateralFilterNorm)\
+	shared( inputImage, weightingImage, output,\
             windowSize, spatialSigma, rangeSigma)
-    for(int i = padding; i < input.rows - padding; i++) {
-        iMin = i - padding;
-        iMax = iMin + windowSize;
+    for(int i = 0; i < inputImage.rows; i++) {
+        iMin = max(i - windowSize, 0);
+        iMax = min(i + windowSize, inputImage.rows-1);
         xRange = Range(iMin, iMax);
-
-        for(int j = padding; j < input.cols - padding; j++) {
-            jMin = j -  padding;
-            jMax = jMin + windowSize;
+        for(int j = 0; j < inputImage.cols; j++) {
+            jMin = max(j - windowSize, 0);
+            jMax = min(j + windowSize, inputImage.cols-1);
             yRange = Range(jMin, jMax);
 
             // Extract local weightRegion based on the window size
-            weightRegion = weight(xRange, yRange);
-            cv::split(weightRegion, weightChannels);
+            weightingRegion = weightingImage(xRange, yRange);
+            cv::split(weightingRegion, weightingChannels);
 
             /**
             * The other Gaussian kernel is the range Gaussian kernel \f$ G_{\text range}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
@@ -81,43 +66,43 @@ Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, c
             * locations as in the spatial kernel computation. In this case a the input \f$ U \f$ is separated into the three CIELab weightChannels and each
             * channel is processed as an individual input \f$ U_{\text channel} \f$
             */
-            pixel = weight.at<Vec3f>(i, j);
-            cv::pow(weightChannels[L] - pixel.val[L], 2, dL);
-            cv::pow(weightChannels[a] - pixel.val[a], 2, da);
-            cv::pow(weightChannels[b] - pixel.val[b], 2, db);
-            cv::exp((dL + da + db) / (-2 * rangeVariance), rangeGaussian);
+            pixel = weightingImage.at<Vec3f>(i, j);
+            cv::pow(weightingChannels[L] - pixel.val[L], 2, dL);
+            cv::pow(weightingChannels[a] - pixel.val[a], 2, da);
+            cv::pow(weightingChannels[b] - pixel.val[b], 2, db);
+            rangeGaussian = lib.GaussianFunction(dL + da + db, rangeSigma);
 
             /**
             * The two kernels convolve to obtain the Bilateral Filter kernel
             * \f$ \phi_{\text SBF}(U, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U(m)-U(p)||) \f$
             *
             */
-            bilateralFilterKernel = spatialGaussian.mul(rangeGaussian);
+            xRange = Range(iMin + windowSize - i, iMax + windowSize - i);
+            yRange = Range(jMin + windowSize - j, jMax + windowSize - j);
+            bilateralFilter = spatialGaussian(xRange, yRange).mul(rangeGaussian);
 
             /**
             * The Bilateral filter's norm corresponds to
             * \f$ \left( \sum_{m \subseteq \Omega} \phi_{\text{SBF}}(U, m, p) \right)^{-1} \f$
             */
-            bilateralFilterKernelNorm = sum(bilateralFilterKernel).val[0];
+            bilateralFilterNorm = sum(bilateralFilter).val[0];
 
             /**
             * Finally the bilateral filter kernel can be convolved with the input as follows
             * \f$ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, m, p) \right)^{-1}
             * \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
-            inputRegion = input(xRange, yRange);
+            xRange = Range(iMin, iMax);
+            yRange = Range(jMin, jMax);
+            inputRegion = inputImage(xRange, yRange);
             cv::split(inputRegion, inputChannels);
-            output.at<Vec3f>(i,j)[L] = (1/bilateralFilterKernelNorm) * sum(bilateralFilterKernel.mul(inputChannels[L])).val[0];
-            output.at<Vec3f>(i,j)[a] = (1/bilateralFilterKernelNorm) * sum(bilateralFilterKernel.mul(inputChannels[a])).val[0];
-            output.at<Vec3f>(i,j)[b] = (1/bilateralFilterKernelNorm) * sum(bilateralFilterKernel.mul(inputChannels[b])).val[0];
+            output.at<Vec3f>(i,j)[L] = (1/bilateralFilterNorm) * sum(bilateralFilter.mul(inputChannels[L])).val[0];
+            output.at<Vec3f>(i,j)[a] = (1/bilateralFilterNorm) * sum(bilateralFilter.mul(inputChannels[a])).val[0];
+            output.at<Vec3f>(i,j)[b] = (1/bilateralFilterNorm) * sum(bilateralFilter.mul(inputChannels[b])).val[0];
         }
     }
 
-    // Discard the padding
-    xRange = Range(padding, padding + inputImage.rows);
-    yRange = Range(padding, padding + inputImage.cols);
-
-    return output(xRange, yRange);
+    return output;
 }
 
 /**
