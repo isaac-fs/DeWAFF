@@ -11,10 +11,20 @@
  * @param rangeSigma range or radiometric standard deviation
  * @return Mat output image
  */
-Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const double spatialSigma, const int rangeSigma) {
+Mat Filters::BilateralFilter(const Mat &weightingImage_, const Mat &inputImage_, const int windowSize, const double spatialSigma, const int rangeSigma) {
+    // Set the padding value
+    int padding = (windowSize - 1) / 2;
+
+    // Working images
+    Mat inputImage, weightingImage;
+
+    // Add padding to the input for kernel consistency
+    copyMakeBorder(inputImage_, inputImage, padding, padding, padding, padding, BORDER_REPLICATE);
+    copyMakeBorder(weightingImage_, weightingImage, padding, padding, padding, padding, BORDER_REPLICATE);
+
     // Pre compute the m - p = |m-p| factors
     Mat X, Y;
-    Range range = Range(-windowSize, windowSize + 1);
+    Range range = Range((-windowSize/2), (windowSize/2) + 1);
     lib.MeshGrid(range, X, Y);
     pow(X, 2, X);
     pow(Y, 2, Y);
@@ -29,7 +39,7 @@ Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, c
     Mat spatialGaussian = lib.GaussianFunction(euclideanDistances, spatialSigma);
 
     // Prepare variables for the bilateral filtering
-    Mat output(inputImage.size(), inputImage.type());
+    Mat outputImage(inputImage.size(), inputImage.type());
     Mat weightingRegion, inputRegion;
     Mat dL, da, db, bilateralFilter, rangeGaussian;
 	double bilateralFilterNorm;
@@ -44,15 +54,15 @@ Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, c
             weightingRegion, weightingChannels, inputRegion, inputChannels,\
             pixel, dL, da, db, rangeGaussian,\
             bilateralFilter, bilateralFilterNorm)\
-	shared( inputImage, weightingImage, output,\
+	shared( inputImage, weightingImage, outputImage,\
             windowSize, spatialSigma, rangeSigma)
-    for(int i = 0; i < inputImage.rows; i++) {
-        iMin = max(i - windowSize, 0);
-        iMax = min(i + windowSize, inputImage.rows-1);
+    for(int i = padding; i < inputImage.rows - padding; i++) {
+        iMin = i - padding;
+        iMax = iMin + windowSize;
         xRange = Range(iMin, iMax);
-        for(int j = 0; j < inputImage.cols; j++) {
-            jMin = max(j - windowSize, 0);
-            jMax = min(j + windowSize, inputImage.cols-1);
+        for(int j = padding; j < inputImage.cols - padding; j++) {
+            jMin = j -  padding;
+            jMax = jMin + windowSize;
             yRange = Range(jMin, jMax);
 
             // Extract local weightRegion based on the window size
@@ -74,35 +84,34 @@ Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, c
 
             /**
             * The two kernels convolve to obtain the Bilateral Filter kernel
-            * \f$ \phi_{\text SBF}(U, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U(m)-U(p)||) \f$
+            * \f$ \phi_{\text BF}(U, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U(m)-U(p)||) \f$
             *
-            */
-            xRange = Range(iMin + windowSize - i, iMax + windowSize - i);
-            yRange = Range(jMin + windowSize - j, jMax + windowSize - j);
-            bilateralFilter = spatialGaussian(xRange, yRange).mul(rangeGaussian);
+            */;
+            bilateralFilter = spatialGaussian.mul(rangeGaussian);
 
             /**
             * The Bilateral filter's norm corresponds to
-            * \f$ \left( \sum_{m \subseteq \Omega} \phi_{\text{SBF}}(U, m, p) \right)^{-1} \f$
+            * \f$ \left( \sum_{m \subseteq \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \f$
             */
             bilateralFilterNorm = sum(bilateralFilter).val[0];
 
             /**
             * Finally the bilateral filter kernel can be convolved with the input as follows
-            * \f$ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, m, p) \right)^{-1}
-            * \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
+            * \f$ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text BF}(U, m, p) \right)^{-1}
+            * \left( \sum_{m \subseteq \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
-            xRange = Range(iMin, iMax);
-            yRange = Range(jMin, jMax);
             inputRegion = inputImage(xRange, yRange);
             cv::split(inputRegion, inputChannels);
-            output.at<Vec3f>(i,j)[L] = (1/bilateralFilterNorm) * sum(bilateralFilter.mul(inputChannels[L])).val[0];
-            output.at<Vec3f>(i,j)[a] = (1/bilateralFilterNorm) * sum(bilateralFilter.mul(inputChannels[a])).val[0];
-            output.at<Vec3f>(i,j)[b] = (1/bilateralFilterNorm) * sum(bilateralFilter.mul(inputChannels[b])).val[0];
+            outputImage.at<Vec3f>(i,j)[L] = (1/bilateralFilterNorm) * sum(bilateralFilter.mul(inputChannels[L])).val[0];
+            outputImage.at<Vec3f>(i,j)[a] = (1/bilateralFilterNorm) * sum(bilateralFilter.mul(inputChannels[a])).val[0];
+            outputImage.at<Vec3f>(i,j)[b] = (1/bilateralFilterNorm) * sum(bilateralFilter.mul(inputChannels[b])).val[0];
         }
     }
 
-    return output;
+    // Discard the padding
+    xRange = Range(padding, inputImage_.rows + padding);
+    yRange = Range(padding, inputImage_.cols + padding);
+    return outputImage(xRange, yRange);
 }
 
 /**
@@ -119,119 +128,12 @@ Mat Filters::BilateralFilter(const Mat &weightingImage, const Mat &inputImage, c
  * @return Mat output image
  */
 Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const double spatialSigma, const int rangeSigma) {
-     // Set the padding value
-    int padding = (windowSize - 1) / 2;
-
-    // Working images
-    Mat input, weight;
-
-    // Add padding to the input for kernel consistency
-    copyMakeBorder(inputImage, input, padding, padding, padding, padding, BORDER_CONSTANT);
-    copyMakeBorder(weightingImage, weight, padding, padding, padding, padding, BORDER_CONSTANT);
-
-    // Pre computation of meshgrid values
-    Mat1f X, Y, S;
-    Range range = Range(-(windowSize/2), (windowSize/2) + 1);
-    lib.MeshGrid(range, X, Y);
-
-    pow(X, 2, X);
-    pow(Y, 2, Y);
-    S = X + Y;
-
-    /**
-    * This filter uses two Gaussian kernels, one of them is the spatial Gaussian kernel
-    * \f$ G_{\text spatial}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \f$
-    * with the spatial values from an image region \f$ \Omega \subseteq U \f$.
-    * The spatial kernel uses the \f$ m_i \subseteq \Omega \f$ pixels coordinates as weighting values for the pixel \f$ p = (x, y) \f$
-    */
-    Mat spatialGaussian = lib.GaussianFunction(S, spatialSigma);
-
-    // Variance calculation
-    int rangeVariance = std::pow(rangeSigma, 2);
-
     /* This filter uses a low pass filtered version of the input image as part of the weighting input.
     *  In this case with a Gaussian blur as LPF
     */
-    Mat scaled(weight.size(), weight.type());
-    GaussianBlur(weight, scaled, Size(windowSize, windowSize), rangeSigma);
-
-    // Prepare variables for the bilateral filtering
-    Mat output(input.size(), input.type());
-    Mat weightRegion, inputRegion, scaledRegion;
-    Mat dL, da, db;
-    Mat scaledBilateralKernel, rangeGaussian;
-	double scaledBilateralKernelNorm;
-    int iMin, iMax, jMin, jMax;
-    Range xRange, yRange;
-	Vec3f pixel;
-    Mat scaledChannels[3], inputChannels[3];
-
-    // Set the parallelization pragma for OpenMP
-    #pragma omp parallel for\
-    private(iMin, iMax, jMin, jMax, xRange, yRange,\
-            weightRegion, inputRegion, inputChannels, scaledRegion, scaledChannels,\
-            pixel, dL, da, db,\
-            rangeGaussian, scaledBilateralKernel, scaledBilateralKernelNorm)\
-	shared( input, weight, scaled, output,\
-            windowSize, spatialSigma, rangeSigma)
-    for(int i = padding; i < input.rows - padding; i++) {
-        iMin = i - padding;
-        iMax = iMin + windowSize;
-        xRange = Range(iMin, iMax);
-
-        for(int j = padding; j < input.cols - padding; j++) {
-            jMin = j - padding;
-            jMax = jMin + windowSize;
-            yRange = Range(jMin, jMax);
-
-            // Extract local region based on the window size
-            scaledRegion = scaled(xRange, yRange);
-            cv::split(scaledRegion, scaledChannels);
-
-            /**
-            * The other Gaussian kernel is the range Gaussian kernel \f$ G_{\text range}(U, U^s, m, p) = \exp\left( -\frac{ ||U^s(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$
-            * with the intensity (range) values from an image region \f$ \Omega \subseteq U \f$.
-            * The range kernel uses the \f$ m_i \subseteq \Omega \f$ pixels intensities as weighting values for the pixel \f$ p = (x, y) \f$ instead of their
-            * locations as in the spatial kernel computation. In this case a the image \f$ U \f$ is separated into the three CIELab scaledChannels and each
-            * channel is processed as an individual image \f$ U_{\text channel} \f$
-            */
-            pixel = weight.at<Vec3f>(i, j);
-            pow(scaledChannels[L] - pixel.val[L], 2, dL);
-            pow(scaledChannels[a] - pixel.val[a], 2, da);
-            pow(scaledChannels[b] - pixel.val[b], 2, db);
-            exp((dL + da + db) / (-2 * rangeVariance), rangeGaussian);
-
-            /**
-            * The two kernels convolve to obtain the Scaled Bilateral Filter kernel
-            * \f$ \phi_{\text SBF}(U, U^s, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U^s(m)-U(p)||) \f$
-            *
-            */
-            scaledBilateralKernel = spatialGaussian.mul(rangeGaussian);
-
-            /**
-            * The Scaled Bilateral filter's norm corresponds to
-            * \f$ \left( \sum_{m \subseteq \Omega} \phi_{\text{SBF}}(U, U^s, m, p) \right)^{-1} \f$
-            */
-            scaledBilateralKernelNorm = sum(scaledBilateralKernel).val[0];
-
-            /**
-            * Finally the bilateral filter kernel can be convolved with the input as follows
-            * \f$ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, U^s, m, p) \right)^{-1}
-            * \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
-            */
-            inputRegion = input(xRange, yRange);
-            cv::split(inputRegion, inputChannels);
-            output.at<Vec3f>(i,j)[L] = (1/scaledBilateralKernelNorm) * sum(scaledBilateralKernel.mul(inputChannels[L])).val[0];
-            output.at<Vec3f>(i,j)[a] = (1/scaledBilateralKernelNorm) * sum(scaledBilateralKernel.mul(inputChannels[a])).val[0];
-            output.at<Vec3f>(i,j)[b] = (1/scaledBilateralKernelNorm) * sum(scaledBilateralKernel.mul(inputChannels[b])).val[0];
-        }
-    }
-
-    // Discard the padding
-    xRange = Range(padding, padding + inputImage.rows);
-    yRange = Range(padding, padding + inputImage.cols);
-
-    return output(xRange, yRange);
+    Mat scaledImage(weightingImage.size(), weightingImage.type());
+    GaussianBlur(weightingImage, scaledImage, Size(windowSize, windowSize), spatialSigma, 0.0, BORDER_CONSTANT);
+    return Filters::BilateralFilter(scaledImage, inputImage, windowSize, spatialSigma, rangeSigma);
 }
 
 /**
