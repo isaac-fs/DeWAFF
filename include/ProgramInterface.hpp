@@ -15,6 +15,7 @@
 #include <iomanip>
 #include <unistd.h>
 #include <iostream>
+#include <getopt.h>
 #include "Utils.hpp"
 #include "DeWAFF.hpp"
 
@@ -30,13 +31,13 @@ public:
 private:
 	// Class configuration
 	unsigned int mode;
-	int benchmarkIterations;
 	enum programModes : unsigned int {
 		start = 0, 		// 000
 		image = 1, 		// 001
 		video = 2, 		// 010
 		benchmark = 4 	// 100
 	};
+	int benchmarkIterations;
 	std::string programName, inputFileName, outputFileName;
 	std::string::size_type dotPos;
 	Size frameSize;
@@ -49,11 +50,11 @@ private:
 	Timer timer;
 	int windowSize, rangeSigma, patchSize;
 	double spatialSigma;
-	unsigned int filterType;
-	enum filterTypes : unsigned int {
-		DBF,
+	int filterType;
+	enum filterTypes {
+		DBF = 1,
 		DSBF,
-		DNLM,
+		DNLMF,
 		DGF
 	};
 
@@ -65,28 +66,29 @@ private:
 	void processVideo();
 	void benchmarkImage();
 	void benchmarkVideo();
+	void displayFilterParams();
 
 	// Helper methods
 	void getVideoInfo(VideoCapture inputVideo);
-	void printVideoInfo();
-	void printImageInfo();
-	void printBenchmarkHeader();
-	void printBenchmarkFooter();
+	void displayVideoInfo();
+	void displayImageInfo();
+	void displayBenchmarkHeader();
+	void displayBenchmarkFooter();
 	void setOutputFileName();
 	void errorMessage(std::string msg);
 	void help();
 
 	// Output spacing
 	enum spacing {
-        VIDEO_LINE = 27,
+        MAIN_LINE = 29,
         DATA_SPACE = 11,
-        VALUE_SPACE = 8,
+        VALUE_SPACE = 10,
         BENCHMARK_LINE = 20,
         NUMBER_SPACE = 3,
         TIME_SPACE = 9,
-		HELP_SPACE = 69,
-		HELP_OPTION = 8,
-		HELP_DESCR = 53
+		PARAMS_LINE = 55,
+		PARAM_DESC_SPACE = 15,
+		PARAM_VAL_SPACE = 32
 	};
 };
 
