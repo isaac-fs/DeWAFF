@@ -41,27 +41,55 @@ This project requires that OpenCV is alredy installed in your machine. For this 
 After these steps binary named `DeWAFF` should appear in the directory. To recompile the project you can use the generated Makefille.
 
 ## Execution
-To execute the framework run `./DeWAFF` accompanied of one or more of the following options:
-```terminal
-        --------------------------------------------------------------------
-        | Options  | Description                                           |
-        --------------------------------------------------------------------
-        | -i       | Process an image given a file name -i <file name>     |
-        | -v       | Process a video given a file name -v <file name>      |
-        | -b < N > | Run a series of N benchmarks for a video or an image. |
-        | -h       | Display this help message                             |
-        --------------------------------------------------------------------
+To execute the framework use the `./DeWAFF` command it can be as simple as to use
+```bash
+    ./DeWAFF -i path/to/image
+```
+But it supports a varied array of customization options, so a command can look like this
+```bash
+    ./DeWAFF -i path/to/image -f dnlmf -p ws=31,ps=9,rs=15,ss=10
 ```
 
-For example, to process an image the command looks like this
-```bash
-    ./DeWAFF -i /path/to/image/file
+These are the instructions:
+```terminal
+usage: ./DeWAFF [-f <filter type>] [-p <filter parameters>]
+		[-b <number of iterations>] [-h]
+		-i <file name> | -v <file name>
+
+	DEFAULT PARAMETERS
+	- Filter:       dgf (Deceived Guided Filter)
+	- Window size:  15
+	- Patch size:   7
+	- Range Sigma:  10
+	- Spatial Sigma:10
+	- USM Lambda:   2
+
+	PROGRAM OPTIONS
+	-i, --image: Process an image given a file name. The file name goes after the option. Example: '-i picture.png'
+
+	-v, --video: Process a video given a file name. The file name goes after the option. Example: '-v video.mp4'
+
+	-f, --filter: Choose which filter to use. The availabe options are:
+		- dbf:  deceived bilateral filter
+		- dsbf: deceived scaled bilateral filter
+		- dnlmf:deceived non local means filter
+		- dgf:  deceived guided filter
+	For example, to process an image using the deceived bilateral filter use: './DeWAFF -i image.png -f dbf'
+
+	-p, --parameters: Change the filter parameters. The available parameters are:
+		- ws:    Window size
+		- rs:    Range Sigma
+		- ss:    Spatial Sigma
+		- lambda:Lambda value for the Laplacian deceive
+		- ps:    Patch size for the DNLM filter
+	It is possible to change one or more parameters in the same line, for example '-p ws=15,rs=10,ss=10' would change the window size and the range and spatial sigma values for the filter. Using just '-p ws=15' would only change its window size The 'ps' option Only works with the filter set to 'dnlm'
+
+	-b, --benchmark: Run a series of N benchmarks for a video or an image. This option will run a series of N benchmarks and display the results in the terminal. Note: The results are NOT saved during this process. Indicate the number of iterations after the flag, for example '-b 10' would indicate to run the filter 10 separate times
+
+	-h, --help: Display the program's help message
 ```
-To process a video just change the flag from `-i` to `-v` as follows
-```bash
-    ./DeWAFF -v /path/to/video/file
-```
-These options will generate an output in the `/path/to/file` directory with the applied filter acronym as suffix `file_ACRONYM.extension`.
+
+The output wil be generated in the `/path/to/file` directory with the applied filter acronym as suffix `file_ACRONYM.extension`.
 
 ## Benchmark mode
 
