@@ -41,10 +41,6 @@ cmake*
 build/
 Makefile
 
-# Doxygen
-doxygen/
-docs/
-
 # Binary
 DeWAFF
 
