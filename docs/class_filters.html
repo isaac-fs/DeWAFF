@@ -138,9 +138,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a420055db9cf1ecf8a0457bc5d192f208"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a420055db9cf1ecf8a0457bc5d192f208">ScaledBilateralFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const double spatialSigma, const int rangeSigma)</td></tr>
 <tr class="memdesc:a420055db9cf1ecf8a0457bc5d192f208"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The difference between this filter and the not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter to have better performance under heavy AWGN.  <a href="class_filters.html#a420055db9cf1ecf8a0457bc5d192f208">More...</a><br /></td></tr>
 <tr class="separator:a420055db9cf1ecf8a0457bc5d192f208"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7458d17abc87805f5fd4e615da97973"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#ac7458d17abc87805f5fd4e615da97973">NonLocalMeansFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const int patchSize, const double rangeSigma)</td></tr>
-<tr class="memdesc:ac7458d17abc87805f5fd4e615da97973"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding.  <a href="class_filters.html#ac7458d17abc87805f5fd4e615da97973">More...</a><br /></td></tr>
-<tr class="separator:ac7458d17abc87805f5fd4e615da97973"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1deec2de78c18f40eb89538d79d8e8e8"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a1deec2de78c18f40eb89538d79d8e8e8">NonLocalMeansFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const int patchSize, const int rangeSigma)</td></tr>
+<tr class="memdesc:a1deec2de78c18f40eb89538d79d8e8e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding.  <a href="class_filters.html#a1deec2de78c18f40eb89538d79d8e8e8">More...</a><br /></td></tr>
+<tr class="separator:a1deec2de78c18f40eb89538d79d8e8e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e7acfe426ce8619c2fc1dbcbae5e5e0"><td class="memItemLeft" align="right" valign="top"><a id="a0e7acfe426ce8619c2fc1dbcbae5e5e0"></a>
 Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (const Mat &amp;inputImage, const Mat &amp;guidingImage, const int windowSize, const int rangeSigma)</td></tr>
 <tr class="separator:a0e7acfe426ce8619c2fc1dbcbae5e5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -218,8 +218,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac7458d17abc87805f5fd4e615da97973"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7458d17abc87805f5fd4e615da97973">&#9670;&nbsp;</a></span>NonLocalMeansFilter()</h2>
+<a id="a1deec2de78c18f40eb89538d79d8e8e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1deec2de78c18f40eb89538d79d8e8e8">&#9670;&nbsp;</a></span>NonLocalMeansFilter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -251,7 +251,7 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const double&#160;</td>
+          <td class="paramtype">const int&#160;</td>
           <td class="paramname"><em>rangeSigma</em>&#160;</td>
         </tr>
         <tr>
@@ -268,7 +268,7 @@ Protected Attributes</h2></td></tr>
     <tr><td class="paramname">weightingImage</td><td>image used to calculate the kernel's weight </td></tr>
     <tr><td class="paramname">inputImage</td><td>image used as input for the filter </td></tr>
     <tr><td class="paramname">windowSize</td><td>processing window size, has to be odd numbered and greater or equal than 3 </td></tr>
-    <tr><td class="paramname">rangeSigma</td><td>range or radiometric standard deviation. Used to calculate the parameter \( h = \frac{\sqrt(\sigma)}{2} \) </td></tr>
+    <tr><td class="paramname">rangeSigma</td><td>range or radiometric standard deviation. Used to calculate the parameter \( h = 2 sigma^2 \) </td></tr>
   </table>
   </dd>
 </dl>
@@ -344,8 +344,8 @@ Protected Attributes</h2></td></tr>
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/isaac/Desktop/DeWAFF/include/<a class="el" href="_filters_8hpp_source.html">Filters.hpp</a></li>
-<li>/home/isaac/Desktop/DeWAFF/src/Filters.cpp</li>
+<li>/home/isaac/Code/DeWAFF/include/<a class="el" href="_filters_8hpp_source.html">Filters.hpp</a></li>
+<li>/home/isaac/Code/DeWAFF/src/Filters.cpp</li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

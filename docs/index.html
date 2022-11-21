@@ -98,7 +98,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="title">Deceived Weighted Average <a class="el" href="class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ...">Filters</a> Framework </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md__home_isaac_Desktop_DeWAFF_README"></a> </p>
+<div class="textblock"><p><a class="anchor" id="md__home_isaac_Code_DeWAFF_README"></a> </p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Table of contents</h1>
 <ul>
@@ -147,12 +147,12 @@ Execution</h1>
 <div class="line">        -i &lt;file name&gt; | -v &lt;file name&gt;</div>
 <div class="line"> </div>
 <div class="line">    DEFAULT PARAMETERS</div>
-<div class="line">    - Filter:       dgf (Deceived Guided Filter)</div>
-<div class="line">    - Window size:  15</div>
-<div class="line">    - Patch size:   7</div>
-<div class="line">    - Range Sigma:  10</div>
-<div class="line">    - Spatial Sigma:10</div>
-<div class="line">    - USM Lambda:   2</div>
+<div class="line">    - Filter:        dbf (Deceived Bilateral Filter)</div>
+<div class="line">    - Window size:   3</div>
+<div class="line">    - Patch size:    3</div>
+<div class="line">    - Range Sigma:   5</div>
+<div class="line">    - Spatial Sigma: 5</div>
+<div class="line">    - USM Lambda:    2</div>
 <div class="line"> </div>
 <div class="line">    PROGRAM OPTIONS</div>
 <div class="line">    -i, --image: Process an image given a file name. The file name goes after the option. Example: &#39;-i picture.png&#39;</div>
