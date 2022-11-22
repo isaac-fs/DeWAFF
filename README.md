@@ -50,43 +50,62 @@ But it supports a varied array of customization options, so a command can look l
     ./DeWAFF -i path/to/image -f dnlmf -p ws=31,ps=9,rs=15,ss=10
 ```
 
-These are the instructions:
+These are the full program instructions:
 ```terminal
 usage: ./DeWAFF [-f <filter type>] [-p <filter parameters>]
 		[-b <number of iterations>] [-h]
 		-i <file name> | -v <file name>
 
 	DEFAULT PARAMETERS
-	- Filter:        dbf (Deceived Bilateral Filter)
-	- Window size:   11
-	- Patch size:    3
-	- Range Sigma:   10
-	- Spatial Sigma: 10
-	- USM Lambda:    2
+	- Filter:            dbf (Deceived Bilateral Filter)
+	- Window size:       3
+	- Neighborhood size: 3
+	- Range Sigma:       10.0
+	- Spatial Sigma:     10.0
+	- USM Lambda:        2
 
 	PROGRAM OPTIONS
-	-i, --image: Process an image given a file name. The file name goes after the option. Example: '-i picture.png'
+	-i, --image: Process an image given a file name. The file name goes
+	after the option.
+	Example: '-i picture.png'
 
-	-v, --video: Process a video given a file name. The file name goes after the option. Example: '-v video.mp4'
+	-v, --video: Process a video given a file name. The file name goes
+	after the option.
+	Example: '-v video.mp4'
 
 	-f, --filter: Choose which filter to use. The availabe options are:
 		- dbf:  deceived bilateral filter
 		- dsbf: deceived scaled bilateral filter
 		- dnlmf:deceived non local means filter
 		- dgf:  deceived guided filter
-	For example, to process an image using the deceived bilateral filter use: './DeWAFF -i image.png -f dbf'
+	For example, to process an image using the deceived bilateral filter
+	use: './DeWAFF -i image.png -f dbf'
 
-	-p, --parameters: Change the filter parameters. The available parameters are:
+	-p, --parameters: Change the filter parameters. Available parameters:
 		- ws:    Window size
 		- rs:    Range Sigma
 		- ss:    Spatial Sigma
 		- lambda:Lambda value for the Laplacian deceive
-		- ps:    Patch size for the DNLM filter
-	It is possible to change one or more parameters in the same line, for example '-p ws=15,rs=10,ss=10' would change the window size and the range and spatial sigma values for the filter. Using just '-p ws=15' would only change its window size The 'ps' option Only works with the filter set to 'dnlm'
+		- ns:    Neighborhood size for the DNLM filter
+	It is possible to change one or more parameters in the same line,
+	for example '-p ws=15,rs=10,ss=10' would change the window size and
+	the range and spatial sigma values for the filter. Using just
+	'-p ws=15' would only change its window size.
+	The 'ns' option Only works with the filter set to 'dnlm'
 
-	-b, --benchmark: Run a series of N benchmarks for a video or an image. This option will run a series of N benchmarks and display the results in the terminal. Note: The results are NOT saved during this process. Indicate the number of iterations after the flag, for example '-b 10' would indicate to run the filter 10 separate times
+	-b, --benchmark: Run a series of N benchmarks for a video or an image.
+	This option will run aseries of N benchmarks and
+	display the results in the terminal.
+	Note: The results are NOT saved during this process.
+	Indicate the number of iterations after the flag,
+	for example '-b 10' would indicate to run the filter
+	ten separate times
 
-	-h, --help: Display the program's help message
+	-q, --quiet: Run in quiet mode. Does not displays the file's and
+	filter's information
+
+	-h, --help: Display the program's help message. The long version
+	--help shows the full program's help
 ```
 
 The output wil be generated in the `/path/to/file` directory with the applied filter acronym as suffix `file_ACRONYM.extension`.
@@ -103,4 +122,4 @@ To benchmar a video just change the flag from `-i` to `-v` as follows
 ```bash
     ./DeWAFF -v /path/to/video/file -b 3
 ```
-Take into consideration that videos take a long time to benchmark as each frame has to be processed
+Take into consideration that videos take a long time to benchmark as each frame has to be processed!
