@@ -219,7 +219,7 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
             weightRegion = weight(xRange, yRange);
 
             /**
-            * The discrete representation of the Non Local Means Filter is as follows,
+            * The discrete representation of the Non Local Means Filter is as follows \n
             * \f$ \phi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2}{h^2} \right)\f$
             * where  \f$B(p)\f$ is a patch part of the window \f$\Omega\f$ centered at pixel \f$p\f$. \f$B(m)\f$ represents all of the
             * patches at \f$\Omega\f$ centered in each \f$m\f$ pixel. The Non Local Means Filter calculates the Euclidean distance
