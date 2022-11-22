@@ -24,12 +24,33 @@
 */
 var NAVTREE =
 [
-  [ "DeWAFF", "index.html", ]
+  [ "DeWAFF", "index.html", [
+    [ "Deceived Weighted Average Filters Framework", "index.html", [
+      [ "Table of contents", "index.html#autotoc_md1", null ],
+      [ "Description", "index.html#autotoc_md2", null ],
+      [ "Documentation", "index.html#autotoc_md3", null ],
+      [ "Installation", "index.html#autotoc_md4", null ],
+      [ "Execution", "index.html#autotoc_md5", null ],
+      [ "Benchmark mode", "index.html#autotoc_md6", null ]
+    ] ],
+    [ "Classes", "annotated.html", [
+      [ "Class List", "annotated.html", "annotated_dup" ],
+      [ "Class Index", "classes.html", null ],
+      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
+      [ "Class Members", "functions.html", [
+        [ "All", "functions.html", null ],
+        [ "Functions", "functions_func.html", null ]
+      ] ]
+    ] ],
+    [ "Files", "files.html", [
+      [ "File List", "files.html", "files_dup" ]
+    ] ]
+  ] ]
 ];
 
 var NAVTREEINDEX =
 [
-"index.html"
+"_de_w_a_f_f_8hpp.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
