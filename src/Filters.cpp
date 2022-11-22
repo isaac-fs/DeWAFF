@@ -11,7 +11,7 @@
  * @param rangeSigma range or radiometric standard deviation
  * @return Mat output image
  */
-Mat Filters::BilateralFilter(const Mat &weightingImage_, const Mat &inputImage_, const int windowSize, const double spatialSigma, const int rangeSigma) {
+Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_, int windowSize, double spatialSigma, double rangeSigma) {
     // Set the padding value
     int padding = (windowSize - 1) / 2;
 
@@ -19,15 +19,15 @@ Mat Filters::BilateralFilter(const Mat &weightingImage_, const Mat &inputImage_,
     Mat inputImage, weightingImage;
 
     // Add padding to the input for kernel consistency
-    copyMakeBorder(inputImage_, inputImage, padding, padding, padding, padding, BORDER_REPLICATE);
-    copyMakeBorder(weightingImage_, weightingImage, padding, padding, padding, padding, BORDER_REPLICATE);
+    copyMakeBorder(inputImage_, inputImage, padding, padding, padding, padding, BORDER_CONSTANT);
+    copyMakeBorder(weightingImage_, weightingImage, padding, padding, padding, padding, BORDER_CONSTANT);
 
     // Pre compute the m - p = |m-p| factors
     Mat X, Y;
     Range range = Range((-windowSize/2), (windowSize/2) + 1);
     lib.MeshGrid(range, X, Y);
-    pow(X, 2, X);
-    pow(Y, 2, Y);
+    pow(X, 2.0, X);
+    pow(Y, 2.0, Y);
     Mat euclideanDistances = X + Y;
 
     /**
@@ -77,9 +77,9 @@ Mat Filters::BilateralFilter(const Mat &weightingImage_, const Mat &inputImage_,
             * channel is processed as an individual input \f$ U_{\text channel} \f$
             */
             pixel = weightingImage.at<Vec3f>(i, j);
-            cv::pow(weightingChannels[L] - pixel.val[L], 2, dL);
-            cv::pow(weightingChannels[a] - pixel.val[a], 2, da);
-            cv::pow(weightingChannels[b] - pixel.val[b], 2, db);
+            cv::pow(weightingChannels[L] - pixel.val[L], 2.0, dL);
+            cv::pow(weightingChannels[a] - pixel.val[a], 2.0, da);
+            cv::pow(weightingChannels[b] - pixel.val[b], 2.0, db);
             rangeGaussian = lib.GaussianFunction(dL + da + db, rangeSigma);
 
             /**
@@ -109,8 +109,9 @@ Mat Filters::BilateralFilter(const Mat &weightingImage_, const Mat &inputImage_,
     }
 
     // Discard the padding
-    xRange = Range(padding, inputImage_.rows + padding);
-    yRange = Range(padding, inputImage_.cols + padding);
+    xRange = Range(padding, inputImage.rows - padding);
+    yRange = Range(padding, inputImage.cols - padding);
+
     return outputImage(xRange, yRange);
 }
 
@@ -127,7 +128,7 @@ Mat Filters::BilateralFilter(const Mat &weightingImage_, const Mat &inputImage_,
  * @param rangeSigma range or radiometric standard deviation
  * @return Mat output image
  */
-Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const double spatialSigma, const int rangeSigma) {
+Mat Filters::ScaledBilateralFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, double spatialSigma, double rangeSigma) {
     /* This filter uses a low pass filtered version of the input image as part of the weighting input.
     *  In this case with a Gaussian blur as LPF
     */
@@ -158,7 +159,7 @@ Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputIm
     */
     Mat scaledImage(weightingImage.size(), weightingImage.type());
     GaussianBlur(weightingImage, scaledImage, Size(windowSize, windowSize), spatialSigma, 0.0, BORDER_CONSTANT);
-    return Filters::BilateralFilter(scaledImage, inputImage, windowSize, spatialSigma, rangeSigma);
+    return Filters::BilateralFilter(inputImage, scaledImage, windowSize, spatialSigma, rangeSigma);
 }
 
 /**
@@ -172,22 +173,22 @@ Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputIm
  * @param rangeSigma range or radiometric standard deviation. Used to calculate the parameter \f$ h = 2 \sigma^2 \f$
  * @return Mat output image
  */
-Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const int neighborhoodSize, const int rangeSigma) {
+Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingImage_, int windowSize, int neighborhoodSize, double rangeSigma) {
      // Set the padding value
     int padding = (windowSize - 1) / 2;
 
     // Working images
-    Mat input, weight;
+    Mat inputImage, weightingImage;
 
     // Add padding to the input for kernel consistency
-    copyMakeBorder(inputImage, input, padding, padding, padding, padding, BORDER_CONSTANT);
-    copyMakeBorder(weightingImage, weight, padding, padding, padding, padding, BORDER_CONSTANT);
+    copyMakeBorder(inputImage_, inputImage, padding, padding, padding, padding, BORDER_CONSTANT);
+    copyMakeBorder(weightingImage_, weightingImage, padding, padding, padding, padding, BORDER_CONSTANT);
 
     // NML standard deviation h
-    double h = 2*pow(rangeSigma,2);
+    double h = 2*pow(rangeSigma, 2.0);
 
     // Prepare variables for the bilateral filtering
-    Mat output(input.size(), input.type());
+    Mat outputImage(inputImage.size(), inputImage.type());
     Mat inputRegion, weightRegion;
     Mat dL, da, db;
     Mat nonLocalMeansFilter;
@@ -203,20 +204,19 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
             pixel, dL, da, db,\
             nlmChannels, nonLocalMeansFilter, nonLocalMeansFilterNorm,\
             weightRegion, weightChannels, inputRegion, inputChannels)\
-	shared( input, weight, output,\
+	shared( inputImage, weightingImage, outputImage,\
             windowSize, neighborhoodSize, rangeSigma)
-    for(int i = padding; i < input.rows - padding; i++) {
+    for(int i = padding; i < inputImage.rows - padding; i++) {
         iMin = i - padding;
         iMax = iMin + windowSize;
         xRange = Range(iMin, iMax);
-
-        for(int j = padding; j < input.cols - padding; j++) {
+        for(int j = padding; j < inputImage.cols - padding; j++) {
             jMin = j - padding;
             jMax = jMin + windowSize;
             yRange = Range(jMin, jMax);
 
             // Extract local region based on the window size
-            weightRegion = weight(xRange, yRange);
+            weightRegion = weightingImage(xRange, yRange);
 
             /**
             * The discrete representation of the Non Local Means Filter is as follows \n
@@ -244,19 +244,19 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
             * \f$ Y_{\phi_{\text NLM}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text NLM}(U, m, p) \right)^{-1}
             * \left( \sum_{m \subseteq \Omega} \phi_{\text NLM}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
-            inputRegion = input(xRange, yRange);
+            inputRegion = inputImage(xRange, yRange);
             cv::split(inputRegion, inputChannels);
-            output.at<Vec3f>(i,j)[L] = (1/nonLocalMeansFilterNorm) * sum(nonLocalMeansFilter.mul(inputChannels[L])).val[0];
-            output.at<Vec3f>(i,j)[a] = (1/nonLocalMeansFilterNorm) * sum(nonLocalMeansFilter.mul(inputChannels[a])).val[0];
-            output.at<Vec3f>(i,j)[b] = (1/nonLocalMeansFilterNorm) * sum(nonLocalMeansFilter.mul(inputChannels[b])).val[0];
+            outputImage.at<Vec3f>(i,j)[L] = (1/nonLocalMeansFilterNorm) * sum(nonLocalMeansFilter.mul(inputChannels[L])).val[0];
+            outputImage.at<Vec3f>(i,j)[a] = (1/nonLocalMeansFilterNorm) * sum(nonLocalMeansFilter.mul(inputChannels[a])).val[0];
+            outputImage.at<Vec3f>(i,j)[b] = (1/nonLocalMeansFilterNorm) * sum(nonLocalMeansFilter.mul(inputChannels[b])).val[0];
         }
     }
 
     // Discard the padding
-    xRange = Range(padding, padding + inputImage.rows);
-    yRange = Range(padding, padding + inputImage.cols);
+    xRange = Range(padding, inputImage.rows - padding);
+    yRange = Range(padding, inputImage.cols - padding);
 
-    return output(xRange, yRange);
+    return outputImage(xRange, yRange);
 }
 
 /**
@@ -270,13 +270,13 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
  * @param rangeSigma range or radiometric standard deviation. Used to calculate \f$ \epsilon = \sigma_r^2}
  * @return Mat output image
  */
-Mat Filters::GuidedFilter(const Mat &inputImage, const Mat &guidingImage, const int windowSize, const int rangeSigma) {
-    double epsilon = pow(rangeSigma, 2);
+Mat Filters::GuidedFilter(const Mat &inputImage, const Mat &guidingImage, int windowSize, double rangeSigma) {
     /**
      * The Guided Filter follows the followin algorithm
      *
      */
-    return guidedFilter(guidingImage, inputImage, windowSize, epsilon, -1);
+    double epsilon = pow((rangeSigma), 2.0);
+    return guidedFilter(guidingImage, inputImage, windowSize, epsilon);
 }
 
 // Below this line is the Guided Filter implementation

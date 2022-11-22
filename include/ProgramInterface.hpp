@@ -48,8 +48,8 @@ private:
 	DeWAFF framework;
 	Utils lib;
 	Timer timer;
-	int windowSize, rangeSigma, neighborhoodSize;
-	double spatialSigma;
+	int windowSize, neighborhoodSize;
+	double rangeSigma, spatialSigma;
 	int filterType;
 	enum filterTypes {
 		DBF = 1,
@@ -76,7 +76,11 @@ private:
 	void displayBenchmarkFooter();
 	void setOutputFileName();
 	void errorMessage(std::string msg);
+	void longHelp();
 	void help();
+
+	// Quiet mode
+	bool quietMode;
 
 	// Output spacing
 	enum spacing {

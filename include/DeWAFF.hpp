@@ -26,10 +26,10 @@ class DeWAFF : protected Filters {
 	public:
 		DeWAFF();
 		int usmLambda; /// Parameter for the Laplacian deceive
-		Mat DeceivedBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma);
-		Mat DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma);
-		Mat DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int neighborhoodSize, double spatialSigma, int rangeSigma);
-		Mat DeceivedGuidedFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma);
+		Mat DeceivedBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma);
+		Mat DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma);
+		Mat DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int neighborhoodSize, double spatialSigma, double rangeSigma);
+		Mat DeceivedGuidedFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma);
 };
 
 #endif /* DEWAFF_H_ */

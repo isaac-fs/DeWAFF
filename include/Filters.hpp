@@ -34,10 +34,10 @@ class Filters {
         Utils lib;
 
     public:
-        Mat BilateralFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const double spatialSigma, const int rangeSigma);
-        Mat ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const double spatialSigma, const int rangeSigma);
-        Mat NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const int neighborhoodSize, const int rangeSigma);
-        Mat GuidedFilter(const Mat &inputImage, const Mat &guidingImage, const int windowSize, const int rangeSigma);
+        Mat BilateralFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, double spatialSigma, double rangeSigma);
+        Mat ScaledBilateralFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, double spatialSigma, double rangeSigma);
+        Mat NonLocalMeansFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, int neighborhoodSize, double rangeSigma);
+        Mat GuidedFilter(const Mat &inputImage, const Mat &guidingImage, int windowSize, double rangeSigma);
 };
 
 /**

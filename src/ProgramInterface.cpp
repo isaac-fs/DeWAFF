@@ -10,14 +10,15 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 	// Initial values
 	mode = start;
 	benchmarkIterations = 0;
+	quietMode = false; // Print info
 
 	// Framework
 	framework = DeWAFF();
 	filterType = DBF;
-	windowSize = 11;
-	spatialSigma = 10; // = windowSize / 1.5
-	rangeSigma = 10;
+	windowSize = 3;
 	neighborhoodSize = 3;
+	spatialSigma = 10.0;
+	rangeSigma = 10.0;
 
 	// Libraries
 	lib = Utils();
@@ -59,7 +60,8 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
           {"filter",  		required_argument, 0, 'f'},
           {"parameters",    required_argument, 0, 'p'},
           {"benchmark",  	required_argument, 0, 'b'},
-		  {"help",  		no_argument		, 0, 'h'},
+		  {"quiet",  		no_argument		, 0, 'q'},
+		  {"help",  		no_argument		, 0, 'H'},
           {0, 0, 0, 0}
     };
 
@@ -68,7 +70,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
     int opt, opt_index;
 
 	// Capture user input
-    while ((opt = getopt_long(argc, argv, "b:i:f:v:p:h", long_options, &opt_index)) != -1) {
+    while ((opt = getopt_long(argc, argv, "b:i:f:v:p:hq", long_options, &opt_index)) != -1) {
 		switch(opt) {
 			case 'i': // Process an image
 				if(mode & video) errorMessage("Options -v and -i are mutually exclusive");
@@ -90,7 +92,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 			case 'f': {
 				std::string fName = optarg;
 				int f = filterIdentifierMap[fName];
-				if(f < DBF || f > DGF) errorMessage("Not a valid filter option. Use option -h to check valid filters");
+				if(f < DBF || f > DGF) errorMessage("Not a valid filter option. Use option --h to check valid filters");
 				else filterType = f;
 				break;
 			}
@@ -100,35 +102,35 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
                     char *saved = subopts;
                     switch(getsubopt(&subopts, (char **)filterOpts, &value)) {
 						case WINDOW_SIZE: {
-							if (value == NULL) abort();
+							if(value == NULL) abort();
 							int wS = atoi(value);
-							if (wS < 3 || wS % 2 == 0) errorMessage("Window size must be equal or greater than 3 and an odd number");
+							if(wS < 3 || wS % 2 == 0) errorMessage("Window size must be equal or greater than 3 and an odd number");
 							else windowSize = wS;
 							break;
 						}
 						case RANGE_SIGMA: {
-							if (value == NULL) abort();
-							int rs = atoi(value);
-							if (rs < 1) errorMessage("Range Sigma value must be greater than 1");
+							if(value == NULL) abort();
+							double rs = atof(value);
+							if(rs < 0.0001) errorMessage("Range Sigma value must be greater than 0.0001");
 							else rangeSigma = rs;
 							break;
 						}
 						case SPATIAL_SIGMA: {
-							if (value == NULL) abort();
+							if(value == NULL) abort();
 							double ss = atof(value);
-							if (ss < 0.1) errorMessage("Spatial Sigma value must be greater than 0.1");
+							if(ss < 0.0001) errorMessage("Spatial Sigma value must be greater than 0.0001");
 							else spatialSigma = ss;
 							break;
 						}
 						case LAMBDA: {
-							if (value == NULL) abort();
+							if(value == NULL) abort();
 							int l = atoi(value);
-							if (l < 1) errorMessage("Lambda value must me equal or greater than 1");
+							if(l < 0) errorMessage("Lambda value must be equal or greater than zero");
 							else framework.usmLambda = l;
                         	break;
 						}
 						case NEIGHBORHOOD_SIZE: {
-							if (value == NULL) abort();
+							if(value == NULL) abort();
 							if(filterType != DNLMF)
 								errorMessage("Neighborhoodsize option only applies when the filter type is set to Deceived Non Local Means Filter");
 							int ns = atoi(value);
@@ -146,6 +148,13 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
                    	}
                 }
 				break;
+			case 'q':
+				quietMode = true;
+				break;
+			case 'H':
+				longHelp();
+				exit(-1);
+				break;
 			case 'h':
 				help();
 				exit(-1);
@@ -158,8 +167,14 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 		}
     }
 
+	// Catch extra arguments in the terminal
+	if(argc-1 == optind) {
+		std::string error = "Unexpected argument \"" + (std::string) argv[argc-1] + "\"";
+		errorMessage(error);
+	}
+
 	// Get the las dot position in the file name
-	this->dotPos = inputFileName.find_last_of('.');
+	dotPos = inputFileName.find_last_of('.');
 
 	// Set the output file name
 	setOutputFileName();
@@ -187,7 +202,7 @@ int ProgramInterface::run() {
 		return 1;
 		break;
 	default:
-		std::cout << "Use " << programName << " --help to see the program usage" << std::endl;
+		std::cout << "Use " << programName << " --help to see the program's full usage" << std::endl;
 		return -1;
 		break;
 	}
@@ -205,7 +220,7 @@ Mat ProgramInterface::inputPreProcessor(const Mat &inputImage) {
     int type = inputImage.type();
 	double minVal, maxVal;
 	lib.MinMax(inputImage, &minVal, &maxVal);
-	if (!(type == CV_8UC1 || type == CV_8UC3) || minVal < 0 || maxVal > 255)
+	if(!(type == CV_8UC1 || type == CV_8UC3) || minVal < 0 || maxVal > 255)
 	   errorMessage("Input frame must be a Grayscale or RGB unsigned integer matrix of size NxMx1 or NxMx3 on the closed interval [0,255]");
 
     // Converto to CIELab color space
@@ -272,8 +287,10 @@ void ProgramInterface::processImage() {
 	if(inputFrame.empty()) errorMessage("Could not open the input file for read: " + inputFileName);
 
 	frameSize = inputFrame.size();
-	displayImageInfo();
-	displayFilterParams();
+	if(!quietMode) {
+		displayImageInfo();
+		displayFilterParams();
+	}
 
 	// Process image
 	Mat outputFrame;
@@ -292,14 +309,16 @@ void ProgramInterface::processImage() {
 void ProgramInterface::processVideo() {
 	// Open input video file
 	VideoCapture inputVideo = VideoCapture(inputFileName);
-	if (!inputVideo.isOpened()) errorMessage("Could not open the input video for read: " + inputFileName);
+	if(!inputVideo.isOpened()) errorMessage("Could not open the input video for read: " + inputFileName);
 
 	// Acquire input video information
 	getVideoInfo(inputVideo);
 
 	// Print collected video information
-	displayVideoInfo();
-	displayFilterParams();
+	if(!quietMode){
+		displayVideoInfo();
+		displayFilterParams();
+	}
 
 	// Open output video
 	VideoWriter outputVideo(outputFileName, codec, frameRate , frameSize, true);
@@ -309,7 +328,7 @@ void ProgramInterface::processVideo() {
 	Mat inputFrame, outputFrame;
 	while(inputVideo.read(inputFrame)) {
 		// Process current frame
-		outputFrame = this->processFrame(inputFrame);
+		outputFrame = processFrame(inputFrame);
 
 		// Write frame to output video
 		outputVideo.write(outputFrame);
@@ -332,8 +351,10 @@ void ProgramInterface::benchmarkImage() {
 		if(inputFrame.empty()) errorMessage("Could not open the input file for read: " + inputFileName);
 
 		frameSize = inputFrame.size();
-		displayImageInfo();
-		displayFilterParams();
+		if(!quietMode) {
+			displayImageInfo();
+			displayFilterParams();
+		}
 
 		double elapsedSeconds;
 
@@ -362,14 +383,16 @@ void ProgramInterface::benchmarkImage() {
  */
 void ProgramInterface::benchmarkVideo() {
 	VideoCapture inputVideo = VideoCapture(inputFileName);
-	if (!inputVideo.isOpened()) errorMessage("Could not open the input video for read: " + inputFileName);
+	if(!inputVideo.isOpened()) errorMessage("Could not open the input video for read: " + inputFileName);
 
 	// Acquire input video information
 	getVideoInfo(inputVideo);
 
 	// Print collected video information
-	displayVideoInfo();
-	displayFilterParams();
+	if(!quietMode) {
+		displayVideoInfo();
+		displayFilterParams();
+	}
 
 	Mat inputFrame, outputFrame;
 	double elapsedSeconds;
@@ -495,11 +518,20 @@ void ProgramInterface::displayBenchmarkFooter() {
 }
 
 /**
- * @brief Displays the program's help
+ * @brief Displays the program's short help
  */
 void ProgramInterface::help() {
-//  usage: ./DeWAFF[-f <filter type>] [-p <filter parameters>] [-b <number of iterat
+	std::cout
+	<< "usage: " << programName << " "
+	<< "[-f <filter type>] [-p <filter parameters>]" << std::endl
+	<< "\t\t" << "[-b <number of iterations>] [-h]" << std::endl
+	<< "\t\t" << "-i <file name> | -v <file name>" << std::endl;
+}
 
+/**
+ * @brief Displays the program's full help
+ */
+void ProgramInterface::longHelp() {
 	std::cout
 	<< "usage: " << programName << " "
 	<< "[-f <filter type>] [-p <filter parameters>]" << std::endl
@@ -508,22 +540,26 @@ void ProgramInterface::help() {
 	<< std::endl
 
 	<< "\t" << std::left << "DEFAULT PARAMETERS"
-	<< "\n\t" << std::setw(17) << "- Filter:" << "dbf (Deceived Bilateral Filter)"
-	<< "\n\t" << std::setw(17) << "- Window size:" << 11
-	<< "\n\t" << std::setw(17) << "- Neighborhood size:" << 3
-	<< "\n\t" << std::setw(17) << "- Range Sigma:" << 10
-	<< "\n\t" << std::setw(17) << "- Spatial Sigma:" << 10
-	<< "\n\t" << std::setw(17) << "- USM Lambda:" << 2
+	<< "\n\t" << std::setw(21) << "- Filter:" << "dbf (Deceived Bilateral Filter)"
+	<< "\n\t" << std::setw(21) << "- Window size:" << 3
+	<< "\n\t" << std::setw(21) << "- Neighborhood size:" << 3
+	<< "\n\t" << std::setw(21) << "- Range Sigma:" << 10
+	<< "\n\t" << std::setw(21) << "- Spatial Sigma:" << 10
+	<< "\n\t" << std::setw(21) << "- USM Lambda:" << 2
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "PROGRAM OPTIONS\n"
 
 	<< "\t" << std::left << "-i, --image"
-	<< ": " << "Process an image given a file name. The file name goes after the option. Example: \'-i picture.png\'"
+	<< ": " << "Process an image given a file name. The file name goes"
+	<< "\n\t" << "after the option."
+	<< "\n\t" << "Example: \'-i picture.png\'"
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-v, --video"
-	<< ": " << "Process a video given a file name. The file name goes after the option. Example: \'-v video.mp4\'"
+	<< ": " << "Process a video given a file name. The file name goes"
+	<< "\n\t" << "after the option."
+	<< "\n\t" << "Example: \'-v video.mp4\'"
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-f, --filter"
@@ -532,28 +568,42 @@ void ProgramInterface::help() {
 	<< "\n\t\t" << std::setw(8) << "- dsbf:" << "deceived scaled bilateral filter"
 	<< "\n\t\t" << std::setw(8) << "- dnlmf:" << "deceived non local means filter"
 	<< "\n\t\t" << std::setw(8) << "- dgf:" << "deceived guided filter"
-	<< "\n\t" << "For example, to process an image using the deceived bilateral filter use: \'./DeWAFF -i image.png -f dbf\'"
+	<< "\n\t" << "For example, to process an image using the deceived bilateral filter"
+	<< "\n\t" << "use: \'./DeWAFF -i image.png -f dbf\'"
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-p, --parameters"
-	<< ": " << "Change the filter parameters. The available parameters are:"
+	<< ": " << "Change the filter parameters. Available parameters:"
 	<< "\n\t\t" << std::setw(9) << "- ws:" << "Window size"
 	<< "\n\t\t" << std::setw(9) << "- rs:" << "Range Sigma"
 	<< "\n\t\t" << std::setw(9) << "- ss:" << "Spatial Sigma"
 	<< "\n\t\t" << std::setw(9) << "- lambda:" << "Lambda value for the Laplacian deceive"
 	<< "\n\t\t" << std::setw(9) << "- ns:" << "Neighborhood size for the DNLM filter"
-	<< "\n\t" << "It is possible to change one or more parameters in the same line, for example \'-p ws=15,rs=10,ss=10\' "
-	<< "would change the window size and the range and spatial sigma values for the filter. Using just \'-p ws=15\' would only change its window size "
-	<< "The \'ns\' option Only works with the filter set to \'dnlm\'"
+	<< "\n\t" << "It is possible to change one or more parameters in the same line,"
+	<< "\n\t" << "for example \'-p ws=15,rs=10,ss=10\' would change the window size and"
+	<< "\n\t" << "the range and spatial sigma values for the filter. Using just"
+	<< "\n\t" << "\'-p ws=15\' would only change its window size."
+	<< "\n\t" << "The \'ns\' option Only works with the filter set to \'dnlm\'"
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-b, --benchmark"
-	<< ": " << "Run a series of N benchmarks for a video or an image. This option will run a series of N benchmarks and display the results in the terminal. Note: The results "
-	<< "are NOT saved during this process. Indicate the number of iterations after the flag, for example \'-b 10\' would indicate to run the filter 10 separate times"
+	<< ": " << "Run a series of N benchmarks for a video or an image."
+	<< "\n\t" << "This option will run aseries of N benchmarks and"
+	<< "\n\t" << "display the results in the terminal."
+	<< "\n\t" << "Note: The results are NOT saved during this process."
+	<< "\n\t" << "Indicate the number of iterations after the flag,"
+	<< "\n\t" << "for example \'-b 10\' would indicate to run the filter"
+	<< "\n\t" << "ten separate times"
+	<< "\n" << std::endl
+
+	<< "\t" << std::left << "-q, --quiet"
+	<< ": " << "Run in quiet mode. Does not displays the file's and"
+	<< "\n\t" << "filter's information"
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-h, --help"
-	<< ": " << "Display the program's help message"
+	<< ": " << "Display the program's help message. The long version"
+	<< "\n\t" << "--help shows the full program's help"
 
 	<< std::endl;
 }
@@ -592,11 +642,11 @@ void ProgramInterface::setOutputFileName() {
 	}
 
 	std::string extension;
-	if (mode & image) extension = ".png";
+	if(mode & image) extension = ".png";
 	else if(mode & video) extension = ".avi";
 
 	// Set the output file names
-	this->outputFileName = this->inputFileName.substr(0, dotPos) + "_" + filterAcronym + extension;
+	outputFileName = inputFileName.substr(0, dotPos) + "_" + filterAcronym + extension;
 }
 
 /**

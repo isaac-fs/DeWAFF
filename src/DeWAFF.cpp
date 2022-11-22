@@ -15,11 +15,11 @@ DeWAFF::DeWAFF(): usmLambda(2){}
  * @param rangeSigma range or radiometric standard deviation
  * @return Mat output image
  */
-Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma) {
+Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
     // Pre-process the laplacian masked image
     Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
-    return BilateralFilter(inputImage, usmImage, windowSize, spatialSigma, rangeSigma);
+    return BilateralFilter(usmImage, inputImage, windowSize, spatialSigma, rangeSigma);
 }
 
 /**
@@ -32,11 +32,11 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, doubl
  * @param rangeSigma range or radiometric standard deviation
  * @return Mat output image
  */
-Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma) {
+Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
     // Pre-process the laplacian masked image
     Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
-    return ScaledBilateralFilter(inputImage, usmImage, windowSize, spatialSigma, rangeSigma);
+    return ScaledBilateralFilter(usmImage, inputImage, windowSize, spatialSigma, rangeSigma);
 }
 
 /**
@@ -51,11 +51,11 @@ Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize,
  * @param rangeSigma output image
  * @return Mat
  */
-Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int neighborhoodSize, double spatialSigma, int rangeSigma) {
+Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int neighborhoodSize, double spatialSigma, double rangeSigma) {
     // Pre-process the laplacian masked image
     Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
-    return NonLocalMeansFilter(inputImage, usmImage, windowSize, neighborhoodSize, rangeSigma);
+    return NonLocalMeansFilter(usmImage, inputImage, windowSize, neighborhoodSize, rangeSigma);
 }
 
 /**
@@ -68,7 +68,7 @@ Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, i
  * @param rangeSigma range or radiometric standard deviation
  * @return Mat output image
  */
-Mat DeWAFF::DeceivedGuidedFilter(const Mat &inputImage, int windowSize, double spatialSigma, int rangeSigma) {
+Mat DeWAFF::DeceivedGuidedFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
     Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
     return GuidedFilter(usmImage, inputImage, windowSize, rangeSigma);

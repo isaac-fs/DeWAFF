@@ -64,7 +64,7 @@ void Utils::MinMax(const Mat& A, double* minA, double* maxA) {
  */
 Mat Utils::GaussianFunction(Mat input, double sigma){
 	Mat output;
-	double variance = pow(sigma, 2);
+	double variance = pow(sigma, 2.0);
 	exp(input * (-1 / (2 * variance)), output);
 	return output;
 }
@@ -83,8 +83,8 @@ Mat Utils::GaussianKernel(int windowSize, double sigma) {
     Mat1f X, Y;
     Range range = Range(-(windowSize/2), (windowSize/2) + 1);
     MeshGrid(range, X, Y);
-    pow(X, 2, X);
-    pow(Y, 2, Y);
+    pow(X, 2.0, X);
+    pow(Y, 2.0, Y);
 
 	// Compute the Gaussian kernel
 	Mat gaussianKernel = GaussianFunction(X, sigma).mul(GaussianFunction(Y, sigma));
@@ -107,15 +107,15 @@ Mat Utils::LoGFilter(const Mat &image, int windowSize, double sigma) {
     Mat X, Y, S;
     Range range = Range(-(windowSize/2), (windowSize/2) + 1);
     MeshGrid(range, X, Y);
-    pow(X, 2, X);
-    pow(Y, 2, Y);
+    pow(X, 2.0, X);
+    pow(Y, 2.0, Y);
 
 	// Variance
-	double variance = pow(sigma, 2);
+	double variance = pow(sigma, 2.0);
     Mat laplacianOfGaussianKernel = (1 / variance) * (((X+Y)/variance) - 2).mul(gaussianKernel);
 
 	// Normalization
-	laplacianOfGaussianKernel -= sum(laplacianOfGaussianKernel).val[0] / pow(windowSize, 2);
+	laplacianOfGaussianKernel -= sum(laplacianOfGaussianKernel).val[0] / pow(windowSize, 2.0);
 
 	// Create a new image with the size and type of the input image
 	Mat LoGFilteredImage(image.size(), image.type());
