@@ -57,7 +57,7 @@ void Utils::MinMax(const Mat& A, double* minA, double* maxA) {
 
 /**
  * @brief Compute the Gaussian function of an input \f$ X \f$
- * \f$ G(X) = \exp\left(-\frac{X}{2\sigma_s^2} \right) \f$
+ * \f$ G(X) = \exp\left( -\frac{X}{2\sigma_s^2} \right) \f$
  * @param input Matrix input
  * @param sigma Desired standard deviation
  * @return Mat
@@ -70,7 +70,7 @@ Mat Utils::GaussianFunction(Mat input, double sigma){
 }
 
 /**
- * @brief Computes a normalized Gaussian kernel \f$ G(X, Y) = \frac{\exp\left(-\frac X^2 + Y^2 { 2 {\sigma_s^2} } \right)}{|G(X, Y)|} \f$
+ * @brief Computes a normalized Gaussian kernel \f$ G(X, Y) =  \frac{1}{{|G(X, Y)|}} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \f$
  * where X + Y are the horizontal and vertical coordinates on a \f$ \text{windowSize} \times \text{windowSize} \f$ 2D plane.
  * The result can be interpreted as looking at a Gaussian distribution from a top view
  *
