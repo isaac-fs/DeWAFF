@@ -83,7 +83,7 @@ Mat Filters::BilateralFilter(const Mat &weightingImage_, const Mat &inputImage_,
             rangeGaussian = lib.GaussianFunction(dL + da + db, rangeSigma);
 
             /**
-            * The two kernels convolve to obtain the Bilateral Filter kernel
+            * The two kernels convolve to obtain the Bilateral Filter kernel \n
             * \f$ \phi_{\text BF}(U, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U(m)-U(p)||) \f$
             *
             */;
@@ -96,7 +96,7 @@ Mat Filters::BilateralFilter(const Mat &weightingImage_, const Mat &inputImage_,
             bilateralFilterNorm = sum(bilateralFilter).val[0];
 
             /**
-            * Finally the bilateral filter kernel can be convolved with the input as follows
+            * Finally the bilateral filter kernel can be convolved with the input as follows \n
             * \f$ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text BF}(U, m, p) \right)^{-1}
             * \left( \sum_{m \subseteq \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
@@ -130,6 +130,31 @@ Mat Filters::BilateralFilter(const Mat &weightingImage_, const Mat &inputImage_,
 Mat Filters::ScaledBilateralFilter(const Mat &weightingImage, const Mat &inputImage, const int windowSize, const double spatialSigma, const int rangeSigma) {
     /* This filter uses a low pass filtered version of the input image as part of the weighting input.
     *  In this case with a Gaussian blur as LPF
+    */
+
+    /**
+    * It uses the two same Gaussian kernels as the bilateral filter, but it has an extra input, the scaled image \f$ U^s \f$.\n
+    * The kernels are the following: \n
+    * \f$ G_{\text spatial}(U^s, U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \f$ \n
+    * \f$ G_{\text range}(U^s, U, m, p) = \exp\left( -\frac{ ||U^s(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \f$ \n
+    * Notice the diferrence on the range kernel calculation where the scaled image is used
+    */
+
+   /**
+    * The two kernels convolve to obtain the Bilateral Filter kernel \n
+    * \f$ \phi_{\text SBF}(U^s, U, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U^s(m)-U(p)||) \f$
+    *
+    */;
+
+     /**
+    * The Bilateral filter's norm corresponds to
+    * \f$ \left( \sum_{m \subseteq \Omega} \phi_{\text{SBF}}(U^s, U, m, p) \right)^{-1} \f$
+    */
+
+   /**
+    * Finally the bilateral filter kernel can be convolved with the input as follows \n
+    * \f$ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U^s, U, m, p) \right)^{-1}
+    * \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U^s, U, m, p) \, \hat{f}_{\text USM}(m) \right) \f$
     */
     Mat scaledImage(weightingImage.size(), weightingImage.type());
     GaussianBlur(weightingImage, scaledImage, Size(windowSize, windowSize), spatialSigma, 0.0, BORDER_CONSTANT);
@@ -209,13 +234,13 @@ Mat Filters::NonLocalMeansFilter(const Mat &weightingImage, const Mat &inputImag
             nonLocalMeansFilter = (nlmChannels[L] + nlmChannels[a] + nlmChannels[b]);
 
             /**
-            * The Non Local Means filter's norm is calculated with
+            * The Non Local Means filter's norm is calculated with \n
             * \f$ \phi_{\text NLM}(U, m, p) \left( \sum_{m \subseteq \Omega} \phi_{\text{NLM}}(U, m, p) \right)^{-1} \f$
             */
             nonLocalMeansFilterNorm = sum(nonLocalMeansFilter).val[0];
 
             /**
-             * The NLM filter kernel is applied to the laplacian image
+             * The NLM filter kernel is applied to the laplacian image \n
             * \f$ Y_{\phi_{\text NLM}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text NLM}(U, m, p) \right)^{-1}
             * \left( \sum_{m \subseteq \Omega} \phi_{\text NLM}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f$
             */
