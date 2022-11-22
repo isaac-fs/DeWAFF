@@ -1,8 +1,8 @@
 var class_filters =
 [
-    [ "BilateralFilter", "class_filters.html#a98efe5b63afd8f84148e4d42a0b12eb9", null ],
-    [ "GuidedFilter", "class_filters.html#a0e7acfe426ce8619c2fc1dbcbae5e5e0", null ],
-    [ "NonLocalMeansFilter", "class_filters.html#ad28ccdfcbd403a5a5d8276806a8badc0", null ],
-    [ "ScaledBilateralFilter", "class_filters.html#a420055db9cf1ecf8a0457bc5d192f208", null ],
+    [ "BilateralFilter", "class_filters.html#a78a4c57fc753e6de4cca5c67a494afa6", null ],
+    [ "GuidedFilter", "class_filters.html#a9eb2156050f10f40dfafa934f8f9ded8", null ],
+    [ "NonLocalMeansFilter", "class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44", null ],
+    [ "ScaledBilateralFilter", "class_filters.html#aa6faf8cd342f97cb42f303f12cf36702", null ],
     [ "lib", "class_filters.html#a585c34a07148c8a772e04fb38ae22569", null ]
 ];

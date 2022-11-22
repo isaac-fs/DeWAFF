@@ -136,8 +136,8 @@ $(document).ready(function(){initNavTree('_program_interface_8hpp_source.html','
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="class_de_w_a_f_f.html">DeWAFF</a> framework;</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="class_utils.html">Utils</a> lib;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <a class="code" href="class_timer.html">Timer</a> timer;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">int</span> windowSize, rangeSigma, neighborhoodSize;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">double</span> spatialSigma;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordtype">int</span> windowSize, neighborhoodSize;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">double</span> rangeSigma, spatialSigma;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">int</span> filterType;</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">enum</span> filterTypes {</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        DBF = 1,</div>
@@ -164,29 +164,33 @@ $(document).ready(function(){initNavTree('_program_interface_8hpp_source.html','
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">void</span> displayBenchmarkFooter();</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">void</span> setOutputFileName();</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">void</span> errorMessage(std::string msg);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> help();</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="comment">// Output spacing</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keyword">enum</span> spacing {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        MAIN_LINE = 29,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        DATA_SPACE = 11,</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        VALUE_SPACE = 10,</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        BENCHMARK_LINE = 20,</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        NUMBER_SPACE = 3,</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        TIME_SPACE = 9,</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        PARAMS_LINE = 57,</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        PARAM_DESC_SPACE = 17,</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        PARAM_VAL_SPACE = 32</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    };</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;};</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* PROGRAM_INTERFACE_HPP_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> longHelp();</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordtype">void</span> help();</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">// Quiet mode</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">bool</span> quietMode;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="comment">// Output spacing</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">enum</span> spacing {</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        MAIN_LINE = 29,</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        DATA_SPACE = 11,</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        VALUE_SPACE = 10,</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        BENCHMARK_LINE = 20,</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        NUMBER_SPACE = 3,</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        TIME_SPACE = 9,</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        PARAMS_LINE = 57,</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        PARAM_DESC_SPACE = 17,</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        PARAM_VAL_SPACE = 32</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    };</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;};</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* PROGRAM_INTERFACE_HPP_ */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="a_de_w_a_f_f_8hpp_html"><div class="ttname"><a href="_de_w_a_f_f_8hpp.html">DeWAFF.hpp</a></div></div>
 <div class="ttc" id="a_utils_8hpp_html"><div class="ttname"><a href="_utils_8hpp.html">Utils.hpp</a></div></div>
 <div class="ttc" id="aclass_de_w_a_f_f_html"><div class="ttname"><a href="class_de_w_a_f_f.html">DeWAFF</a></div><div class="ttdoc">Deceived Weighted Average Filters Framework class. It applies a filter which intput and weighting inp...</div><div class="ttdef"><b>Definition:</b> DeWAFF.hpp:25</div></div>
 <div class="ttc" id="aclass_program_interface_html"><div class="ttname"><a href="class_program_interface.html">ProgramInterface</a></div><div class="ttdoc">In charge of displaying the program and capturing the needed parameters.</div><div class="ttdef"><b>Definition:</b> ProgramInterface.hpp:26</div></div>
 <div class="ttc" id="aclass_program_interface_html_a293b40a927d96301d96fd522db22c02e"><div class="ttname"><a href="class_program_interface.html#a293b40a927d96301d96fd522db22c02e">ProgramInterface::ProgramInterface</a></div><div class="ttdeci">ProgramInterface(int argc, char **argv)</div><div class="ttdoc">Constructor for the ProgramInterface class. Sets all the necessary parameters for the DeWAFF processi...</div><div class="ttdef"><b>Definition:</b> ProgramInterface.cpp:9</div></div>
-<div class="ttc" id="aclass_program_interface_html_a9518ba12fdc2c7ded0f113e34d9fe647"><div class="ttname"><a href="class_program_interface.html#a9518ba12fdc2c7ded0f113e34d9fe647">ProgramInterface::run</a></div><div class="ttdeci">int run()</div><div class="ttdoc">Starts the program execution.</div><div class="ttdef"><b>Definition:</b> ProgramInterface.cpp:171</div></div>
+<div class="ttc" id="aclass_program_interface_html_a9518ba12fdc2c7ded0f113e34d9fe647"><div class="ttname"><a href="class_program_interface.html#a9518ba12fdc2c7ded0f113e34d9fe647">ProgramInterface::run</a></div><div class="ttdeci">int run()</div><div class="ttdoc">Starts the program execution.</div><div class="ttdef"><b>Definition:</b> ProgramInterface.cpp:186</div></div>
 <div class="ttc" id="aclass_timer_html"><div class="ttname"><a href="class_timer.html">Timer</a></div><div class="ttdoc">Class containing the timer methods for the benchmarking of file processing.</div><div class="ttdef"><b>Definition:</b> Utils.hpp:43</div></div>
 <div class="ttc" id="aclass_utils_html"><div class="ttname"><a href="class_utils.html">Utils</a></div><div class="ttdoc">Useful tools for image processing These tools are statics objects to use them in the lifetime of the ...</div><div class="ttdef"><b>Definition:</b> Utils.hpp:28</div></div>
 </div><!-- fragment --></div><!-- contents -->

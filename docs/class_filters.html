@@ -132,18 +132,18 @@ $(document).ready(function(){initNavTree('class_filters.html',''); initResizable
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a98efe5b63afd8f84148e4d42a0b12eb9"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a98efe5b63afd8f84148e4d42a0b12eb9">BilateralFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const double spatialSigma, const int rangeSigma)</td></tr>
-<tr class="memdesc:a98efe5b63afd8f84148e4d42a0b12eb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image.  <a href="class_filters.html#a98efe5b63afd8f84148e4d42a0b12eb9">More...</a><br /></td></tr>
-<tr class="separator:a98efe5b63afd8f84148e4d42a0b12eb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a420055db9cf1ecf8a0457bc5d192f208"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a420055db9cf1ecf8a0457bc5d192f208">ScaledBilateralFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const double spatialSigma, const int rangeSigma)</td></tr>
-<tr class="memdesc:a420055db9cf1ecf8a0457bc5d192f208"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The difference between this filter and the not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter to have better performance under heavy AWGN.  <a href="class_filters.html#a420055db9cf1ecf8a0457bc5d192f208">More...</a><br /></td></tr>
-<tr class="separator:a420055db9cf1ecf8a0457bc5d192f208"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad28ccdfcbd403a5a5d8276806a8badc0"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#ad28ccdfcbd403a5a5d8276806a8badc0">NonLocalMeansFilter</a> (const Mat &amp;weightingImage, const Mat &amp;inputImage, const int windowSize, const int neighborhoodSize, const int rangeSigma)</td></tr>
-<tr class="memdesc:ad28ccdfcbd403a5a5d8276806a8badc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding.  <a href="class_filters.html#ad28ccdfcbd403a5a5d8276806a8badc0">More...</a><br /></td></tr>
-<tr class="separator:ad28ccdfcbd403a5a5d8276806a8badc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e7acfe426ce8619c2fc1dbcbae5e5e0"><td class="memItemLeft" align="right" valign="top"><a id="a0e7acfe426ce8619c2fc1dbcbae5e5e0"></a>
-Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (const Mat &amp;inputImage, const Mat &amp;guidingImage, const int windowSize, const int rangeSigma)</td></tr>
-<tr class="separator:a0e7acfe426ce8619c2fc1dbcbae5e5e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78a4c57fc753e6de4cca5c67a494afa6"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a78a4c57fc753e6de4cca5c67a494afa6">BilateralFilter</a> (const Mat &amp;inputImage, const Mat &amp;weightingImage, int windowSize, double spatialSigma, double rangeSigma)</td></tr>
+<tr class="memdesc:a78a4c57fc753e6de4cca5c67a494afa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image.  <a href="class_filters.html#a78a4c57fc753e6de4cca5c67a494afa6">More...</a><br /></td></tr>
+<tr class="separator:a78a4c57fc753e6de4cca5c67a494afa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6faf8cd342f97cb42f303f12cf36702"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#aa6faf8cd342f97cb42f303f12cf36702">ScaledBilateralFilter</a> (const Mat &amp;inputImage, const Mat &amp;weightingImage, int windowSize, double spatialSigma, double rangeSigma)</td></tr>
+<tr class="memdesc:aa6faf8cd342f97cb42f303f12cf36702"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The difference between this filter and the not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter to have better performance under heavy AWGN.  <a href="class_filters.html#aa6faf8cd342f97cb42f303f12cf36702">More...</a><br /></td></tr>
+<tr class="separator:aa6faf8cd342f97cb42f303f12cf36702"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02eafe8690dcd01dde0f81b1c5966b44"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44">NonLocalMeansFilter</a> (const Mat &amp;inputImage, const Mat &amp;weightingImage, int windowSize, int neighborhoodSize, double rangeSigma)</td></tr>
+<tr class="memdesc:a02eafe8690dcd01dde0f81b1c5966b44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding.  <a href="class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44">More...</a><br /></td></tr>
+<tr class="separator:a02eafe8690dcd01dde0f81b1c5966b44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9eb2156050f10f40dfafa934f8f9ded8"><td class="memItemLeft" align="right" valign="top"><a id="a9eb2156050f10f40dfafa934f8f9ded8"></a>
+Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (const Mat &amp;inputImage, const Mat &amp;guidingImage, int windowSize, double rangeSigma)</td></tr>
+<tr class="separator:a9eb2156050f10f40dfafa934f8f9ded8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -154,8 +154,8 @@ Protected Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class containing Weighted Average <a class="el" href="class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ...">Filters</a> (WAFs). This implementation relies on padding the original image to fit square odd dimensioned kernels throughout the processing. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a98efe5b63afd8f84148e4d42a0b12eb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98efe5b63afd8f84148e4d42a0b12eb9">&#9670;&nbsp;</a></span>BilateralFilter()</h2>
+<a id="a78a4c57fc753e6de4cca5c67a494afa6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78a4c57fc753e6de4cca5c67a494afa6">&#9670;&nbsp;</a></span>BilateralFilter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -164,30 +164,30 @@ Protected Attributes</h2></td></tr>
           <td class="memname">Mat Filters::BilateralFilter </td>
           <td>(</td>
           <td class="paramtype">const Mat &amp;&#160;</td>
-          <td class="paramname"><em>weightingImage_</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Mat &amp;&#160;</td>
           <td class="paramname"><em>inputImage_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype">const Mat &amp;&#160;</td>
+          <td class="paramname"><em>weightingImage_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>windowSize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const double&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>spatialSigma</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>rangeSigma</em>&#160;</td>
         </tr>
         <tr>
@@ -220,8 +220,8 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ad28ccdfcbd403a5a5d8276806a8badc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad28ccdfcbd403a5a5d8276806a8badc0">&#9670;&nbsp;</a></span>NonLocalMeansFilter()</h2>
+<a id="a02eafe8690dcd01dde0f81b1c5966b44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02eafe8690dcd01dde0f81b1c5966b44">&#9670;&nbsp;</a></span>NonLocalMeansFilter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -230,30 +230,30 @@ Protected Attributes</h2></td></tr>
           <td class="memname">Mat Filters::NonLocalMeansFilter </td>
           <td>(</td>
           <td class="paramtype">const Mat &amp;&#160;</td>
-          <td class="paramname"><em>weightingImage</em>, </td>
+          <td class="paramname"><em>inputImage_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const Mat &amp;&#160;</td>
-          <td class="paramname"><em>inputImage</em>, </td>
+          <td class="paramname"><em>weightingImage_</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>windowSize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>neighborhoodSize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>rangeSigma</em>&#160;</td>
         </tr>
         <tr>
@@ -285,8 +285,8 @@ where \(B(p)\) is a patch part of the window \(\Omega\) centered at pixel \(p\).
 
 </div>
 </div>
-<a id="a420055db9cf1ecf8a0457bc5d192f208"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a420055db9cf1ecf8a0457bc5d192f208">&#9670;&nbsp;</a></span>ScaledBilateralFilter()</h2>
+<a id="aa6faf8cd342f97cb42f303f12cf36702"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6faf8cd342f97cb42f303f12cf36702">&#9670;&nbsp;</a></span>ScaledBilateralFilter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -295,30 +295,30 @@ where \(B(p)\) is a patch part of the window \(\Omega\) centered at pixel \(p\).
           <td class="memname">Mat Filters::ScaledBilateralFilter </td>
           <td>(</td>
           <td class="paramtype">const Mat &amp;&#160;</td>
-          <td class="paramname"><em>weightingImage</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Mat &amp;&#160;</td>
           <td class="paramname"><em>inputImage</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype">const Mat &amp;&#160;</td>
+          <td class="paramname"><em>weightingImage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>windowSize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const double&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>spatialSigma</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const int&#160;</td>
+          <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>rangeSigma</em>&#160;</td>
         </tr>
         <tr>
