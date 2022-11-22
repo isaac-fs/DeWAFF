@@ -127,10 +127,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a012b8177e7e05918d805620bf736ee9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the global min and max values of a 3 channel Matrix.  <a href="class_utils.html#a012b8177e7e05918d805620bf736ee9f">More...</a><br /></td></tr>
 <tr class="separator:a012b8177e7e05918d805620bf736ee9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaed701e60ee9310481dcf1c5758aed77"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a> (Mat input, double sigma)</td></tr>
-<tr class="memdesc:aaed701e60ee9310481dcf1c5758aed77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Gaussian function of an input \( X \) \( G(X) = \exp\left(-\frac{X}{2\sigma_s^2} \right) \).  <a href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">More...</a><br /></td></tr>
+<tr class="memdesc:aaed701e60ee9310481dcf1c5758aed77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Gaussian function of an input \( X \) \( G(X) = \exp\left( -\frac{X}{2\sigma_s^2} \right) \).  <a href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">More...</a><br /></td></tr>
 <tr class="separator:aaed701e60ee9310481dcf1c5758aed77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94be617a9fa88444e5be1a0da341669f"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a94be617a9fa88444e5be1a0da341669f">GaussianKernel</a> (int windowSize, double sigma)</td></tr>
-<tr class="memdesc:a94be617a9fa88444e5be1a0da341669f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a normalized Gaussian kernel \( G(X, Y) = \frac{\exp\left(-\frac X^2 + Y^2 { 2 {\sigma_s^2} } \right)}{|G(X, Y)|} \) where X + Y are the horizontal and vertical coordinates on a \( \text{windowSize} \times \text{windowSize} \) 2D plane. The result can be interpreted as looking at a Gaussian distribution from a top view.  <a href="class_utils.html#a94be617a9fa88444e5be1a0da341669f">More...</a><br /></td></tr>
+<tr class="memdesc:a94be617a9fa88444e5be1a0da341669f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a normalized Gaussian kernel \( G(X, Y) = \frac{1}{{|G(X, Y)|}} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \) where X + Y are the horizontal and vertical coordinates on a \( \text{windowSize} \times \text{windowSize} \) 2D plane. The result can be interpreted as looking at a Gaussian distribution from a top view.  <a href="class_utils.html#a94be617a9fa88444e5be1a0da341669f">More...</a><br /></td></tr>
 <tr class="separator:a94be617a9fa88444e5be1a0da341669f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27ea9fba4632480b0a2fb33e5157ecbb"><td class="memItemLeft" align="right" valign="top"><a id="a27ea9fba4632480b0a2fb33e5157ecbb"></a>
 Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a27ea9fba4632480b0a2fb33e5157ecbb">LoGFilter</a> (const Mat &amp;image, int windowSize, double sigma)</td></tr>
@@ -210,7 +210,7 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
       </table>
 </div><div class="memdoc">
 
-<p>Compute the Gaussian function of an input \( X \) \( G(X) = \exp\left(-\frac{X}{2\sigma_s^2} \right) \). </p>
+<p>Compute the Gaussian function of an input \( X \) \( G(X) = \exp\left( -\frac{X}{2\sigma_s^2} \right) \). </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">input</td><td>Matrix input </td></tr>
@@ -248,7 +248,7 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
       </table>
 </div><div class="memdoc">
 
-<p>Computes a normalized Gaussian kernel \( G(X, Y) = \frac{\exp\left(-\frac X^2 + Y^2 { 2 {\sigma_s^2} } \right)}{|G(X, Y)|} \) where X + Y are the horizontal and vertical coordinates on a \( \text{windowSize} \times \text{windowSize} \) 2D plane. The result can be interpreted as looking at a Gaussian distribution from a top view. </p>
+<p>Computes a normalized Gaussian kernel \( G(X, Y) = \frac{1}{{|G(X, Y)|}} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \) where X + Y are the horizontal and vertical coordinates on a \( \text{windowSize} \times \text{windowSize} \) 2D plane. The result can be interpreted as looking at a Gaussian distribution from a top view. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">windowSize</td><td>2D plane dimension </td></tr>
