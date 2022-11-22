@@ -41,6 +41,9 @@ cmake*
 build/
 Makefile
 
+# html docs generation
+docs_html
+
 # Binary
 DeWAFF
 
