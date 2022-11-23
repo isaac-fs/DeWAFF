@@ -8,6 +8,7 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
 add_executable(DeWAFF   src/Main.cpp
                         src/DeWAFF.cpp
                         src/Filters.cpp
+                        src/GuidedFilter.cpp
                         src/ProgramInterface.cpp
                         src/Utils.cpp)
 target_link_libraries(DeWAFF ${OpenCV_LIBS})
