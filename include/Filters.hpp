@@ -18,6 +18,7 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "Utils.hpp"
+#include "GuidedFilter.hpp"
 
 using namespace cv;
 
@@ -39,29 +40,5 @@ class Filters {
         Mat NonLocalMeansFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, int neighborhoodSize, double rangeSigma);
         Mat GuidedFilter(const Mat &inputImage, const Mat &guidingImage, int windowSize, double rangeSigma);
 };
-
-/**
- * @file Filters.hpp
- * @author Atılım Çetin
- * @author Nikolai Poliarnyi
- * @brief Guided filter implementation from https://github.com/atilimcetin/guided-filter
- * @brief An open source OpenCV guided filter implementation under the MIT license
- * @date 2020-06-1
- */
-class GuidedFilterImpl;
-
-class GuidedFilter {
-public:
-    GuidedFilter(const cv::Mat &I, int r, double eps);
-    ~GuidedFilter();
-
-    cv::Mat filter(const cv::Mat &p, int depth = -1) const;
-
-private:
-    GuidedFilterImpl *impl_;
-};
-
-cv::Mat guidedFilter(const cv::Mat &I, const cv::Mat &p, int r, double eps, int depth = -1);
-
 
 #endif /* FILTERS_HPP_ */

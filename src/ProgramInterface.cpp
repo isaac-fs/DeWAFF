@@ -38,11 +38,11 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 
 	// Filter options
 	const char *filterOpts[] = {
-		"ws",		/// window_size,
-		"rs",		/// range_sigma,
-		"ss",		/// spatial_sigma,
-		"lambda",	/// lambda,
-		"ns",		/// neighborhood_size,
+		"ws",		// window_size,
+		"rs",		// range_sigma,
+		"ss",		// spatial_sigma,
+		"lambda",	// lambda,
+		"ns",		// neighborhood_size,
 		NULL
 	};
 
@@ -92,7 +92,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 			case 'f': {
 				std::string fName = optarg;
 				int f = filterIdentifierMap[fName];
-				if(f < DBF || f > DGF) errorMessage("Not a valid filter option. Use option --h to check valid filters");
+				if(f < DBF || f > DGF) errorMessage("Not a valid filter option. Use option --help to check valid filters");
 				else filterType = f;
 				break;
 			}
@@ -523,9 +523,11 @@ void ProgramInterface::displayBenchmarkFooter() {
 void ProgramInterface::help() {
 	std::cout
 	<< "usage: " << programName << " "
-	<< "[-f <filter type>] [-p <filter parameters>]" << std::endl
-	<< "\t\t" << "[-b <number of iterations>] [-h]" << std::endl
-	<< "\t\t" << "-i <file name> | -v <file name>" << std::endl;
+	<< "[-i | --image <file name>] | [-v | --video <file name>]" << std::endl
+	<< "\t\t" << "[-f | --filter <filter type>]" << std::endl
+	<< "\t\t" << "[-p | --parameters <filter parameters>]" << std::endl
+	<< "\t\t" << "[-b | --benchmark <number of iterations>] [-h | --help]"
+	<< std::endl;
 }
 
 /**
@@ -534,17 +536,18 @@ void ProgramInterface::help() {
 void ProgramInterface::longHelp() {
 	std::cout
 	<< "usage: " << programName << " "
-	<< "[-f <filter type>] [-p <filter parameters>]" << std::endl
-	<< "\t\t" << "[-b <number of iterations>] [-h]" << std::endl
-	<< "\t\t" << "-i <file name> | -v <file name>" << std::endl
+	<< "[-i | --image <file name>] | [-v | --video <file name>]" << std::endl
+	<< "\t\t" << "[-f | --filter <filter type>]" << std::endl
+	<< "\t\t" << "[-p | --parameters <filter parameters>]" << std::endl
+	<< "\t\t" << "[-b | --benchmark <number of iterations>] [-h | --help]"
 	<< std::endl
 
-	<< "\t" << std::left << "DEFAULT PARAMETERS"
+	<< "\n\t" << std::left << "DEFAULT PARAMETERS"
 	<< "\n\t" << std::setw(21) << "- Filter:" << "dbf (Deceived Bilateral Filter)"
 	<< "\n\t" << std::setw(21) << "- Window size:" << 3
 	<< "\n\t" << std::setw(21) << "- Neighborhood size:" << 3
-	<< "\n\t" << std::setw(21) << "- Range Sigma:" << 10
-	<< "\n\t" << std::setw(21) << "- Spatial Sigma:" << 10
+	<< "\n\t" << std::setw(21) << "- Range Sigma:" << 10.0
+	<< "\n\t" << std::setw(21) << "- Spatial Sigma:" << 10.0
 	<< "\n\t" << std::setw(21) << "- USM Lambda:" << 2
 	<< "\n" << std::endl
 
@@ -569,7 +572,7 @@ void ProgramInterface::longHelp() {
 	<< "\n\t\t" << std::setw(8) << "- dnlmf:" << "deceived non local means filter"
 	<< "\n\t\t" << std::setw(8) << "- dgf:" << "deceived guided filter"
 	<< "\n\t" << "For example, to process an image using the deceived bilateral filter"
-	<< "\n\t" << "use: \'./DeWAFF -i image.png -f dbf\'"
+	<< "\n\t" << "use: \'./DeWAFF -i image.png -f dbf\'."
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-p, --parameters"
@@ -583,7 +586,8 @@ void ProgramInterface::longHelp() {
 	<< "\n\t" << "for example \'-p ws=15,rs=10,ss=10\' would change the window size and"
 	<< "\n\t" << "the range and spatial sigma values for the filter. Using just"
 	<< "\n\t" << "\'-p ws=15\' would only change its window size."
-	<< "\n\t" << "The \'ns\' option Only works with the filter set to \'dnlm\'"
+	<< "\n\t" << "The \'ns\' option only works with the filter set to \'dnlm\'."
+	<< "\n\t" << "If \'lambda=0\' the Laplacian the deceive will be disabled."
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-b, --benchmark"
@@ -593,17 +597,17 @@ void ProgramInterface::longHelp() {
 	<< "\n\t" << "Note: The results are NOT saved during this process."
 	<< "\n\t" << "Indicate the number of iterations after the flag,"
 	<< "\n\t" << "for example \'-b 10\' would indicate to run the filter"
-	<< "\n\t" << "ten separate times"
+	<< "\n\t" << "ten separate times."
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-q, --quiet"
 	<< ": " << "Run in quiet mode. Does not displays the file's and"
-	<< "\n\t" << "filter's information"
+	<< "\n\t" << "filter's information."
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-h, --help"
 	<< ": " << "Display the program's help message. The long version"
-	<< "\n\t" << "--help shows the full program's help"
+	<< "\n\t" << "--help shows the full program's help."
 
 	<< std::endl;
 }

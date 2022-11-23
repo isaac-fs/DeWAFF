@@ -28,7 +28,7 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, doubl
  *
  * @param inputImage input image
  * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
- * @param spatialSima spatial standard deviation
+ * @param spatialSigma spatial standard deviation
  * @param rangeSigma range or radiometric standard deviation
  * @return Mat output image
  */

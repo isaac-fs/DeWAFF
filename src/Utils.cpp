@@ -1,26 +1,23 @@
 #include "Utils.hpp"
 
 /**
- * @brief Generates a meshgrid from \f$X\f$ and \f$Y\f$ unidimensional coordinates
+ * @brief Generates a meshgrid from \f$X\f$ and \f$Y\f$ unidimensional coordinates.
  * Example:
- * xRange = [0,3[ and yRange = [0,3[ will return the following \f$X\f$ and \f$Y\f$ coordinates
+ * xRange = [0,3[ and yRange = [0,3[ will return the following \f$X\f$ and \f$Y\f$ coordinates:
  *
- * \f$X\f$ = \n
- * 		[0, 0, 0;	\n
- *		 1, 1, 1;	\n
- *		 2, 2, 2]	\n
+ * 	X =			Y =
+ * 	[0, 0, 0;	[0, 1, 2;
+ *		 1, 1, 1;	 0, 1, 2;
+ *		 2, 2, 2]	 0, 1, 2]
  *
- * \f$Y\f$ = \n
- * 		[0, 1, 2;	\n
- *		 0, 1, 2;	\n
- *		 0, 1, 2]	\n
- * 					\n
- * Wich would form the following mesh grid
+ * Wich would form the following mesh grid:
  *
- * \f$(X,Y)\f$ = \n
- * 		[(0,0) (0,1), (0,2); \n
- * 		 (0,1) (1,1), (2,1); \n
+ * 	(X,Y) =
+ * 		[(0,0) (0,1), (0,2);
+ * 		 (0,1) (1,1), (2,1);
  * 		 (2,0) (2,1), (2,2)]
+ *
+ * Although the values of \f$X\f$ and \f$Y\f$ can be manipulated to form useful patterns.
  *
  * @param range range to form the 2D grid
  * @param X x axis values for the mesh grid
@@ -36,7 +33,7 @@ void Utils::MeshGrid(const Range &range, Mat &X, Mat &Y) {
 }
 
 /**
- * @brief Gets the global min and max values of a 3 channel Matrix
+ * @brief Gets the global min and max values of a 3 channel Matrix.
  *
  * @param A Input matrix
  * @param minA Minimun value of the matrix A
@@ -56,8 +53,8 @@ void Utils::MinMax(const Mat& A, double* minA, double* maxA) {
 }
 
 /**
- * @brief Compute the Gaussian function of an input \f$ X \f$
- * \f$ G(X) = \exp\left( -\frac{X}{2\sigma_s^2} \right) \f$
+ * @brief Computes the Gaussian function of an input \f$ X \f$
+ * \f[ G(X) = \exp\left( -\frac{X}{2\sigma^2} \right) \f]
  * @param input Matrix input
  * @param sigma Desired standard deviation
  * @return Mat
@@ -70,13 +67,12 @@ Mat Utils::GaussianFunction(Mat input, double sigma){
 }
 
 /**
- * @brief Computes a normalized Gaussian kernel \f$ G(X, Y) =  \frac{1}{{|G(X, Y)|}} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \f$
- * where X + Y are the horizontal and vertical coordinates on a \f$ \text{windowSize} \times \text{windowSize} \f$ 2D plane.
- * The result can be interpreted as looking at a Gaussian distribution from a top view
- *
- * @param windowSize 2D plane dimension
- * @param sigma standar deviation for the Gaussian distribution
- * @return Mat A Gaussian kernel
+ * @brief Computes a normalized Gaussian kernel
+ * \f[ G(X, Y) =  \frac{1}{{|G(X, Y)|}} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \f]
+ * where \f$X\f$ and \f$Y\f$ are the horizontal and vertical coordinates on a windowSize\f$ \times \f$windowSize 2D plane.
+ * @param windowSize size of the window for the kernel
+ * @param sigma standard deviation for the Gaussian distribution
+ * @return Mat Gaussian kernel
  */
 Mat Utils::GaussianKernel(int windowSize, double sigma) {
 	// Pre computation of meshgrid values
@@ -96,8 +92,8 @@ Mat Utils::GaussianKernel(int windowSize, double sigma) {
 }
 
 /**
- * @brief Filter an image through a Laplacian of Gaussian filter
- * \f$ \text{LoG}(X,Y) = \left( \frac{1}{\sigma^2} \right) \left( \frac{X^2 + Y^2}{\sigma^2} - 2 \right) \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \f$
+ * @brief Filters an image through a Laplacian of Gaussian filter
+ * \f[ \text{LoG}(X,Y) = \left( \frac{1}{\sigma^2} \right) \left( \frac{X^2 + Y^2}{\sigma^2} - 2 \right) \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \f]
  */
 Mat Utils::LoGFilter(const Mat &image, int windowSize, double sigma) {
 	// Get the Gaussian kernel
@@ -128,8 +124,11 @@ Mat Utils::LoGFilter(const Mat &image, int windowSize, double sigma) {
 
 /**
  * @brief Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter
- * \f$ \hat{f}_{\text USM} = U - \lambda \ \mathcal{L} \text{ where } \mathcal{L} = l * g \f$.
- * @param image Image to apply the mask
+ * \f[ \hat{f}_{\text USM} = U - \lambda \ \mathcal{L} \text{ where } \mathcal{L} = l * g \f].
+ * @param image Input image to filter
+ * @param windowSize Size of the filter
+ * @param lambda constan for the Laplacian deceive
+ * @param sigma standard distribution
  * @return Filtered image
  */
 Mat Utils::NonAdaptiveUSMFilter(const Mat &image, int windowSize, int lambda, double sigma) {
@@ -147,16 +146,15 @@ Mat Utils::NonAdaptiveUSMFilter(const Mat &image, int windowSize, int lambda, do
 }
 
 /**
- * @brief Computes an Euclidean distance matrix from an input matrix. This is achieved
- * by calculating the Euclidean distance between a fixed patch at the center of the input
+ * @brief Computes the Euclidean distance between a fixed patch at the center of the input
  * image and a patch centered in every other pixel in the input image, mathematically, for
  * an input matrix \f$A = (a_{ij})\f$ every element will take the corresponding Euclidean distance value
  * \f$a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\f$
- * @param inputImage_ input image to obtain the patches to compute the matrix
- * @param neighborhoodSize size of the used patch. Analog to window size
- * @return Mat Euclidean distance matrix
+ * @param inputImage_ input image
+ * @param neighborhoodSize size of the pixel neighborhood
+ * @return Mat
  */
-Mat Utils::EuclideanDistanceMatrix(const Mat& inputImage_, int neighborhoodSize) {
+Mat Utils::RegionDistancesMatrix(const Mat& inputImage_, int neighborhoodSize) {
     // Fixed pixel sub region (must be a square region)
 	Mat inputImage;
 	int windowSize = inputImage_.rows;
@@ -175,7 +173,7 @@ Mat Utils::EuclideanDistanceMatrix(const Mat& inputImage_, int neighborhoodSize)
     Mat slidingWindow(fixedWindow.size(), fixedWindow.type());
 
     // Initialize the output matrix
-    Mat euclideanDistanceMatrix(inputImage_.size(), inputImage_.type());
+    Mat distancesMatrix(inputImage_.size(), inputImage_.type());
 
     // Visit each pixel in the image region
     for(int i = 0; i < windowSize; i++) {
@@ -187,10 +185,10 @@ Mat Utils::EuclideanDistanceMatrix(const Mat& inputImage_, int neighborhoodSize)
             slidingWindow = inputImage(xRange, yRange);
 
             // Calculate the euclidean distance between patches
-            euclideanDistanceMatrix.at<float>(i, j) = norm(fixedWindow, slidingWindow, NORM_L2SQR);
+            distancesMatrix.at<float>(i, j) = norm(fixedWindow, slidingWindow, NORM_L2SQR);
         }
     }
-    return euclideanDistanceMatrix;
+    return distancesMatrix;
 }
 
 /**
