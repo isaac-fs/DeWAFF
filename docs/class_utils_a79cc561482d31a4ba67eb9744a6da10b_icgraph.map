@@ -1,5 +1,0 @@
-<map id="Utils::RegionDistancesMatrix" name="Utils::RegionDistancesMatrix">
-<area shape="rect" id="node1" title="Computes the Euclidean distance between a fixed patch at the center of the input image and a patch ce..." alt="" coords="513,13,724,39"/>
-<area shape="rect" id="node2" href="$class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44" title="Apply a Non Local Means Filter to an image. This is the decoupled version of this filter,..." alt="" coords="259,13,465,39"/>
-<area shape="rect" id="node3" href="$class_de_w_a_f_f.html#afaabff8b389bef4c26d956c5328a3685" title="Apply the Deceived Non Local Means Filter to an image. Uses an UnSharp mask as deceiver...." alt="" coords="5,5,211,47"/>
-</map>

@@ -1,6 +1,0 @@
-<map id="Utils::LoGFilter" name="Utils::LoGFilter">
-<area shape="rect" id="node1" title="Filters an image through a Laplacian of Gaussian filter." alt="" coords="5,31,124,57"/>
-<area shape="rect" id="node2" href="$class_utils.html#a94be617a9fa88444e5be1a0da341669f" title="Computes a normalized Gaussian kernel." alt="" coords="172,5,333,32"/>
-<area shape="rect" id="node4" href="$class_utils.html#acebbcc4ea191555ab087d05145edd3cc" title="Generates a meshgrid from &#160;and &#160;unidimensional coordinates. Example: xRange = [0,3[ and yRange = [0,..." alt="" coords="407,56,530,83"/>
-<area shape="rect" id="node3" href="$class_utils.html#aaed701e60ee9310481dcf1c5758aed77" title="Computes the Gaussian function of an input ." alt="" coords="381,5,556,32"/>
-</map>

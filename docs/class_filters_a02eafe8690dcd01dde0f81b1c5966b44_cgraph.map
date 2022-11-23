@@ -1,5 +1,0 @@
-<map id="Filters::NonLocalMeansFilter" name="Filters::NonLocalMeansFilter">
-<area shape="rect" id="node1" title="Apply a Non Local Means Filter to an image. This is the decoupled version of this filter,..." alt="" coords="5,31,212,57"/>
-<area shape="rect" id="node2" href="$class_utils.html#aaed701e60ee9310481dcf1c5758aed77" title="Computes the Gaussian function of an input ." alt="" coords="278,5,453,32"/>
-<area shape="rect" id="node3" href="$class_utils.html#a79cc561482d31a4ba67eb9744a6da10b" title="Computes the Euclidean distance between a fixed patch at the center of the input image and a patch ce..." alt="" coords="260,56,471,83"/>
-</map>

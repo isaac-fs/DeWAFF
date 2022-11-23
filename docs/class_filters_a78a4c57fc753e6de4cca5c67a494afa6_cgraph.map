@@ -1,5 +1,0 @@
-<map id="Filters::BilateralFilter" name="Filters::BilateralFilter">
-<area shape="rect" id="node1" title="Apply a Bilateral Filter to an image. This is the decoupled version of this filter,..." alt="" coords="5,31,164,57"/>
-<area shape="rect" id="node2" href="$class_utils.html#aaed701e60ee9310481dcf1c5758aed77" title="Computes the Gaussian function of an input ." alt="" coords="212,5,387,32"/>
-<area shape="rect" id="node3" href="$class_utils.html#acebbcc4ea191555ab087d05145edd3cc" title="Generates a meshgrid from &#160;and &#160;unidimensional coordinates. Example: xRange = [0,3[ and yRange = [0,..." alt="" coords="238,56,361,83"/>
-</map>

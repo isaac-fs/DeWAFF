@@ -1,8 +1,0 @@
-<map id="Utils::NonAdaptiveUSMFilter" name="Utils::NonAdaptiveUSMFilter">
-<area shape="rect" id="node1" title="Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter." alt="" coords="5,56,212,83"/>
-<area shape="rect" id="node2" href="$class_utils.html#a27ea9fba4632480b0a2fb33e5157ecbb" title="Filters an image through a Laplacian of Gaussian filter." alt="" coords="260,31,379,57"/>
-<area shape="rect" id="node6" href="$class_utils.html#a012b8177e7e05918d805620bf736ee9f" title="Gets the global min and max values of a 3 channel Matrix." alt="" coords="263,81,375,108"/>
-<area shape="rect" id="node3" href="$class_utils.html#a94be617a9fa88444e5be1a0da341669f" title="Computes a normalized Gaussian kernel." alt="" coords="427,5,588,32"/>
-<area shape="rect" id="node5" href="$class_utils.html#acebbcc4ea191555ab087d05145edd3cc" title="Generates a meshgrid from &#160;and &#160;unidimensional coordinates. Example: xRange = [0,3[ and yRange = [0,..." alt="" coords="662,56,785,83"/>
-<area shape="rect" id="node4" href="$class_utils.html#aaed701e60ee9310481dcf1c5758aed77" title="Computes the Gaussian function of an input ." alt="" coords="636,5,811,32"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="Utils::GaussianKernel" name="Utils::GaussianKernel">
-<area shape="rect" id="node1" title="Computes a normalized Gaussian kernel." alt="" coords="5,31,167,57"/>
-<area shape="rect" id="node2" href="$class_utils.html#aaed701e60ee9310481dcf1c5758aed77" title="Computes the Gaussian function of an input ." alt="" coords="215,5,389,32"/>
-<area shape="rect" id="node3" href="$class_utils.html#acebbcc4ea191555ab087d05145edd3cc" title="Generates a meshgrid from &#160;and &#160;unidimensional coordinates. Example: xRange = [0,3[ and yRange = [0,..." alt="" coords="241,56,363,83"/>
-</map>

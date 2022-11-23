@@ -1,4 +1,0 @@
-<map id="Filters::ScaledBilateralFilter" name="Filters::ScaledBilateralFilter">
-<area shape="rect" id="node1" title="Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter,..." alt="" coords="296,5,464,47"/>
-<area shape="rect" id="node2" href="$class_de_w_a_f_f.html#a8f41693671685201204f009de14d34d2" title="Apply the Deceived Scaled Bilateral Filter to an image. Uses an UnSharp mask as deceiver...." alt="" coords="5,5,248,47"/>
-</map>
