@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['filters_9',['Filters',['../class_filters.html',1,'']]],
-  ['filters_2ehpp_10',['Filters.hpp',['../_filters_8hpp.html',1,'']]]
+  ['gaussianfunction_10',['GaussianFunction',['../class_utils.html#aaed701e60ee9310481dcf1c5758aed77',1,'Utils']]],
+  ['gaussiankernel_11',['GaussianKernel',['../class_utils.html#a94be617a9fa88444e5be1a0da341669f',1,'Utils']]],
+  ['guidedfilter_12',['GuidedFilter',['../class_filters.html#a9eb2156050f10f40dfafa934f8f9ded8',1,'Filters']]]
 ];

@@ -1,0 +1,13 @@
+<map id="Utils::GaussianFunction" name="Utils::GaussianFunction">
+<area shape="rect" id="node1" title="Computes the Gaussian function of an input ." alt="" coords="1012,137,1187,163"/>
+<area shape="rect" id="node2" href="$class_filters.html#a78a4c57fc753e6de4cca5c67a494afa6" title="Apply a Bilateral Filter to an image. This is the decoupled version of this filter,..." alt="" coords="551,78,709,105"/>
+<area shape="rect" id="node6" href="$class_utils.html#a94be617a9fa88444e5be1a0da341669f" title="Computes a normalized Gaussian kernel." alt="" coords="780,137,941,163"/>
+<area shape="rect" id="node11" href="$class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44" title="Apply a Non Local Means Filter to an image. This is the decoupled version of this filter,..." alt="" coords="757,187,964,214"/>
+<area shape="rect" id="node3" href="$class_de_w_a_f_f.html#afa8726d7750c00b70d99a0c7cfe0eb1b" title="Parameter for the Laplacian deceive." alt="" coords="27,5,227,47"/>
+<area shape="rect" id="node4" href="$class_filters.html#aa6faf8cd342f97cb42f303f12cf36702" title="Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter,..." alt="" coords="315,71,483,112"/>
+<area shape="rect" id="node5" href="$class_de_w_a_f_f.html#a8f41693671685201204f009de14d34d2" title="Apply the Deceived Scaled Bilateral Filter to an image. Uses an UnSharp mask as deceiver...." alt="" coords="5,71,248,112"/>
+<area shape="rect" id="node7" href="$class_utils.html#a27ea9fba4632480b0a2fb33e5157ecbb" title="Filters an image through a Laplacian of Gaussian filter." alt="" coords="571,137,689,163"/>
+<area shape="rect" id="node8" href="$class_utils.html#a65a7038fa77057d38cbb66e0c4f3d56b" title="Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter." alt="" coords="296,137,503,163"/>
+<area shape="rect" id="node9" href="$class_de_w_a_f_f.html#ab02b391dbde3cb384462b950e586ddb7" title="Apply the Deceived Guided Filter to an image. Uses an UnSharp mask as deceiver. The fastest WAF for t..." alt="" coords="15,137,239,163"/>
+<area shape="rect" id="node10" href="$class_de_w_a_f_f.html#afaabff8b389bef4c26d956c5328a3685" title="Apply the Deceived Non Local Means Filter to an image. Uses an UnSharp mask as deceiver...." alt="" coords="24,188,229,229"/>
+</map>

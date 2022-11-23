@@ -1,0 +1,4 @@
+<map id="Filters::NonLocalMeansFilter" name="Filters::NonLocalMeansFilter">
+<area shape="rect" id="node1" title="Apply a Non Local Means Filter to an image. This is the decoupled version of this filter,..." alt="" coords="259,13,465,39"/>
+<area shape="rect" id="node2" href="$class_de_w_a_f_f.html#afaabff8b389bef4c26d956c5328a3685" title="Apply the Deceived Non Local Means Filter to an image. Uses an UnSharp mask as deceiver...." alt="" coords="5,5,211,47"/>
+</map>

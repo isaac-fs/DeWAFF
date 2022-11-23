@@ -1,5 +1,9 @@
-<map id="/home/isaac/Code/DeWAFF/include/Filters.hpp" name="/home/isaac/Code/DeWAFF/include/Filters.hpp">
-<area shape="rect" id="node1" title="Guided filter implementation from https://github.com/atilimcetin/guided&#45;filter." alt="" coords="16,5,213,47"/>
-<area shape="rect" id="node2" href="$_de_w_a_f_f_8hpp.html" title=" " alt="" coords="16,95,213,136"/>
-<area shape="rect" id="node3" href="$_program_interface_8hpp.html" title=" " alt="" coords="5,184,224,225"/>
+<map id="Filters.hpp" name="Filters.hpp">
+<area shape="rect" id="node1" title=" " alt="" coords="213,5,303,32"/>
+<area shape="rect" id="node2" href="$_de_w_a_f_f_8hpp.html" title=" " alt="" coords="147,80,249,107"/>
+<area shape="rect" id="node7" href="$_filters_8cpp_source.html" title=" " alt="" coords="273,80,363,107"/>
+<area shape="rect" id="node3" href="$_program_interface_8hpp.html" title=" " alt="" coords="38,155,201,181"/>
+<area shape="rect" id="node6" href="$_de_w_a_f_f_8cpp_source.html" title=" " alt="" coords="225,155,328,181"/>
+<area shape="rect" id="node4" href="$_main_8cpp_source.html" title=" " alt="" coords="5,229,87,256"/>
+<area shape="rect" id="node5" href="$_program_interface_8cpp_source.html" title=" " alt="" coords="111,229,274,256"/>
 </map>

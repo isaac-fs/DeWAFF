@@ -1,0 +1,6 @@
+<map id="Filters::ScaledBilateralFilter" name="Filters::ScaledBilateralFilter">
+<area shape="rect" id="node1" title="Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter,..." alt="" coords="5,23,173,65"/>
+<area shape="rect" id="node2" href="$class_filters.html#a78a4c57fc753e6de4cca5c67a494afa6" title="Apply a Bilateral Filter to an image. This is the decoupled version of this filter,..." alt="" coords="221,31,380,57"/>
+<area shape="rect" id="node3" href="$class_utils.html#aaed701e60ee9310481dcf1c5758aed77" title="Computes the Gaussian function of an input ." alt="" coords="428,5,603,32"/>
+<area shape="rect" id="node4" href="$class_utils.html#acebbcc4ea191555ab087d05145edd3cc" title="Generates a meshgrid from &#160;and &#160;unidimensional coordinates. Example: xRange = [0,3[ and yRange = [0,..." alt="" coords="454,56,577,83"/>
+</map>

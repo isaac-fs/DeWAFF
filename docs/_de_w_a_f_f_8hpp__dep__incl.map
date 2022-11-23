@@ -1,4 +1,7 @@
-<map id="/home/isaac/Code/DeWAFF/include/DeWAFF.hpp" name="/home/isaac/Code/DeWAFF/include/DeWAFF.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="16,5,213,47"/>
-<area shape="rect" id="node2" href="$_program_interface_8hpp.html" title=" " alt="" coords="5,95,224,136"/>
+<map id="DeWAFF.hpp" name="DeWAFF.hpp">
+<area shape="rect" id="node1" title=" " alt="" coords="147,5,249,32"/>
+<area shape="rect" id="node2" href="$_program_interface_8hpp.html" title=" " alt="" coords="38,80,201,107"/>
+<area shape="rect" id="node5" href="$_de_w_a_f_f_8cpp_source.html" title=" " alt="" coords="225,80,328,107"/>
+<area shape="rect" id="node3" href="$_main_8cpp_source.html" title=" " alt="" coords="5,155,87,181"/>
+<area shape="rect" id="node4" href="$_program_interface_8cpp_source.html" title=" " alt="" coords="111,155,274,181"/>
 </map>

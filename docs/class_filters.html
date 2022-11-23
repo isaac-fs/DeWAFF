@@ -105,8 +105,6 @@ $(document).ready(function(){initNavTree('class_filters.html',''); initResizable
 
 <p>Class containing Weighted Average <a class="el" href="class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ...">Filters</a> (WAFs). This implementation relies on padding the original image to fit square odd dimensioned kernels throughout the processing.  
  <a href="class_filters.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="_filters_8hpp_source.html">Filters.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Filters:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -141,8 +139,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a02eafe8690dcd01dde0f81b1c5966b44"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44">NonLocalMeansFilter</a> (const Mat &amp;inputImage, const Mat &amp;weightingImage, int windowSize, int neighborhoodSize, double rangeSigma)</td></tr>
 <tr class="memdesc:a02eafe8690dcd01dde0f81b1c5966b44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding.  <a href="class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44">More...</a><br /></td></tr>
 <tr class="separator:a02eafe8690dcd01dde0f81b1c5966b44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9eb2156050f10f40dfafa934f8f9ded8"><td class="memItemLeft" align="right" valign="top"><a id="a9eb2156050f10f40dfafa934f8f9ded8"></a>
-Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (const Mat &amp;inputImage, const Mat &amp;guidingImage, int windowSize, double rangeSigma)</td></tr>
+<tr class="memitem:a9eb2156050f10f40dfafa934f8f9ded8"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a9eb2156050f10f40dfafa934f8f9ded8">GuidedFilter</a> (const Mat &amp;inputImage, const Mat &amp;guidingImage, int windowSize, double rangeSigma)</td></tr>
+<tr class="memdesc:a9eb2156050f10f40dfafa934f8f9ded8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Guided Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. In this case the weighting image is known as guiding image. This filter uses a lineal algorithm, making it very fast computationally.  <a href="class_filters.html#a9eb2156050f10f40dfafa934f8f9ded8">More...</a><br /></td></tr>
 <tr class="separator:a9eb2156050f10f40dfafa934f8f9ded8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
@@ -153,6 +151,8 @@ Protected Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class containing Weighted Average <a class="el" href="class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ...">Filters</a> (WAFs). This implementation relies on padding the original image to fit square odd dimensioned kernels throughout the processing. </p>
+
+<p class="definition">Definition at line <a class="el" href="_filters_8hpp_source.html#l00030">30</a> of file <a class="el" href="_filters_8hpp_source.html">Filters.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a78a4c57fc753e6de4cca5c67a494afa6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a78a4c57fc753e6de4cca5c67a494afa6">&#9670;&nbsp;</a></span>BilateralFilter()</h2>
@@ -201,8 +201,8 @@ Protected Attributes</h2></td></tr>
 <p>Apply a Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">weightingImage</td><td>image used to calculate the kernel's weight </td></tr>
-    <tr><td class="paramname">inputImage</td><td>image used as input for the filter </td></tr>
+    <tr><td class="paramname">weightingImage_</td><td>image used to calculate the kernel's weight </td></tr>
+    <tr><td class="paramname">inputImage_</td><td>image used as input for the filter </td></tr>
     <tr><td class="paramname">windowSize</td><td>processing window size, has to be odd numbered and greater or equal than 3 </td></tr>
     <tr><td class="paramname">spatialSigma</td><td>spatial standard deviation </td></tr>
     <tr><td class="paramname">rangeSigma</td><td>range or radiometric standard deviation </td></tr>
@@ -210,13 +210,97 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat output image </dd></dl>
-<p>This filter uses two Gaussian kernels, one of them is the spatial Gaussian kernel \( G_{\text spatial}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \) with the spatial values from an image region \( \Omega \subseteq U \). The spatial kernel uses the \( m_i \subseteq \Omega \) pixels coordinates as weighting values for the pixel \( p = (x, y) \)</p>
-<p>The other Gaussian kernel is the range Gaussian kernel \( G_{\text range}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \) with the intensity (range) values from an image region \( \Omega \subseteq U \). The range kernel uses the \( m_i \subseteq \Omega \) pixels intensities as weighting values for the pixel \( p = (x, y) \) instead of their locations as in the spatial kernel computation. In this case a the input \( U \) is separated into the three CIELab weightChannels and each channel is processed as an individual input \( U_{\text channel} \)</p>
-<p>The two kernels convolve to obtain the Bilateral Filter kernel <br  />
- \( \phi_{\text BF}(U, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U(m)-U(p)||) \)</p>
-<p>The Bilateral filter's norm corresponds to \( \left( \sum_{m \subseteq \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \)</p>
-<p>Finally the bilateral filter kernel can be convolved with the input as follows <br  />
- \( Y_{\phi_{\text BF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text BF}(U, m, p) \right)^{-1} \left( \sum_{m \subseteq \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \)</p>
+<p>This filter uses two Gaussian kernels, one of them is the spatial Gaussian kernel: </p><p class="formulaDsp">
+\[ G_{\text spatial}(U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \]
+</p>
+<p> with the spatial values from an image region \( \Omega \subseteq U \). The spatial kernel uses the \( m_i \subset \Omega \) pixels coordinates as weighting values for the pixel \( p = (x, y) \).</p>
+<p>The other used kernel is the range Gaussian kernel: </p><p class="formulaDsp">
+\[ G_{\text range}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_r^2} } \right) \]
+</p>
+<p> with the intensity (range) values from an image region \( \Omega \subseteq U \). The range kernel uses the \( m_i \subset \Omega \) pixels intensities as weighting values for the pixel \( p = (x, y) \) instead of their locations as in the spatial kernel computation. In this case a the input \( U \) is separated into the three CIELab weightChannels and each channel is processed as an individual input \( U_{\text channel} \).</p>
+<p>The two kernels convolve to obtain the Bilateral Filter kernel: </p><p class="formulaDsp">
+\[ \phi_{\text BF}(U, m, p) = G_{\text spatial}(||m-p||^2) \, G_{\text range}(||U(m)-U(p)||^2) \]
+</p>
+<p>The Bilateral filter's norm corresponds to: </p><p class="formulaDsp">
+\[ \left( \sum_{m \subset \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \]
+</p>
+<p>Finally the bilateral filter kernel can be convolved with the input as follows: </p><p class="formulaDsp">
+\[ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, m, p) \right)^{-1} \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \]
+</p>
+
+<p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00014">14</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a9eb2156050f10f40dfafa934f8f9ded8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9eb2156050f10f40dfafa934f8f9ded8">&#9670;&nbsp;</a></span>GuidedFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Mat Filters::GuidedFilter </td>
+          <td>(</td>
+          <td class="paramtype">const Mat &amp;&#160;</td>
+          <td class="paramname"><em>inputImage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Mat &amp;&#160;</td>
+          <td class="paramname"><em>guidingImage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>windowSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>rangeSigma</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Apply a Guided Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. In this case the weighting image is known as guiding image. This filter uses a lineal algorithm, making it very fast computationally. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inputImage</td><td>image used as input for the filter </td></tr>
+    <tr><td class="paramname">guidingImage</td><td>image used to calculate the kernel's weight </td></tr>
+    <tr><td class="paramname">windowSize</td><td>processing window size </td></tr>
+    <tr><td class="paramname">rangeSigma</td><td>range or radiometric standard deviation. Used to calculate \( \epsilon = \sigma_r^2 \) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Mat </dd></dl>
+<p>The Guided Filter initialy has the same form as any WAF </p><p class="formulaDsp">
+\[ q_i = \sum_j W_{ij}(I)p_j \]
+</p>
+<p> where \( q_i \) is the output if filtered pixel \( p_j \) with the kernel \( W_{ij} \) guided by image \( I \). This is expected as the original idea for this filter comes from the bilateral filter. The greatness in this filter lies in its solution. It asumes a linear relationship: </p><p class="formulaDsp">
+\[ q_i = a_k I_i + b_k, \forall i \in \omega_k \]
+</p>
+<p> where \( \omega_k \) is a window centered at pixel \( k \). The solution is in finding the linear coefficients \( a_k \) and \( b_k \). This is achieved through the cost function </p><p class="formulaDsp">
+\[ E(a_k, b_k) \sum_{i\in \omega_k} ((a_k I_i + b_k - p_i)^2 + \epsilon a_k^2)\]
+</p>
+<p> which seeks to minimize the difference between the input \( p \) and the output \( q \). The solution is found through a linear regresion </p><p class="formulaDsp">
+\[ a_k = \frac{\frac{1}{|\omega|} \sum_{i\in \omega_k} I_i p_i - \mu_k \bar{p}_k}{\omega_k^2 + \epsilon}\]
+</p>
+ <p class="formulaDsp">
+\[ b_k = \bar{p}_k - a_k \mu_k \]
+</p>
+<p> \( \mu_k \) and \(\omega_k^2\) are the mean and the variance of \(I\) in \( \omega_k \), respectively. \( \frac{1}{|\omega|} \sum_{i\in \omega_k} p_i \) is the mean of \(p\) in \( \omega_k \). Finally the output is </p><p class="formulaDsp">
+\[ q_i = \frac{1}{|\omega|} \sum_{k:i \in \omega_k} (a_k I_i + b_k )\]
+</p>
+
+<p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00281">281</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
 
 </div>
 </div>
@@ -267,21 +351,27 @@ Protected Attributes</h2></td></tr>
 <p>Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">weightingImage</td><td>image used to calculate the kernel's weight </td></tr>
-    <tr><td class="paramname">inputImage</td><td>image used as input for the filter </td></tr>
-    <tr><td class="paramname">windowSize</td><td>processing window size, has to be odd numbered and greater or equal than 3 </td></tr>
-    <tr><td class="paramname">rangeSigma</td><td>range or radiometric standard deviation. Used to calculate the parameter \( h = 2 \sigma^2 \) </td></tr>
+    <tr><td class="paramname">weightingImage_</td><td>image used to calculate the kernel's weight </td></tr>
+    <tr><td class="paramname">inputImage_</td><td>image used as input for the filter </td></tr>
+    <tr><td class="paramname">windowSize</td><td>processing window size </td></tr>
+    <tr><td class="paramname">neighborhoodSize</td><td>subwindow size </td></tr>
+    <tr><td class="paramname">rangeSigma</td><td>range or radiometric standard deviation. Used to calculate the parameter \( h^2 = 2 \sigma_r^2 \) </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat output image </dd></dl>
-<p>The discrete representation of the Non Local Means Filter is as follows <br  />
- \( \phi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2}{h^2} \right)\) <br  />
-where \(B(p)\) is a patch part of the window \(\Omega\) centered at pixel \(p\). \(B(m)\) represents all of the patches at \(\Omega\) centered in each \(m\) pixel. The Non Local Means Filter calculates the Euclidean distance between each patch \(B(m)\) and \(B(p)\) for each window \(\Omega \subseteq U\). This is why this algorithm is highly demanding in computational terms. Each Euclidean distance matrix obtained from each patch pair is the input for a Gaussian decreasing function with standard deviation \(h\) that generates the new pixel \(p\) value</p>
-<p>The Non Local Means filter's norm is calculated with <br  />
- \( \phi_{\text NLM}(U, m, p) \left( \sum_{m \subseteq \Omega} \phi_{\text{NLM}}(U, m, p) \right)^{-1} \)</p>
-<p>The NLM filter kernel is applied to the laplacian image <br  />
- \( Y_{\phi_{\text NLM}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text NLM}(U, m, p) \right)^{-1} \left( \sum_{m \subseteq \Omega} \phi_{\text NLM}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \)</p>
+<p>The discrete representation of the Non Local Means Filter is as follows: </p><p class="formulaDsp">
+\[ \phi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2}{h^2} \right)\]
+</p>
+<p> where \(B(p)\) is a patch part of the window \(\Omega\) centered at pixel \(p\). \(B(m)\) represents all of the patches at \(\Omega\) centered in each \(m\) pixel. The Non Local Means Filter calculates the Euclidean distance between each patch \(B(m)\) and \(B(p)\) for each window \(\Omega \subseteq U\). This is why this algorithm is highly demanding in computational terms. Each Euclidean distance matrix obtained from each patch pair is the input for a Gaussian decreasing function with standard deviation \(h\) that generates the new pixel \(p\) value.</p>
+<p>The Non Local Means filter's norm is calculated with: </p><p class="formulaDsp">
+\[\left( \sum_{m \subset \Omega} \phi_{\text{NLM}}(U, m, p) \right)^{-1} \]
+</p>
+<p>The NLM filter kernel is applied to the laplacian image: </p><p class="formulaDsp">
+\[ Y_{\phi_{\text NLM}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, m, p) \right)^{-1} \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \]
+</p>
+
+<p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00183">183</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
 
 </div>
 </div>
@@ -341,22 +431,30 @@ where \(B(p)\) is a patch part of the window \(\Omega\) centered at pixel \(p\).
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat output image </dd></dl>
-<p>It uses the two same Gaussian kernels as the bilateral filter, but it has an extra input, the scaled image \( U^s \).<br  />
-The kernels are the following: <br  />
- \( G_{\text spatial}(U^s, U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \) <br  />
- \( G_{\text range}(U^s, U, m, p) = \exp\left( -\frac{ ||U^s(m) - U(p)||^2 }{ 2{\sigma_s^2} } \right) \) <br  />
-Notice the diferrence on the range kernel calculation where the scaled image is used</p>
-<p>The two kernels convolve to obtain the Bilateral Filter kernel <br  />
- \( \phi_{\text SBF}(U^s, U, m, p) = G_{\text spatial}(||m-p||) \, G_{\text range}(||U^s(m)-U(p)||) \)</p>
-<p>The Bilateral filter's norm corresponds to \( \left( \sum_{m \subseteq \Omega} \phi_{\text{SBF}}(U^s, U, m, p) \right)^{-1} \)</p>
-<p>Finally the bilateral filter kernel can be convolved with the input as follows <br  />
- \( Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U^s, U, m, p) \right)^{-1} \left( \sum_{m \subseteq \Omega} \phi_{\text SBF}(U^s, U, m, p) \, \hat{f}_{\text USM}(m) \right) \)</p>
+<p>It uses the two same Gaussian kernels as the bilateral filter, but it has an extra input, the scaled image \( U^s \). The kernels are the following: </p><p class="formulaDsp">
+\[ G_{\text spatial}(U^s, U, m, p) = \exp\left(-\frac{ ||m - p||^2 }{ 2 {\sigma_s^2} } \right) \]
+</p>
+ <p class="formulaDsp">
+\[ G_{\text range}(U^s, U, m, p) = \exp\left( -\frac{ ||U^s(m) - U(p)||^2 }{ 2{\sigma_r^2} } \right) \]
+</p>
+<p> Notice the diferrence on the range kernel calculation where the scaled image is used.</p>
+<p>The two kernels convolve to obtain the Bilateral Filter kernel: </p><p class="formulaDsp">
+\[ \phi_{\text SBF}(U^s, U, m, p) = G_{\text spatial}(||m-p||^2) \, G_{\text range}(||U^s(m)-U(p)||^2) \]
+</p>
+<p>The Bilateral filter's norm corresponds to: </p><p class="formulaDsp">
+\[ \left( \sum_{m \subset \Omega} \phi_{\text{SBF}}(U^s, U, m, p) \right)^{-1} \]
+</p>
+<p>Finally the bilateral filter kernel can be convolved with the input as follows: </p><p class="formulaDsp">
+\[ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \right)^{-1} \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \, \hat{f}_{\text USM}(m) \right) \]
+</p>
+
+<p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00135">135</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/isaac/Code/DeWAFF/include/<a class="el" href="_filters_8hpp_source.html">Filters.hpp</a></li>
-<li>/home/isaac/Code/DeWAFF/src/Filters.cpp</li>
+<li><a class="el" href="_filters_8hpp_source.html">Filters.hpp</a></li>
+<li><a class="el" href="_filters_8cpp_source.html">Filters.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

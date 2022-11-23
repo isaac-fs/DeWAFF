@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['euclideandistancematrix_8',['EuclideanDistanceMatrix',['../class_utils.html#a175bde5d9e286e4a3dd188af117d0d95',1,'Utils']]]
+  ['filters_8',['Filters',['../class_filters.html',1,'']]],
+  ['filters_2ehpp_9',['Filters.hpp',['../_filters_8hpp.html',1,'']]]
 ];

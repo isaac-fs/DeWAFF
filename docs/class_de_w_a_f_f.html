@@ -105,8 +105,6 @@ $(document).ready(function(){initNavTree('class_de_w_a_f_f.html',''); initResiza
 
 <p>Deceived Weighted Average <a class="el" href="class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ...">Filters</a> Framework class. It applies a filter which intput and weighting input are decoupled, so it is possible deceive the input and to still use the original input weighting values.  
  <a href="class_de_w_a_f_f.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="_de_w_a_f_f_8hpp_source.html">DeWAFF.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for DeWAFF:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -168,8 +166,8 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a02eafe8690dcd01dde0f81b1c5966b44 inherit pro_methods_class_filters"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44">NonLocalMeansFilter</a> (const Mat &amp;inputImage, const Mat &amp;weightingImage, int windowSize, int neighborhoodSize, double rangeSigma)</td></tr>
 <tr class="memdesc:a02eafe8690dcd01dde0f81b1c5966b44 inherit pro_methods_class_filters"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding.  <a href="class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44">More...</a><br /></td></tr>
 <tr class="separator:a02eafe8690dcd01dde0f81b1c5966b44 inherit pro_methods_class_filters"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9eb2156050f10f40dfafa934f8f9ded8 inherit pro_methods_class_filters"><td class="memItemLeft" align="right" valign="top"><a id="a9eb2156050f10f40dfafa934f8f9ded8"></a>
-Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (const Mat &amp;inputImage, const Mat &amp;guidingImage, int windowSize, double rangeSigma)</td></tr>
+<tr class="memitem:a9eb2156050f10f40dfafa934f8f9ded8 inherit pro_methods_class_filters"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a9eb2156050f10f40dfafa934f8f9ded8">GuidedFilter</a> (const Mat &amp;inputImage, const Mat &amp;guidingImage, int windowSize, double rangeSigma)</td></tr>
+<tr class="memdesc:a9eb2156050f10f40dfafa934f8f9ded8 inherit pro_methods_class_filters"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Guided Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. In this case the weighting image is known as guiding image. This filter uses a lineal algorithm, making it very fast computationally.  <a href="class_filters.html#a9eb2156050f10f40dfafa934f8f9ded8">More...</a><br /></td></tr>
 <tr class="separator:a9eb2156050f10f40dfafa934f8f9ded8 inherit pro_methods_class_filters"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_class_filters"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_class_filters')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="class_filters.html">Filters</a></td></tr>
 <tr class="memitem:a585c34a07148c8a772e04fb38ae22569 inherit pro_attribs_class_filters"><td class="memItemLeft" align="right" valign="top"><a id="a585c34a07148c8a772e04fb38ae22569"></a>
@@ -178,6 +176,8 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (cons
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Deceived Weighted Average <a class="el" href="class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ...">Filters</a> Framework class. It applies a filter which intput and weighting input are decoupled, so it is possible deceive the input and to still use the original input weighting values. </p>
+
+<p class="definition">Definition at line <a class="el" href="_de_w_a_f_f_8hpp_source.html#l00025">25</a> of file <a class="el" href="_de_w_a_f_f_8hpp_source.html">DeWAFF.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="afa8726d7750c00b70d99a0c7cfe0eb1b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afa8726d7750c00b70d99a0c7cfe0eb1b">&#9670;&nbsp;</a></span>DeceivedBilateralFilter()</h2>
@@ -230,6 +230,8 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (cons
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat output image </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_de_w_a_f_f_8cpp_source.html#l00018">18</a> of file <a class="el" href="_de_w_a_f_f_8cpp_source.html">DeWAFF.cpp</a>.</p>
+
 </div>
 </div>
 <a id="ab02b391dbde3cb384462b950e586ddb7"></a>
@@ -281,6 +283,8 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (cons
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat output image </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_de_w_a_f_f_8cpp_source.html#l00071">71</a> of file <a class="el" href="_de_w_a_f_f_8cpp_source.html">DeWAFF.cpp</a>.</p>
 
 </div>
 </div>
@@ -341,6 +345,8 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (cons
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_de_w_a_f_f_8cpp_source.html#l00054">54</a> of file <a class="el" href="_de_w_a_f_f_8cpp_source.html">DeWAFF.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a8f41693671685201204f009de14d34d2"></a>
@@ -386,18 +392,20 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (cons
   <table class="params">
     <tr><td class="paramname">inputImage</td><td>input image </td></tr>
     <tr><td class="paramname">windowSize</td><td>processing window size, has to be odd numbered and greater or equal than 3 </td></tr>
-    <tr><td class="paramname">spatialSima</td><td>spatial standard deviation </td></tr>
+    <tr><td class="paramname">spatialSigma</td><td>spatial standard deviation </td></tr>
     <tr><td class="paramname">rangeSigma</td><td>range or radiometric standard deviation </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat output image </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_de_w_a_f_f_8cpp_source.html#l00035">35</a> of file <a class="el" href="_de_w_a_f_f_8cpp_source.html">DeWAFF.cpp</a>.</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/isaac/Code/DeWAFF/include/<a class="el" href="_de_w_a_f_f_8hpp_source.html">DeWAFF.hpp</a></li>
-<li>/home/isaac/Code/DeWAFF/src/DeWAFF.cpp</li>
+<li><a class="el" href="_de_w_a_f_f_8hpp_source.html">DeWAFF.hpp</a></li>
+<li><a class="el" href="_de_w_a_f_f_8cpp_source.html">DeWAFF.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

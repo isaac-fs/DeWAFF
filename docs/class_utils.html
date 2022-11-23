@@ -104,8 +104,6 @@ $(document).ready(function(){initNavTree('class_utils.html',''); initResizable()
 
 <p>Useful tools for image processing These tools are statics objects to use them in the lifetime of the program without the need of constinuous instantiation.  
  <a href="class_utils.html#details">More...</a></p>
-
-<p><code>#include &lt;<a class="el" href="_utils_8hpp_source.html">Utils.hpp</a>&gt;</code></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Inheritance diagram for Utils:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
@@ -121,69 +119,32 @@ $(document).ready(function(){initNavTree('class_utils.html',''); initResizable()
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:acebbcc4ea191555ab087d05145edd3cc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#acebbcc4ea191555ab087d05145edd3cc">MeshGrid</a> (const Range &amp;range, Mat &amp;X, Mat &amp;Y)</td></tr>
-<tr class="memdesc:acebbcc4ea191555ab087d05145edd3cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates a meshgrid from \(X\) and \(Y\) unidimensional coordinates Example: xRange = [0,3[ and yRange = [0,3[ will return the following \(X\) and \(Y\) coordinates.  <a href="class_utils.html#acebbcc4ea191555ab087d05145edd3cc">More...</a><br /></td></tr>
+<tr class="memdesc:acebbcc4ea191555ab087d05145edd3cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generates a meshgrid from \(X\) and \(Y\) unidimensional coordinates. Example: xRange = [0,3[ and yRange = [0,3[ will return the following \(X\) and \(Y\) coordinates:  <a href="class_utils.html#acebbcc4ea191555ab087d05145edd3cc">More...</a><br /></td></tr>
 <tr class="separator:acebbcc4ea191555ab087d05145edd3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a012b8177e7e05918d805620bf736ee9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a012b8177e7e05918d805620bf736ee9f">MinMax</a> (const Mat &amp;A, double *minA, double *maxA)</td></tr>
 <tr class="memdesc:a012b8177e7e05918d805620bf736ee9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the global min and max values of a 3 channel Matrix.  <a href="class_utils.html#a012b8177e7e05918d805620bf736ee9f">More...</a><br /></td></tr>
 <tr class="separator:a012b8177e7e05918d805620bf736ee9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaed701e60ee9310481dcf1c5758aed77"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a> (Mat input, double sigma)</td></tr>
-<tr class="memdesc:aaed701e60ee9310481dcf1c5758aed77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the Gaussian function of an input \( X \) \( G(X) = \exp\left( -\frac{X}{2\sigma_s^2} \right) \).  <a href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">More...</a><br /></td></tr>
+<tr class="memdesc:aaed701e60ee9310481dcf1c5758aed77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the Gaussian function of an input \( X \).  <a href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">More...</a><br /></td></tr>
 <tr class="separator:aaed701e60ee9310481dcf1c5758aed77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94be617a9fa88444e5be1a0da341669f"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a94be617a9fa88444e5be1a0da341669f">GaussianKernel</a> (int windowSize, double sigma)</td></tr>
-<tr class="memdesc:a94be617a9fa88444e5be1a0da341669f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a normalized Gaussian kernel \( G(X, Y) = \frac{1}{{|G(X, Y)|}} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \) where X + Y are the horizontal and vertical coordinates on a \( \text{windowSize} \times \text{windowSize} \) 2D plane. The result can be interpreted as looking at a Gaussian distribution from a top view.  <a href="class_utils.html#a94be617a9fa88444e5be1a0da341669f">More...</a><br /></td></tr>
+<tr class="memdesc:a94be617a9fa88444e5be1a0da341669f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a normalized Gaussian kernel.  <a href="class_utils.html#a94be617a9fa88444e5be1a0da341669f">More...</a><br /></td></tr>
 <tr class="separator:a94be617a9fa88444e5be1a0da341669f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27ea9fba4632480b0a2fb33e5157ecbb"><td class="memItemLeft" align="right" valign="top"><a id="a27ea9fba4632480b0a2fb33e5157ecbb"></a>
-Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a27ea9fba4632480b0a2fb33e5157ecbb">LoGFilter</a> (const Mat &amp;image, int windowSize, double sigma)</td></tr>
-<tr class="memdesc:a27ea9fba4632480b0a2fb33e5157ecbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Filter an image through a Laplacian of Gaussian filter \( \text{LoG}(X,Y) = \left( \frac{1}{\sigma^2} \right) \left( \frac{X^2 + Y^2}{\sigma^2} - 2 \right) \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \). <br /></td></tr>
+<tr class="memitem:a27ea9fba4632480b0a2fb33e5157ecbb"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a27ea9fba4632480b0a2fb33e5157ecbb">LoGFilter</a> (const Mat &amp;image, int windowSize, double sigma)</td></tr>
+<tr class="memdesc:a27ea9fba4632480b0a2fb33e5157ecbb"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ...">Filters</a> an image through a Laplacian of Gaussian filter.  <a href="class_utils.html#a27ea9fba4632480b0a2fb33e5157ecbb">More...</a><br /></td></tr>
 <tr class="separator:a27ea9fba4632480b0a2fb33e5157ecbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a65a7038fa77057d38cbb66e0c4f3d56b"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a65a7038fa77057d38cbb66e0c4f3d56b">NonAdaptiveUSMFilter</a> (const Mat &amp;image, int windowSize, int lambda, double sigma)</td></tr>
-<tr class="memdesc:a65a7038fa77057d38cbb66e0c4f3d56b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter \( \hat{f}_{\text USM} = U - \lambda \ \mathcal{L} \text{ where } \mathcal{L} = l * g \).  <a href="class_utils.html#a65a7038fa77057d38cbb66e0c4f3d56b">More...</a><br /></td></tr>
+<tr class="memdesc:a65a7038fa77057d38cbb66e0c4f3d56b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter.  <a href="class_utils.html#a65a7038fa77057d38cbb66e0c4f3d56b">More...</a><br /></td></tr>
 <tr class="separator:a65a7038fa77057d38cbb66e0c4f3d56b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a175bde5d9e286e4a3dd188af117d0d95"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a175bde5d9e286e4a3dd188af117d0d95">EuclideanDistanceMatrix</a> (const Mat &amp;image, int neighborhoodSize)</td></tr>
-<tr class="memdesc:a175bde5d9e286e4a3dd188af117d0d95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes an Euclidean distance matrix from an input matrix. This is achieved by calculating the Euclidean distance between a fixed patch at the center of the input image and a patch centered in every other pixel in the input image, mathematically, for an input matrix \(A = (a_{ij})\) every element will take the corresponding Euclidean distance value \(a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\).  <a href="class_utils.html#a175bde5d9e286e4a3dd188af117d0d95">More...</a><br /></td></tr>
-<tr class="separator:a175bde5d9e286e4a3dd188af117d0d95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79cc561482d31a4ba67eb9744a6da10b"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">RegionDistancesMatrix</a> (const Mat &amp;image, int neighborhoodSize)</td></tr>
+<tr class="memdesc:a79cc561482d31a4ba67eb9744a6da10b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the Euclidean distance between a fixed patch at the center of the input image and a patch centered in every other pixel in the input image, mathematically, for an input matrix \(A = (a_{ij})\) every element will take the corresponding Euclidean distance value \(a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\).  <a href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">More...</a><br /></td></tr>
+<tr class="separator:a79cc561482d31a4ba67eb9744a6da10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Useful tools for image processing These tools are statics objects to use them in the lifetime of the program without the need of constinuous instantiation. </p>
+
+<p class="definition">Definition at line <a class="el" href="_utils_8hpp_source.html#l00028">28</a> of file <a class="el" href="_utils_8hpp_source.html">Utils.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a175bde5d9e286e4a3dd188af117d0d95"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a175bde5d9e286e4a3dd188af117d0d95">&#9670;&nbsp;</a></span>EuclideanDistanceMatrix()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Mat Utils::EuclideanDistanceMatrix </td>
-          <td>(</td>
-          <td class="paramtype">const Mat &amp;&#160;</td>
-          <td class="paramname"><em>inputImage_</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>neighborhoodSize</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes an Euclidean distance matrix from an input matrix. This is achieved by calculating the Euclidean distance between a fixed patch at the center of the input image and a patch centered in every other pixel in the input image, mathematically, for an input matrix \(A = (a_{ij})\) every element will take the corresponding Euclidean distance value \(a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\). </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">inputImage_</td><td>input image to obtain the patches to compute the matrix </td></tr>
-    <tr><td class="paramname">neighborhoodSize</td><td>size of the used patch. Analog to window size </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Mat Euclidean distance matrix </dd></dl>
-
-</div>
-</div>
 <a id="aaed701e60ee9310481dcf1c5758aed77"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaed701e60ee9310481dcf1c5758aed77">&#9670;&nbsp;</a></span>GaussianFunction()</h2>
 
@@ -210,8 +171,11 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
       </table>
 </div><div class="memdoc">
 
-<p>Compute the Gaussian function of an input \( X \) \( G(X) = \exp\left( -\frac{X}{2\sigma_s^2} \right) \). </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Computes the Gaussian function of an input \( X \). </p>
+<p class="formulaDsp">
+\[ G(X) = \exp\left( -\frac{X}{2\sigma^2} \right) \]
+</p>
+ <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">input</td><td>Matrix input </td></tr>
     <tr><td class="paramname">sigma</td><td>Desired standard deviation </td></tr>
@@ -219,6 +183,8 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00062">62</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -248,15 +214,61 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
       </table>
 </div><div class="memdoc">
 
-<p>Computes a normalized Gaussian kernel \( G(X, Y) = \frac{1}{{|G(X, Y)|}} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \) where X + Y are the horizontal and vertical coordinates on a \( \text{windowSize} \times \text{windowSize} \) 2D plane. The result can be interpreted as looking at a Gaussian distribution from a top view. </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Computes a normalized Gaussian kernel. </p>
+<p class="formulaDsp">
+\[ G(X, Y) = \frac{1}{{|G(X, Y)|}} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \]
+</p>
+<p> where \(X\) and \(Y\) are the horizontal and vertical coordinates on a windowSize \( \times \)windowSize 2D plane. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">windowSize</td><td>2D plane dimension </td></tr>
-    <tr><td class="paramname">sigma</td><td>standar deviation for the Gaussian distribution </td></tr>
+    <tr><td class="paramname">windowSize</td><td>size of the window for the kernel </td></tr>
+    <tr><td class="paramname">sigma</td><td>standard deviation for the Gaussian distribution </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>Mat A Gaussian kernel </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Mat Gaussian kernel </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00077">77</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a27ea9fba4632480b0a2fb33e5157ecbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a27ea9fba4632480b0a2fb33e5157ecbb">&#9670;&nbsp;</a></span>LoGFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Mat Utils::LoGFilter </td>
+          <td>(</td>
+          <td class="paramtype">const Mat &amp;&#160;</td>
+          <td class="paramname"><em>image</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>windowSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>sigma</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p><a class="el" href="class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ...">Filters</a> an image through a Laplacian of Gaussian filter. </p>
+<p class="formulaDsp">
+\[ \text{LoG}(X,Y) = \left( \frac{1}{\sigma^2} \right) \left( \frac{X^2 + Y^2}{\sigma^2} - 2 \right) \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \]
+</p>
+ 
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00098">98</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -292,21 +304,16 @@ Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
       </table>
 </div><div class="memdoc">
 
-<p>Generates a meshgrid from \(X\) and \(Y\) unidimensional coordinates Example: xRange = [0,3[ and yRange = [0,3[ will return the following \(X\) and \(Y\) coordinates. </p>
-<p>\(X\) = <br  />
- [0, 0, 0; <br  />
- 1, 1, 1; <br  />
- 2, 2, 2] <br  />
- \(Y\) = <br  />
- [0, 1, 2; <br  />
- 0, 1, 2; <br  />
- 0, 1, 2] <br  />
- <br  />
-Wich would form the following mesh grid</p>
-<p>\((X,Y)\) = <br  />
- [(0,0) (0,1), (0,2); <br  />
- (0,1) (1,1), (2,1); <br  />
- (2,0) (2,1), (2,2)]</p>
+<p>Generates a meshgrid from \(X\) and \(Y\) unidimensional coordinates. Example: xRange = [0,3[ and yRange = [0,3[ will return the following \(X\) and \(Y\) coordinates: </p>
+<pre class="fragment">X =         Y =
+[0, 0, 0;   [0, 1, 2;
+ 1, 1, 1;    0, 1, 2;
+ 2, 2, 2]    0, 1, 2]
+</pre><p> Wich would form the following mesh grid: </p><pre class="fragment">(X,Y) =
+    [(0,0) (0,1), (0,2);
+     (0,1) (1,1), (2,1);
+     (2,0) (2,1), (2,2)]
+</pre><p> Although the values of \(X\) and \(Y\) can be manipulated to form useful patterns.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">range</td><td>range to form the 2D grid </td></tr>
@@ -315,6 +322,8 @@ Wich would form the following mesh grid</p>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00026">26</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -360,6 +369,8 @@ Wich would form the following mesh grid</p>
   </dd>
 </dl>
 
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00042">42</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
+
 </div>
 </div>
 <a id="a65a7038fa77057d38cbb66e0c4f3d56b"></a>
@@ -400,20 +411,68 @@ Wich would form the following mesh grid</p>
       </table>
 </div><div class="memdoc">
 
-<p>Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter \( \hat{f}_{\text USM} = U - \lambda \ \mathcal{L} \text{ where } \mathcal{L} = l * g \). </p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter. </p>
+<p class="formulaDsp">
+\[ \hat{f}_{\text USM} = U - \lambda \ \mathcal{L} \text{ where } \mathcal{L} = l * g \]
+</p>
+<p>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">image</td><td>Image to apply the mask </td></tr>
+    <tr><td class="paramname">image</td><td>Input image to filter </td></tr>
+    <tr><td class="paramname">windowSize</td><td>Size of the filter </td></tr>
+    <tr><td class="paramname">lambda</td><td>constan for the Laplacian deceive </td></tr>
+    <tr><td class="paramname">sigma</td><td>standard distribution </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Filtered image </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00134">134</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a79cc561482d31a4ba67eb9744a6da10b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79cc561482d31a4ba67eb9744a6da10b">&#9670;&nbsp;</a></span>RegionDistancesMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Mat Utils::RegionDistancesMatrix </td>
+          <td>(</td>
+          <td class="paramtype">const Mat &amp;&#160;</td>
+          <td class="paramname"><em>inputImage_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>neighborhoodSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the Euclidean distance between a fixed patch at the center of the input image and a patch centered in every other pixel in the input image, mathematically, for an input matrix \(A = (a_{ij})\) every element will take the corresponding Euclidean distance value \(a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inputImage_</td><td>input image </td></tr>
+    <tr><td class="paramname">neighborhoodSize</td><td>size of the pixel neighborhood </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Mat </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00157">157</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/isaac/Code/DeWAFF/include/<a class="el" href="_utils_8hpp_source.html">Utils.hpp</a></li>
-<li>/home/isaac/Code/DeWAFF/src/Utils.cpp</li>
+<li><a class="el" href="_utils_8hpp_source.html">Utils.hpp</a></li>
+<li><a class="el" href="_utils_8cpp_source.html">Utils.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

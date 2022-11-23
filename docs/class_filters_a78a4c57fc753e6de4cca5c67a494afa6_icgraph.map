@@ -1,0 +1,6 @@
+<map id="Filters::BilateralFilter" name="Filters::BilateralFilter">
+<area shape="rect" id="node1" title="Apply a Bilateral Filter to an image. This is the decoupled version of this filter,..." alt="" coords="544,46,703,73"/>
+<area shape="rect" id="node2" href="$class_de_w_a_f_f.html#afa8726d7750c00b70d99a0c7cfe0eb1b" title="Parameter for the Laplacian deceive." alt="" coords="296,5,496,47"/>
+<area shape="rect" id="node3" href="$class_filters.html#aa6faf8cd342f97cb42f303f12cf36702" title="Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter,..." alt="" coords="312,71,480,112"/>
+<area shape="rect" id="node4" href="$class_de_w_a_f_f.html#a8f41693671685201204f009de14d34d2" title="Apply the Deceived Scaled Bilateral Filter to an image. Uses an UnSharp mask as deceiver...." alt="" coords="5,71,248,112"/>
+</map>

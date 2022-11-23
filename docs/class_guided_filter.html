@@ -104,15 +104,107 @@ $(document).ready(function(){initNavTree('class_guided_filter.html',''); initRes
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ae734dc38c38efb89533ba298c19f48cf"><td class="memItemLeft" align="right" valign="top"><a id="ae734dc38c38efb89533ba298c19f48cf"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>GuidedFilter</b> (const cv::Mat &amp;I, int r, double eps)</td></tr>
+<tr class="memitem:ae734dc38c38efb89533ba298c19f48cf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_guided_filter.html#ae734dc38c38efb89533ba298c19f48cf">GuidedFilter</a> (const cv::Mat &amp;I, int r, double eps)</td></tr>
+<tr class="memdesc:ae734dc38c38efb89533ba298c19f48cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new Guided Filter:: Guided Filter object.  <a href="class_guided_filter.html#ae734dc38c38efb89533ba298c19f48cf">More...</a><br /></td></tr>
 <tr class="separator:ae734dc38c38efb89533ba298c19f48cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4c3bcbed33c68bf3a274e316dbfdd25"><td class="memItemLeft" align="right" valign="top"><a id="ac4c3bcbed33c68bf3a274e316dbfdd25"></a>
-cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><b>filter</b> (const cv::Mat &amp;p, int depth=-1) const</td></tr>
+<tr class="memitem:ac4c3bcbed33c68bf3a274e316dbfdd25"><td class="memItemLeft" align="right" valign="top">cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_guided_filter.html#ac4c3bcbed33c68bf3a274e316dbfdd25">filter</a> (const cv::Mat &amp;p, int depth=-1) const</td></tr>
+<tr class="memdesc:ac4c3bcbed33c68bf3a274e316dbfdd25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes a guided filter over an image.  <a href="class_guided_filter.html#ac4c3bcbed33c68bf3a274e316dbfdd25">More...</a><br /></td></tr>
 <tr class="separator:ac4c3bcbed33c68bf3a274e316dbfdd25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>/home/isaac/Code/DeWAFF/include/<a class="el" href="_filters_8hpp_source.html">Filters.hpp</a></li>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock">
+<p class="definition">Definition at line <a class="el" href="_guided_filter_8hpp_source.html#l00020">20</a> of file <a class="el" href="_guided_filter_8hpp_source.html">GuidedFilter.hpp</a>.</p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ae734dc38c38efb89533ba298c19f48cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae734dc38c38efb89533ba298c19f48cf">&#9670;&nbsp;</a></span>GuidedFilter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">GuidedFilter::GuidedFilter </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>I</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>eps</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Construct a new Guided Filter:: Guided Filter object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">I</td><td>Guiding image </td></tr>
+    <tr><td class="paramname">r</td><td>window radius </td></tr>
+    <tr><td class="paramname">eps</td><td>epsilon value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="_guided_filter_8cpp_source.html#l00183">183</a> of file <a class="el" href="_guided_filter_8cpp_source.html">GuidedFilter.cpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac4c3bcbed33c68bf3a274e316dbfdd25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4c3bcbed33c68bf3a274e316dbfdd25">&#9670;&nbsp;</a></span>filter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">cv::Mat GuidedFilter::filter </td>
+          <td>(</td>
+          <td class="paramtype">const cv::Mat &amp;&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>depth</em> = <code>-1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes a guided filter over an image. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>input image </td></tr>
+    <tr><td class="paramname">depth</td><td>image depth </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>cv::Mat </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_guided_filter_8cpp_source.html#l00203">203</a> of file <a class="el" href="_guided_filter_8cpp_source.html">GuidedFilter.cpp</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li><a class="el" href="_guided_filter_8hpp_source.html">GuidedFilter.hpp</a></li>
+<li><a class="el" href="_guided_filter_8cpp_source.html">GuidedFilter.cpp</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->

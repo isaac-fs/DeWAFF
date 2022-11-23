@@ -114,8 +114,8 @@ Table of contents</h1>
 </ul>
 <h1><a class="anchor" id="autotoc_md2"></a>
 Description</h1>
-<p>Implementation of the image abstraction framework <a class="el" href="class_de_w_a_f_f.html" title="Deceived Weighted Average Filters Framework class. It applies a filter which intput and weighting inp...">DeWAFF</a> in C++. This framework allows to use WAF (Weighted Average <a class="el" href="class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ...">Filters</a>) with their input decoupled as a weigthing input and a processing input. The weighthing input is used to generate the kernel values for the WAFF and the processing input serves as input for the filter. This tehcnique is known as "deceiving", hence the name of the framework. With this approach the filter's kernel is weighted with the original input and as input it takes the original input filtered through an UnSharp Mask (Laplacian deceive). Normal WAFs use the same image for both processes. This is the novelty of this framework, to avoid a pipelined approach by applying two different techniques to an image, but instead combine them and apply them as one.</p>
-<p>The <a class="el" href="class_de_w_a_f_f.html" title="Deceived Weighted Average Filters Framework class. It applies a filter which intput and weighting inp...">DeWAFF</a> is aimed at improving patter recognition tasks providing the following improvements:</p><ul>
+<p>Implementation of the image abstraction framework <em><a class="el" href="class_de_w_a_f_f.html" title="Deceived Weighted Average Filters Framework class. It applies a filter which intput and weighting inp...">DeWAFF</a></em> in C++. This framework allows to use WAF (Weighted Average <a class="el" href="class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ...">Filters</a>) with their input decoupled as a weigthing input and a processing input. The weighthing input is used to generate the kernel values for the WAFF and the processing input serves as input for the filter. This tehcnique is known as "deceiving", hence the name of the framework. With this approach the filter's kernel is weighted with the original input and as input it takes the original input filtered through an UnSharp Mask (Laplacian deceive). Normal WAFs use the same image for both processes. This is the novelty of this framework, to avoid a pipelined approach by applying two different techniques to an image, but instead combine them and apply them as one.</p>
+<p>The <em><a class="el" href="class_de_w_a_f_f.html" title="Deceived Weighted Average Filters Framework class. It applies a filter which intput and weighting inp...">DeWAFF</a></em> is aimed at improving patter recognition tasks providing the following improvements:</p><ul>
 <li>Noise reduction</li>
 <li>Irrelevant detail simplification</li>
 <li>Border emphasis of Regions Of Interest</li>
@@ -123,7 +123,7 @@ Description</h1>
 </ul>
 <h1><a class="anchor" id="autotoc_md3"></a>
 Documentation</h1>
-<p>The documentation for this project is hosted at <a href="https://isaac-fs.github.io/DeWAFF/">https://isaac-fs.github.io/DeWAFF/</a></p>
+<p>The documentation for this project is hosted at <a href="https://isaac-fs.github.io/DeWAFF/">https://isaac-fs.github.io/DeWAFF/</a>. Most of the mathematical formulations for the filters used for the framework are found the <b>Classes</b> section.</p>
 <h1><a class="anchor" id="autotoc_md4"></a>
 Installation</h1>
 <p>This project requires that OpenCV is alredy installed in your machine. For this you can follow the <a href="https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html">OpenCV linux installation guide</a>.</p>
@@ -141,17 +141,18 @@ Installation</h1>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Execution</h1>
 <p>To execute the framework use the <code>./DeWAFF</code> command it can be as simple as to use </p><div class="fragment"><div class="line">./DeWAFF -i path/to/image</div>
-</div><!-- fragment --><p> But it supports a varied array of customization options, so a command can look like this </p><div class="fragment"><div class="line">./DeWAFF -i path/to/image -f dnlmf -p ws=31,ps=9,rs=15,ss=10</div>
-</div><!-- fragment --><p>These are the full program instructions: </p><div class="fragment"><div class="line">usage: ./DeWAFF [-f &lt;filter type&gt;] [-p &lt;filter parameters&gt;]</div>
-<div class="line">        [-b &lt;number of iterations&gt;] [-h]</div>
-<div class="line">        -i &lt;file name&gt; | -v &lt;file name&gt;</div>
+</div><!-- fragment --><p> But it supports a varied array of customization options, so a command can look like this </p><div class="fragment"><div class="line">./DeWAFF --image path/to/file --filter dgf --parameters ws=31,rs=15,ss=10 --benchmark 20 --quiet</div>
+</div><!-- fragment --><p>These are the full program instructions: </p><div class="fragment"><div class="line">usage: ./DeWAFF [-i | --image &lt;file name&gt;] | [-v | --video &lt;file name&gt;]</div>
+<div class="line">        [-f | --filter &lt;filter type&gt;]</div>
+<div class="line">        [-p | --parameters &lt;filter parameters&gt;]</div>
+<div class="line">        [-b | --benchmark &lt;number of iterations&gt;] [-h | --help]</div>
 <div class="line"> </div>
 <div class="line">    DEFAULT PARAMETERS</div>
 <div class="line">    - Filter:            dbf (Deceived Bilateral Filter)</div>
 <div class="line">    - Window size:       3</div>
 <div class="line">    - Neighborhood size: 3</div>
-<div class="line">    - Range Sigma:       10.0</div>
-<div class="line">    - Spatial Sigma:     10.0</div>
+<div class="line">    - Range Sigma:       10</div>
+<div class="line">    - Spatial Sigma:     10</div>
 <div class="line">    - USM Lambda:        2</div>
 <div class="line"> </div>
 <div class="line">    PROGRAM OPTIONS</div>
@@ -169,7 +170,7 @@ Execution</h1>
 <div class="line">        - dnlmf:deceived non local means filter</div>
 <div class="line">        - dgf:  deceived guided filter</div>
 <div class="line">    For example, to process an image using the deceived bilateral filter</div>
-<div class="line">    use: &#39;./DeWAFF -i image.png -f dbf&#39;</div>
+<div class="line">    use: &#39;./DeWAFF -i image.png -f dbf&#39;.</div>
 <div class="line"> </div>
 <div class="line">    -p, --parameters: Change the filter parameters. Available parameters:</div>
 <div class="line">        - ws:    Window size</div>
@@ -181,7 +182,8 @@ Execution</h1>
 <div class="line">    for example &#39;-p ws=15,rs=10,ss=10&#39; would change the window size and</div>
 <div class="line">    the range and spatial sigma values for the filter. Using just</div>
 <div class="line">    &#39;-p ws=15&#39; would only change its window size.</div>
-<div class="line">    The &#39;ns&#39; option Only works with the filter set to &#39;dnlm&#39;</div>
+<div class="line">    The &#39;ns&#39; option only works with the filter set to &#39;dnlm&#39;.</div>
+<div class="line">    If &#39;lambda=0&#39; the Laplacian the deceive will be disabled.</div>
 <div class="line"> </div>
 <div class="line">    -b, --benchmark: Run a series of N benchmarks for a video or an image.</div>
 <div class="line">    This option will run aseries of N benchmarks and</div>
@@ -189,20 +191,20 @@ Execution</h1>
 <div class="line">    Note: The results are NOT saved during this process.</div>
 <div class="line">    Indicate the number of iterations after the flag,</div>
 <div class="line">    for example &#39;-b 10&#39; would indicate to run the filter</div>
-<div class="line">    ten separate times</div>
+<div class="line">    ten separate times.</div>
 <div class="line"> </div>
 <div class="line">    -q, --quiet: Run in quiet mode. Does not displays the file&#39;s and</div>
-<div class="line">    filter&#39;s information</div>
+<div class="line">    filter&#39;s information.</div>
 <div class="line"> </div>
 <div class="line">    -h, --help: Display the program&#39;s help message. The long version</div>
-<div class="line">    --help shows the full program&#39;s help</div>
+<div class="line">    --help shows the full program&#39;s help.</div>
 </div><!-- fragment --><p>The output wil be generated in the <code>/path/to/file</code> directory with the applied filter acronym as suffix <code>file_ACRONYM.extension</code>.</p>
 <h1><a class="anchor" id="autotoc_md6"></a>
 Benchmark mode</h1>
 <p>There is also a benchmark mode that allows to run several executions over an image without saving it. This can be helpful to measure the performance of a particular DeWAF for your needs.</p>
 <p>To benchmark an image pass the image with the <code>-i</code> flag, but this time add the benchmark flag <code>-b</code> to indicate the number of benchmarking runs. The number of runs has to be a positive integer equal or greater than one </p><div class="fragment"><div class="line">./DeWAFF -i /path/to/image/file -b 10</div>
 </div><!-- fragment --><p> To benchmar a video just change the flag from <code>-i</code> to <code>-v</code> as follows </p><div class="fragment"><div class="line">./DeWAFF -v /path/to/video/file -b 3</div>
-</div><!-- fragment --><p> Take into consideration that videos take a long time to benchmark as each frame has to be processed! </p>
+</div><!-- fragment --><p> Take into consideration that videos take a long time to benchmark as <em>each frame</em> has to be processed! </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
