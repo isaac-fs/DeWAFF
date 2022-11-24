@@ -113,7 +113,7 @@ $(document).ready(function(){initNavTree('class_filters.html',''); initResizable
 <div class="center"><img src="class_filters__inherit__graph.png" border="0" usemap="#a_filters_inherit__map" alt="Inheritance graph"/></div>
 <map name="a_filters_inherit__map" id="a_filters_inherit__map">
 <area shape="rect" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ..." alt="" coords="13,5,75,32"/>
-<area shape="rect" href="class_de_w_a_f_f.html" title="Deceived Weighted Average Filters Framework class. It applies a filter which intput and weighting inp..." alt="" coords="5,80,83,107"/>
+<area shape="rect" href="class_de_w_a_f_f.html" title="Deceived Weighted Average Filters Framework class. It applies a filter where the intput is decoupled ..." alt="" coords="5,80,83,107"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
@@ -131,16 +131,16 @@ $(document).ready(function(){initNavTree('class_filters.html',''); initResizable
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a78a4c57fc753e6de4cca5c67a494afa6"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a78a4c57fc753e6de4cca5c67a494afa6">BilateralFilter</a> (const Mat &amp;inputImage, const Mat &amp;weightingImage, int windowSize, double spatialSigma, double rangeSigma)</td></tr>
-<tr class="memdesc:a78a4c57fc753e6de4cca5c67a494afa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image.  <a href="class_filters.html#a78a4c57fc753e6de4cca5c67a494afa6">More...</a><br /></td></tr>
+<tr class="memdesc:a78a4c57fc753e6de4cca5c67a494afa6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from its input image.  <a href="class_filters.html#a78a4c57fc753e6de4cca5c67a494afa6">More...</a><br /></td></tr>
 <tr class="separator:a78a4c57fc753e6de4cca5c67a494afa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa6faf8cd342f97cb42f303f12cf36702"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#aa6faf8cd342f97cb42f303f12cf36702">ScaledBilateralFilter</a> (const Mat &amp;inputImage, const Mat &amp;weightingImage, int windowSize, double spatialSigma, double rangeSigma)</td></tr>
-<tr class="memdesc:aa6faf8cd342f97cb42f303f12cf36702"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The difference between this filter and the not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter to have better performance under heavy AWGN.  <a href="class_filters.html#aa6faf8cd342f97cb42f303f12cf36702">More...</a><br /></td></tr>
+<tr class="memdesc:aa6faf8cd342f97cb42f303f12cf36702"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from its input image. The difference between this filter and the not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter for better performance under heavy AWGN.  <a href="class_filters.html#aa6faf8cd342f97cb42f303f12cf36702">More...</a><br /></td></tr>
 <tr class="separator:aa6faf8cd342f97cb42f303f12cf36702"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a02eafe8690dcd01dde0f81b1c5966b44"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44">NonLocalMeansFilter</a> (const Mat &amp;inputImage, const Mat &amp;weightingImage, int windowSize, int neighborhoodSize, double rangeSigma)</td></tr>
-<tr class="memdesc:a02eafe8690dcd01dde0f81b1c5966b44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding.  <a href="class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44">More...</a><br /></td></tr>
+<tr class="memdesc:a02eafe8690dcd01dde0f81b1c5966b44"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from its input image. The algorithm used for this filter is computationally demanding.  <a href="class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44">More...</a><br /></td></tr>
 <tr class="separator:a02eafe8690dcd01dde0f81b1c5966b44"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9eb2156050f10f40dfafa934f8f9ded8"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_filters.html#a9eb2156050f10f40dfafa934f8f9ded8">GuidedFilter</a> (const Mat &amp;inputImage, const Mat &amp;guidingImage, int windowSize, double rangeSigma)</td></tr>
-<tr class="memdesc:a9eb2156050f10f40dfafa934f8f9ded8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Guided Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. In this case the weighting image is known as guiding image. This filter uses a lineal algorithm, making it very fast computationally.  <a href="class_filters.html#a9eb2156050f10f40dfafa934f8f9ded8">More...</a><br /></td></tr>
+<tr class="memdesc:a9eb2156050f10f40dfafa934f8f9ded8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Apply a Guided Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from its input image. In this case the weighting image is known as guiding image. This filter uses a linear algorithm, making it fast computationally.  <a href="class_filters.html#a9eb2156050f10f40dfafa934f8f9ded8">More...</a><br /></td></tr>
 <tr class="separator:a9eb2156050f10f40dfafa934f8f9ded8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
@@ -198,12 +198,12 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Apply a Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. </p>
+<p>Apply a Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from its input image. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">weightingImage_</td><td>image used to calculate the kernel's weight </td></tr>
+    <tr><td class="paramname">weightingImage_</td><td>image used to calculate the kernel weight </td></tr>
     <tr><td class="paramname">inputImage_</td><td>image used as input for the filter </td></tr>
-    <tr><td class="paramname">windowSize</td><td>processing window size, has to be odd numbered and greater or equal than 3 </td></tr>
+    <tr><td class="paramname">windowSize</td><td>processing window size </td></tr>
     <tr><td class="paramname">spatialSigma</td><td>spatial standard deviation </td></tr>
     <tr><td class="paramname">rangeSigma</td><td>range or radiometric standard deviation </td></tr>
   </table>
@@ -270,7 +270,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Apply a Guided Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. In this case the weighting image is known as guiding image. This filter uses a lineal algorithm, making it very fast computationally. </p>
+<p>Apply a Guided Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from its input image. In this case the weighting image is known as guiding image. This filter uses a linear algorithm, making it fast computationally. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inputImage</td><td>image used as input for the filter </td></tr>
@@ -296,7 +296,7 @@ Protected Attributes</h2></td></tr>
  <p class="formulaDsp">
 \[ b_k = \bar{p}_k - a_k \mu_k \]
 </p>
-<p> \( \mu_k \) and \(\omega_k^2\) are the mean and the variance of \(I\) in \( \omega_k \), respectively. \( \frac{1}{|\omega|} \sum_{i\in \omega_k} p_i \) is the mean of \(p\) in \( \omega_k \). Finally the output is </p><p class="formulaDsp">
+<p> \( \mu_k \) and \(\omega_k^2\) are the mean and the variance of \(I\) in \( \omega_k \), respectively. \( \frac{1}{|\omega|} \sum_{i\in \omega_k} p_i \) is the mean of \(p\) in \( \omega_k \). Finally the output of the filter is </p><p class="formulaDsp">
 \[ q_i = \frac{1}{|\omega|} \sum_{k:i \in \omega_k} (a_k I_i + b_k )\]
 </p>
 
@@ -348,7 +348,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The algorithm used for this filter is very computationally demanding. </p>
+<p>Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from its input image. The algorithm used for this filter is computationally demanding. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">weightingImage_</td><td>image used to calculate the kernel's weight </td></tr>
@@ -363,7 +363,7 @@ Protected Attributes</h2></td></tr>
 <p>The discrete representation of the Non Local Means Filter is as follows: </p><p class="formulaDsp">
 \[ \phi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2}{h^2} \right)\]
 </p>
-<p> where \(B(p)\) is a patch part of the window \(\Omega\) centered at pixel \(p\). \(B(m)\) represents all of the patches at \(\Omega\) centered in each \(m\) pixel. The Non Local Means Filter calculates the Euclidean distance between each patch \(B(m)\) and \(B(p)\) for each window \(\Omega \subseteq U\). This is why this algorithm is highly demanding in computational terms. Each Euclidean distance matrix obtained from each patch pair is the input for a Gaussian decreasing function with standard deviation \(h\) that generates the new pixel \(p\) value.</p>
+<p> where \(B(p)\) is a patch part of the window \(\Omega\) centered at pixel \(p\). \(B(m)\) represents all of the patches at \(\Omega\) centered in each \(m\) pixel. The Non Local Means Filter calculates the Euclidean distance between each patch \(B(m)\) and \(B(p)\) for each window \(\Omega \subseteq U\). This is why this algorithm is demanding in computational terms. Each Euclidean distance matrix obtained from each patch pair is the input for a Gaussian decreasing function with standard deviation \(h\) that generates the new pixel \(p\) value.</p>
 <p>The Non Local Means filter's norm is calculated with: </p><p class="formulaDsp">
 \[\left( \sum_{m \subset \Omega} \phi_{\text{NLM}}(U, m, p) \right)^{-1} \]
 </p>
@@ -419,7 +419,7 @@ Protected Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from the input image. The difference between this filter and the not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter to have better performance under heavy AWGN. </p>
+<p>Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter, this means that the weighting image for the filter can be different from its input image. The difference between this filter and the not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter for better performance under heavy AWGN. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">weightingImage</td><td>image used to calculate the kernel's weight </td></tr>
