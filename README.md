@@ -10,7 +10,7 @@
 	- [Benchmark mode](#benchmark-mode)
 
 ## Description
-Implementation of the image abstraction framework *DeWAFF* in C++. This framework allows to use WAF (Weighted Average Filters) with their input decoupled as a weigthing input and a processing input. The weighthing input is used to generate the kernel values for the WAFF and  the processing input serves as input for the filter. This tehcnique is known as "deceiving", hence the name of the framework. With this approach the filter's kernel is weighted with the original input and as input it takes the original input filtered through an UnSharp Mask (Laplacian deceive). Normal WAFs use the same image for both processes. This is the novelty of this framework, to avoid a pipelined approach by applying two different techniques to an image, but instead combine them and apply them as one.
+Implementation of the image abstraction framework *DeWAFF* in C++. This framework allows to use WAF (Weighted Average Filters) with their input decoupled in to a weigthing input and a processing input. The weighthing input is used to generate the kernel values for the WAF and the processing input serves as input for the filter. This tehcnique is known as "deceiving", hence the name of the framework. With this approach the filter's kernel is weighted with the original input and as input it takes the original input filtered through an UnSharp Mask filter (Laplacian deceive). Normal WAFs use the same image for both processes. This is the novelty of this framework, to avoid a pipelined approach by applying two different techniques to an image, but instead combine them and apply them as one.
 
 The *DeWAFF* is aimed at improving patter recognition tasks providing the following improvements:
 - Noise reduction
@@ -19,7 +19,7 @@ The *DeWAFF* is aimed at improving patter recognition tasks providing the follow
 - Enhanced separation of ROIs from the background
 
 ## Documentation
-The documentation for this project is hosted at https://isaac-fs.github.io/DeWAFF/. Most of the mathematical formulations for the filters used for the framework are found the **Classes** section.
+The documentation for this project is hosted at https://isaac-fs.github.io/DeWAFF/. Most of the mathematical formulations for framework filters are found in the **Classes** section.
 
 ## Installation
 
@@ -114,13 +114,13 @@ The output wil be generated in the `/path/to/file` directory with the applied fi
 
 ## Benchmark mode
 
-There is also a benchmark mode that allows to run several executions over an image without saving it. This can be helpful to measure the performance of a particular DeWAF for your needs.
+The benchmark mode that allows to run several executions over an image without saving it. This can be helpful to measure the performance of a particular DeWAF for your needs.
 
 To benchmark an image pass the image with the `-i` flag, but this time add the benchmark flag `-b` to indicate the number of benchmarking runs. The number of runs has to be a positive integer equal or greater than one
 ```bash
     ./DeWAFF -i /path/to/image/file -b 10
 ```
-To benchmar a video just change the flag from `-i` to `-v` as follows
+To benchmark a video just change the flag from `-i` to `-v` as follows
 ```bash
     ./DeWAFF -v /path/to/video/file -b 3
 ```

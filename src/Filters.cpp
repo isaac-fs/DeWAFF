@@ -2,11 +2,11 @@
 
 /**
  * @brief Apply a Bilateral Filter to an image. This is the decoupled version of this filter, this means
- * that the weighting image for the filter can be different from the input image
+ * that the weighting image for the filter can be different from its input image.
  *
- * @param weightingImage_ image used to calculate the kernel's weight
+ * @param weightingImage_ image used to calculate the kernel weight
  * @param inputImage_ image used as input for the filter
- * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
+ * @param windowSize processing window size
  * @param spatialSigma spatial standard deviation
  * @param rangeSigma range or radiometric standard deviation
  * @return Mat output image
@@ -121,8 +121,8 @@ Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_,
 
 /**
  * @brief Apply a Scaled Bilateral Filter to an image. This is the decoupled version of this filter, this means
- * that the weighting image for the filter can be different from the input image. The difference between this filter and the
- * not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter to have better performance
+ * that the weighting image for the filter can be different from its input image. The difference between this filter and the
+ * not scaled version is that the weighting image is pre scaled through a Gaussian low pass filter for better performance
  * under heavy AWGN
  *
  * @param weightingImage image used to calculate the kernel's weight
@@ -170,8 +170,8 @@ Mat Filters::ScaledBilateralFilter(const Mat &inputImage, const Mat &weightingIm
 
 /**
  * @brief Apply a Non Local Means Filter to an image. This is the decoupled version of this filter, this means
- * that the weighting image for the filter can be different from the input image. The algorithm used for this filter
- * is very computationally demanding
+ * that the weighting image for the filter can be different from its input image. The algorithm used for this filter
+ * is computationally demanding
  *
  * @param weightingImage_ image used to calculate the kernel's weight
  * @param inputImage_ image used as input for the filter
@@ -233,7 +233,7 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
              * where  \f$B(p)\f$ is a patch part of the window \f$\Omega\f$ centered at pixel \f$p\f$. \f$B(m)\f$ represents all of the
              * patches at \f$\Omega\f$ centered in each \f$m\f$ pixel. The Non Local Means Filter calculates the Euclidean distance
              * between  each patch \f$B(m)\f$ and \f$B(p)\f$ for each window \f$\Omega \subseteq U\f$. This is why this algorithm is
-             * highly demanding in computational terms. Each Euclidean distance matrix obtained from each patch pair is the input for
+             * demanding in computational terms. Each Euclidean distance matrix obtained from each patch pair is the input for
              * a Gaussian decreasing function with standard deviation \f$h\f$ that generates the new pixel \f$p\f$ value.
              */
             cv::split(weightRegion, weightChannels);
@@ -269,8 +269,8 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
 
 /**
  * @brief Apply a Guided Filter to an image. This is the decoupled version of this filter, this means
- * that the weighting image for the filter can be different from the input image. In this case the weighting
- * image is known as guiding image. This filter uses a lineal algorithm, making it very fast computationally
+ * that the weighting image for the filter can be different from its input image. In this case the weighting
+ * image is known as guiding image. This filter uses a linear algorithm, making it fast computationally
  *
  * @param inputImage image used as input for the filter
  * @param guidingImage image used to calculate the kernel's weight
@@ -298,7 +298,7 @@ Mat Filters::GuidedFilter(const Mat &inputImage, const Mat &guidingImage, int wi
      * \f[ b_k = \bar{p}_k - a_k \mu_k \f]
      * \f$ \mu_k \f$ and \f$\omega_k^2\f$ are the mean and the variance of \f$I\f$ in \f$ \omega_k \f$, respectively.
      * \f$ \frac{1}{|\omega|} \sum_{i\in \omega_k} p_i \f$ is the mean of \f$p\f$ in \f$ \omega_k \f$.
-     * Finally the output is
+     * Finally the output of the filter is
      * \f[ q_i = \frac{1}{|\omega|} \sum_{k:i \in \omega_k} (a_k I_i + b_k )\f]
      */
 
