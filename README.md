@@ -103,11 +103,11 @@ usage: ./DeWAFF [-i | --image <file name>] | [-v | --video <file name>]
 	for example '-b 10' would indicate to run the filter
 	ten separate times.
 
-	-q, --quiet: Run in quiet mode. Does not displays the file's and
-	filter's information.
+	-q, --quiet: Run in quiet mode. Does not displays the file and
+	filter information.
 
 	-h, --help: Display the program's help message. The long version
-	--help shows the full program's help.
+	--help shows the full program's help
 ```
 
 The output wil be generated in the `/path/to/file` directory with the applied filter acronym as suffix `file_ACRONYM.extension`.

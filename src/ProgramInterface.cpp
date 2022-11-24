@@ -601,8 +601,8 @@ void ProgramInterface::longHelp() {
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-q, --quiet"
-	<< ": " << "Run in quiet mode. Does not displays the file's and"
-	<< "\n\t" << "filter's information."
+	<< ": " << "Run in quiet mode. Does not displays the file and"
+	<< "\n\t" << "filter information."
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "-h, --help"
