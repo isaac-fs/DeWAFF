@@ -94,7 +94,7 @@ Mat Utils::GaussianKernel(int windowSize, double sigma) {
 
 /**
  * @brief Filters an image through a Laplacian of Gaussian filter
- * \f[ \text{LoG}(X,Y) = \left( \frac{1}{\sigma^2} \right) \left( \frac{X^2 + Y^2}{\sigma^2} - 2 \right) \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \f]
+ * \f[ \text{LoG}(X,Y) = \frac{1}{2 \pi \sigma^2} \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \left( \frac{X^2 + Y^2}{\sigma^2} - 2 \right) \f]
  */
 Mat Utils::LoGFilter(const Mat &image, int windowSize, double sigma) {
 	// Get the Gaussian kernel
@@ -109,7 +109,7 @@ Mat Utils::LoGFilter(const Mat &image, int windowSize, double sigma) {
 
 	// Variance
 	double variance = pow(sigma, 2.0);
-    Mat laplacianOfGaussianKernel = (1.0 / variance) * (((X+Y)/variance) - 2.0).mul(gaussianKernel);
+    Mat laplacianOfGaussianKernel = (1.0 / (2.0 * CV_PI * variance)) * (((X+Y)/variance) - 2.0).mul(gaussianKernel);
 
 	// Normalization
 	laplacianOfGaussianKernel -= sum(laplacianOfGaussianKernel).val[0] / pow(windowSize, 2.0);
