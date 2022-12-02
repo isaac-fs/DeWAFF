@@ -173,7 +173,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Computes the Gaussian function of an input \( X \). </p>
 <p class="formulaDsp">
-\[ G(X) = \exp\left( -\frac{X}{2\sigma^2} \right) \]
+\[ G(X) = \frac{1}{\sigma\sqrt{2\pi}} \exp\left( -\frac{X}{2\sigma^2} \right) \]
 </p>
  <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -216,7 +216,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Computes a normalized Gaussian kernel. </p>
 <p class="formulaDsp">
-\[ G(X, Y) = \frac{1}{{|G(X, Y)|}} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \]
+\[ G(X, Y) = \frac{1}{2\pi \sigma^2} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \]
 </p>
 <p> where \(X\) and \(Y\) are the horizontal and vertical coordinates on a windowSize \( \times \)windowSize 2D plane. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -227,7 +227,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat Gaussian kernel </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00077">77</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00078">78</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -268,7 +268,7 @@ Public Member Functions</h2></td></tr>
 \[ \text{LoG}(X,Y) = \left( \frac{1}{\sigma^2} \right) \left( \frac{X^2 + Y^2}{\sigma^2} - 2 \right) \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \]
 </p>
  
-<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00098">98</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00099">99</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -426,7 +426,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Filtered image </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00134">134</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00135">135</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
 
 </div>
 </div>
@@ -466,7 +466,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00157">157</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00158">158</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
 
 </div>
 </div>
