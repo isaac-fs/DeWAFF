@@ -265,7 +265,7 @@ Public Member Functions</h2></td></tr>
 
 <p><a class="el" href="class_filters.html" title="Class containing Weighted Average Filters (WAFs). This implementation relies on padding the original ...">Filters</a> an image through a Laplacian of Gaussian filter. </p>
 <p class="formulaDsp">
-\[ \text{LoG}(X,Y) = \left( \frac{1}{\sigma^2} \right) \left( \frac{X^2 + Y^2}{\sigma^2} - 2 \right) \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \]
+\[ \text{LoG}(X,Y) = \frac{1}{2 \pi \sigma^2} \exp\left(-\frac{X^2 + Y^2}{2 \sigma^2}\right) \left( \frac{X^2 + Y^2}{\sigma^2} - 2 \right) \]
 </p>
  
 <p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00099">99</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
