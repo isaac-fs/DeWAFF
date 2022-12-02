@@ -86,8 +86,8 @@ Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_,
             rangeGaussian = lib.GaussianFunction(dL + da + db, rangeSigma);
 
             /**
-             * The two kernels convolve to obtain the Bilateral Filter kernel:
-             * \f[ \phi_{\text BF}(U, m, p) = G_{\text spatial}(||m-p||^2) \, G_{\text range}(||U(m)-U(p)||^2) \f]
+             * The two kernels are multiplied to obtain the Bilateral Filter kernel:
+             * \f[ \phi_{\text BF}(U, m, p) = G_{\text spatial}(U, m, p) \, G_{\text range}(U, m, p) \f]
              *
              */
             ;
@@ -147,8 +147,8 @@ Mat Filters::ScaledBilateralFilter(const Mat &inputImage, const Mat &weightingIm
      */
 
     /**
-     * The two kernels convolve to obtain the Bilateral Filter kernel:
-     * \f[ \phi_{\text SBF}(U^s, U, m, p) = G_{\text spatial}(||m-p||^2) \, G_{\text range}(||U^s(m)-U(p)||^2) \f]
+     * The two kernels are multiplied to obtain the Bilateral Filter kernel:
+     * \f[ \phi_{\text SBF}(U^s, U, m, p) = G_{\text spatial}(U^s, U, m, p) \, G_{\text range}(U^s, U, m, p) \f]
      *
      */
     ;
