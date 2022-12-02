@@ -54,7 +54,7 @@ void Utils::MinMax(const Mat& A, double* minA, double* maxA) {
 
 /**
  * @brief Computes the Gaussian function of an input \f$ X \f$
- * \f[ G(X) = \exp\left( -\frac{X}{2\sigma^2} \right) \f]
+ * \f[ G(X) = \frac{1}{\sigma\sqrt{2\pi}} \exp\left( -\frac{X}{2\sigma^2} \right) \f]
  * @param input Matrix input
  * @param sigma Desired standard deviation
  * @return Mat
@@ -62,13 +62,14 @@ void Utils::MinMax(const Mat& A, double* minA, double* maxA) {
 Mat Utils::GaussianFunction(Mat input, double sigma){
 	Mat output;
 	double variance = pow(sigma, 2.0);
-	exp(input * (-1 / (2 * variance)), output);
+	exp(input * (-1.0 / (2.0 * variance)), output);
+	output *= 1.0/(sqrt(2.0 * CV_PI) * sigma);
 	return output;
 }
 
 /**
  * @brief Computes a normalized Gaussian kernel
- * \f[ G(X, Y) =  \frac{1}{{|G(X, Y)|}} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \f]
+ * \f[ G(X, Y) =  \frac{1}{2\pi \sigma^2} \exp\left( -\frac{ X^2 + Y^2 }{ 2 \sigma_s^2} \right) \f]
  * where \f$X\f$ and \f$Y\f$ are the horizontal and vertical coordinates on a windowSize\f$ \times \f$windowSize 2D plane.
  * @param windowSize size of the window for the kernel
  * @param sigma standard deviation for the Gaussian distribution
@@ -108,7 +109,7 @@ Mat Utils::LoGFilter(const Mat &image, int windowSize, double sigma) {
 
 	// Variance
 	double variance = pow(sigma, 2.0);
-    Mat laplacianOfGaussianKernel = (1 / variance) * (((X+Y)/variance) - 2).mul(gaussianKernel);
+    Mat laplacianOfGaussianKernel = (1.0 / variance) * (((X+Y)/variance) - 2.0).mul(gaussianKernel);
 
 	// Normalization
 	laplacianOfGaussianKernel -= sum(laplacianOfGaussianKernel).val[0] / pow(windowSize, 2.0);
