@@ -218,8 +218,8 @@ Protected Attributes</h2></td></tr>
 \[ G_{\text range}(U, m, p) = \exp\left( -\frac{ ||U(m) - U(p)||^2 }{ 2{\sigma_r^2} } \right) \]
 </p>
 <p> with the intensity (range) values from an image region \( \Omega \subseteq U \). The range kernel uses the \( m_i \subset \Omega \) pixels intensities as weighting values for the pixel \( p = (x, y) \) instead of their locations as in the spatial kernel computation. In this case a the input \( U \) is separated into the three CIELab weightChannels and each channel is processed as an individual input \( U_{\text channel} \).</p>
-<p>The two kernels convolve to obtain the Bilateral Filter kernel: </p><p class="formulaDsp">
-\[ \phi_{\text BF}(U, m, p) = G_{\text spatial}(||m-p||^2) \, G_{\text range}(||U(m)-U(p)||^2) \]
+<p>The two kernels are multiplied to obtain the Bilateral Filter kernel: </p><p class="formulaDsp">
+\[ \phi_{\text BF}(U, m, p) = G_{\text spatial}(U, m, p) \, G_{\text range}(U, m, p) \]
 </p>
 <p>The Bilateral filter's norm corresponds to: </p><p class="formulaDsp">
 \[ \left( \sum_{m \subset \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \]
@@ -438,8 +438,8 @@ Protected Attributes</h2></td></tr>
 \[ G_{\text range}(U^s, U, m, p) = \exp\left( -\frac{ ||U^s(m) - U(p)||^2 }{ 2{\sigma_r^2} } \right) \]
 </p>
 <p> Notice the diferrence on the range kernel calculation where the scaled image is used.</p>
-<p>The two kernels convolve to obtain the Bilateral Filter kernel: </p><p class="formulaDsp">
-\[ \phi_{\text SBF}(U^s, U, m, p) = G_{\text spatial}(||m-p||^2) \, G_{\text range}(||U^s(m)-U(p)||^2) \]
+<p>The two kernels are multiplied to obtain the Bilateral Filter kernel: </p><p class="formulaDsp">
+\[ \phi_{\text SBF}(U^s, U, m, p) = G_{\text spatial}(U^s, U, m, p) \, G_{\text range}(U^s, U, m, p) \]
 </p>
 <p>The Bilateral filter's norm corresponds to: </p><p class="formulaDsp">
 \[ \left( \sum_{m \subset \Omega} \phi_{\text{SBF}}(U^s, U, m, p) \right)^{-1} \]
