@@ -13,10 +13,14 @@ DeWAFF::DeWAFF(): usmLambda(2){}
  * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
  * @param spatialSigma spatial standard deviation
  * @param rangeSigma range or radiometric standard deviation
- * @return Mat output image
+ * @return
+ * \f[ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, m, p) \right)^{-1}
+ * \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f]
+ * where
+ * \f[ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \f]
  */
 Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
-    // Pre-process the laplacian masked image
+    // Pre process the USM image
     Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
     return BilateralFilter(usmImage, inputImage, windowSize, spatialSigma, rangeSigma);
@@ -30,10 +34,14 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, doubl
  * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
  * @param spatialSigma spatial standard deviation
  * @param rangeSigma range or radiometric standard deviation
- * @return Mat output image
+ * @return
+ * \f[ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \right)^{-1}
+ * \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \, \hat{f}_{\text USM}(m) \right) \f]
+ * where
+ * \f[ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \f]
  */
 Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
-    // Pre-process the laplacian masked image
+    // Pre process the USM image
     Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
     return ScaledBilateralFilter(usmImage, inputImage, windowSize, spatialSigma, rangeSigma);
@@ -49,10 +57,14 @@ Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize,
  * @param neighborhoodSize spatial standard deviation
  * @param spatialSigma range or radiometric standard deviation
  * @param rangeSigma output image
- * @return Mat
+ * @return
+ * \f[ Y_{\phi_{\text NLM}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, m, p) \right)^{-1}
+ * \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f]
+ * where
+ * \f[ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \f]
  */
 Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int neighborhoodSize, double spatialSigma, double rangeSigma) {
-    // Pre-process the laplacian masked image
+    // Pre process the USM image
     Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
     return NonLocalMeansFilter(usmImage, inputImage, windowSize, neighborhoodSize, rangeSigma);
@@ -66,9 +78,13 @@ Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, i
  * @param windowSize processing window size, has to be odd numbered and greater or equal than 3
  * @param spatialSigma spatial standard deviation
  * @param rangeSigma range or radiometric standard deviation
- * @return Mat output image
+ * @return
+ * \f[ Y_{\phi_{\text GF}}(p) = \frac{1}{|\Omega|} \sum_{k:i \in \Omega_k} (a_k(U, \hat{f}_{\text USM}) \, U(m) + b_k(U, \hat{f}_{\text USM})\f]
+ * where
+ * \f[ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \f]
  */
 Mat DeWAFF::DeceivedGuidedFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
+    // Pre process the USM image
     Mat usmImage = lib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
     // Calculate the deceived filter
     return GuidedFilter(usmImage, inputImage, windowSize, rangeSigma);

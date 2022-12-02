@@ -102,7 +102,7 @@ Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_,
             /**
              * Finally the bilateral filter kernel can be convolved with the input as follows:
              * \f[ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, m, p) \right)^{-1}
-             * \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f]
+             * \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, p, m) \, U(m) \right) \f]
              */
             inputRegion = inputImage(xRange, yRange);
             cv::split(inputRegion, inputChannels);
@@ -161,7 +161,7 @@ Mat Filters::ScaledBilateralFilter(const Mat &inputImage, const Mat &weightingIm
     /**
      * Finally the bilateral filter kernel can be convolved with the input as follows:
      * \f[ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \right)^{-1}
-     * \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \, \hat{f}_{\text USM}(m) \right) \f]
+     * \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \, U(m) \right) \f]
      */
     Mat scaledImage(weightingImage.size(), weightingImage.type());
     GaussianBlur(weightingImage, scaledImage, Size(windowSize, windowSize), spatialSigma, 0.0, BORDER_CONSTANT);
@@ -251,7 +251,7 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
             /**
              * The NLM filter kernel is applied to the laplacian image:
              * \f[ Y_{\phi_{\text NLM}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, m, p) \right)^{-1}
-             * \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f]
+             * \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, p, m) \, U(m) \right) \f]
              */
             inputRegion = inputImage(xRange, yRange);
             cv::split(inputRegion, inputChannels);
