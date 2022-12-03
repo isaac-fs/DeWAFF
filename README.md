@@ -63,7 +63,7 @@ usage: ./DeWAFF [-i | --image <file name>] | [-v | --video <file name>]
 	- Neighborhood size: 3
 	- Range Sigma:       10
 	- Spatial Sigma:     10
-	- USM Lambda:        2
+	- USM Lambda:        1
 
 	PROGRAM OPTIONS
 	-i, --image: Process an image given a file name. The file name goes

@@ -124,7 +124,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 						}
 						case LAMBDA: {
 							if(value == NULL) abort();
-							int l = atoi(value);
+							double l = atof(value);
 							if(l < 0) errorMessage("Lambda value must be equal or greater than zero");
 							else framework.usmLambda = l;
                         	break;
@@ -534,21 +534,15 @@ void ProgramInterface::help() {
  * @brief Displays the program's full help
  */
 void ProgramInterface::longHelp() {
+	help();
 	std::cout
-	<< "usage: " << programName << " "
-	<< "[-i | --image <file name>] | [-v | --video <file name>]" << std::endl
-	<< "\t\t" << "[-f | --filter <filter type>]" << std::endl
-	<< "\t\t" << "[-p | --parameters <filter parameters>]" << std::endl
-	<< "\t\t" << "[-b | --benchmark <number of iterations>] [-h | --help]"
-	<< std::endl
-
 	<< "\n\t" << std::left << "DEFAULT PARAMETERS"
 	<< "\n\t" << std::setw(21) << "- Filter:" << "dbf (Deceived Bilateral Filter)"
 	<< "\n\t" << std::setw(21) << "- Window size:" << 3
 	<< "\n\t" << std::setw(21) << "- Neighborhood size:" << 3
 	<< "\n\t" << std::setw(21) << "- Range Sigma:" << 10.0
 	<< "\n\t" << std::setw(21) << "- Spatial Sigma:" << 10.0
-	<< "\n\t" << std::setw(21) << "- USM Lambda:" << 2
+	<< "\n\t" << std::setw(21) << "- USM Lambda:" << 1.0
 	<< "\n" << std::endl
 
 	<< "\t" << std::left << "PROGRAM OPTIONS\n"

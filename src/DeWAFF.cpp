@@ -4,7 +4,7 @@
  * @brief DeWAFF class constructor. Sets the lambda parameter for the Laplacian deceive
  *
  */
-DeWAFF::DeWAFF(): usmLambda(2){}
+DeWAFF::DeWAFF(): usmLambda(1.0){}
 
 /**
  * @brief Apply a Deceived Bilateral Filter to an image.
