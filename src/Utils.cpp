@@ -132,7 +132,7 @@ Mat Utils::LoGFilter(const Mat &image, int windowSize, double sigma) {
  * @param sigma standard distribution
  * @return Filtered image
  */
-Mat Utils::NonAdaptiveUSMFilter(const Mat &image, int windowSize, int lambda, double sigma) {
+Mat Utils::NonAdaptiveUSMFilter(const Mat &image, int windowSize, double lambda, double sigma) {
 	// Generate the Laplacian kernel
 	Mat LoGFilteredImage = LoGFilter(image, windowSize, sigma);
 

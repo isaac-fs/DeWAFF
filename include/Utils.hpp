@@ -32,7 +32,7 @@ class Utils {
         Mat GaussianFunction(Mat input, double sigma);
         Mat GaussianKernel(int windowSize, double sigma);
         Mat LoGFilter(const Mat &image, int windowSize, double sigma);
-        Mat NonAdaptiveUSMFilter(const Mat &image, int windowSize, int lambda, double sigma);
+        Mat NonAdaptiveUSMFilter(const Mat &image, int windowSize, double lambda, double sigma);
 		Mat RegionDistancesMatrix(const Mat& image, int neighborhoodSize);
 };
 
