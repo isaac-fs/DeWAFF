@@ -87,7 +87,7 @@ Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_,
 
             /**
              * The two kernels are multiplied to obtain the Bilateral Filter kernel:
-             * \f[ \phi_{\text BF}(U, m, p) = G_{\text spatial}(U, m, p) \, G_{\text range}(U, m, p) \f]
+             * \f[ \psi_{\text BF}(U, m, p) = G_{\text spatial}(U, m, p) \, G_{\text range}(U, m, p) \f]
              *
              */
             ;
@@ -95,14 +95,14 @@ Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_,
 
             /**
              * The Bilateral filter's norm corresponds to:
-             * \f[ \left( \sum_{m \subset \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \f]
+             * \f[ \left( \sum_{m \subset \Omega} \psi_{\text{BF}}(U, m, p) \right)^{-1} \f]
              */
             bilateralFilterNorm = sum(bilateralFilter).val[0];
 
             /**
              * Finally the bilateral filter kernel can be convolved with the input as follows:
-             * \f[ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, m, p) \right)^{-1}
-             * \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, p, m) \, U(m) \right) \f]
+             * \f[ Y_{\psi_{\text BF}}(p) = \left( \sum_{m \subset \Omega} \psi_{\text BF}(U, m, p) \right)^{-1}
+             * \left( \sum_{m \subset \Omega} \psi_{\text BF}(U, p, m) \, U(m) \right) \f]
              */
             inputRegion = inputImage(xRange, yRange);
             cv::split(inputRegion, inputChannels);
@@ -148,20 +148,20 @@ Mat Filters::ScaledBilateralFilter(const Mat &inputImage, const Mat &weightingIm
 
     /**
      * The two kernels are multiplied to obtain the Bilateral Filter kernel:
-     * \f[ \phi_{\text SBF}(U^s, U, m, p) = G_{\text spatial}(U^s, U, m, p) \, G_{\text range}(U^s, U, m, p) \f]
+     * \f[ \psi_{\text SBF}(U^s, U, m, p) = G_{\text spatial}(U^s, U, m, p) \, G_{\text range}(U^s, U, m, p) \f]
      *
      */
     ;
 
     /**
      * The Bilateral filter's norm corresponds to:
-     * \f[ \left( \sum_{m \subset \Omega} \phi_{\text{SBF}}(U^s, U, m, p) \right)^{-1} \f]
+     * \f[ \left( \sum_{m \subset \Omega} \psi_{\text{SBF}}(U^s, U, m, p) \right)^{-1} \f]
      */
 
     /**
      * Finally the bilateral filter kernel can be convolved with the input as follows:
-     * \f[ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \right)^{-1}
-     * \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \, U(m) \right) \f]
+     * \f[ Y_{\psi_{\text SBF}}(p) = \left( \sum_{m \subset \Omega} \psi_{\text SBF}(U^s, U, m, p) \right)^{-1}
+     * \left( \sum_{m \subset \Omega} \psi_{\text SBF}(U^s, U, m, p) \, U(m) \right) \f]
      */
     Mat scaledImage(weightingImage.size(), weightingImage.type());
     GaussianBlur(weightingImage, scaledImage, Size(windowSize, windowSize), spatialSigma, 0.0, BORDER_CONSTANT);
@@ -229,7 +229,7 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
 
             /**
              * The discrete representation of the Non Local Means Filter is as follows:
-             * \f[ \phi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2}{h^2} \right)\f]
+             * \f[ \psi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2}{h^2} \right)\f]
              * where  \f$B(p)\f$ is a patch part of the window \f$\Omega\f$ centered at pixel \f$p\f$. \f$B(m)\f$ represents all of the
              * patches at \f$\Omega\f$ centered in each \f$m\f$ pixel. The Non Local Means Filter calculates the Euclidean distance
              * between  each patch \f$B(m)\f$ and \f$B(p)\f$ for each window \f$\Omega \subseteq U\f$. This is why this algorithm is
@@ -244,14 +244,14 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
 
             /**
              * The Non Local Means filter's norm is calculated with:
-             * \f[\left( \sum_{m \subset \Omega} \phi_{\text{NLM}}(U, m, p) \right)^{-1} \f]
+             * \f[\left( \sum_{m \subset \Omega} \psi_{\text{NLM}}(U, m, p) \right)^{-1} \f]
              */
             nonLocalMeansFilterNorm = sum(nonLocalMeansFilter).val[0];
 
             /**
              * The NLM filter kernel is applied to the laplacian image:
-             * \f[ Y_{\phi_{\text NLM}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, m, p) \right)^{-1}
-             * \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, p, m) \, U(m) \right) \f]
+             * \f[ Y_{\psi_{\text NLM}}(p) = \left( \sum_{m \subset \Omega} \psi_{\text NLM}(U, m, p) \right)^{-1}
+             * \left( \sum_{m \subset \Omega} \psi_{\text NLM}(U, p, m) \, U(m) \right) \f]
              */
             inputRegion = inputImage(xRange, yRange);
             cv::split(inputRegion, inputChannels);

@@ -14,10 +14,10 @@ DeWAFF::DeWAFF(): usmLambda(1.0){}
  * @param spatialSigma spatial standard deviation
  * @param rangeSigma range or radiometric standard deviation
  * @return
- * \f[ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, m, p) \right)^{-1}
- * \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f]
+ * \f[ Y_{\psi_{\text BF}}(p) = \left( \sum_{m \subset \Omega} \psi_{\text BF}(U, m, p) \right)^{-1}
+ * \left( \sum_{m \subset \Omega} \psi_{\text BF}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f]
  * where
- * \f[ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \f]
+ * \f[ \hat{f}_{\text USM} = U + \lambda \, \text{LoG} \f]
  */
 Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
     // Pre process the USM image
@@ -35,10 +35,10 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, doubl
  * @param spatialSigma spatial standard deviation
  * @param rangeSigma range or radiometric standard deviation
  * @return
- * \f[ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \right)^{-1}
- * \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \, \hat{f}_{\text USM}(m) \right) \f]
+ * \f[ Y_{\psi_{\text SBF}}(p) = \left( \sum_{m \subset \Omega} \psi_{\text SBF}(U^s, U, m, p) \right)^{-1}
+ * \left( \sum_{m \subset \Omega} \psi_{\text SBF}(U^s, U, m, p) \, \hat{f}_{\text USM}(m) \right) \f]
  * where
- * \f[ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \f]
+ * \f[ \hat{f}_{\text USM} = U + \lambda \, \text{LoG} \f]
  */
 Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
     // Pre process the USM image
@@ -58,10 +58,10 @@ Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize,
  * @param spatialSigma range or radiometric standard deviation
  * @param rangeSigma output image
  * @return
- * \f[ Y_{\phi_{\text NLM}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, m, p) \right)^{-1}
- * \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f]
+ * \f[ Y_{\psi_{\text NLM}}(p) = \left( \sum_{m \subset \Omega} \psi_{\text NLM}(U, m, p) \right)^{-1}
+ * \left( \sum_{m \subset \Omega} \psi_{\text NLM}(U, p, m) \, \hat{f}_{\text USM}(m) \right) \f]
  * where
- * \f[ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \f]
+ * \f[ \hat{f}_{\text USM} = U + \lambda \, \text{LoG} \f]
  */
 Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int neighborhoodSize, double spatialSigma, double rangeSigma) {
     // Pre process the USM image
@@ -79,9 +79,9 @@ Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, i
  * @param spatialSigma spatial standard deviation
  * @param rangeSigma range or radiometric standard deviation
  * @return
- * \f[ Y_{\phi_{\text GF}}(p) = \frac{1}{|\Omega|} \sum_{k:i \in \Omega_k} (a_k(U, \hat{f}_{\text USM}) \, U(m) + b_k(U, \hat{f}_{\text USM})\f]
+ * \f[ Y_{\psi_{\text GF}}(p) = \frac{1}{|\Omega|} \sum_{k:i \in \Omega_k} (a_k(U, \hat{f}_{\text USM}) \, U(m) + b_k(U, \hat{f}_{\text USM})\f]
  * where
- * \f[ \hat{f}_{\text USM} = U + \lambda \mathcal{L} \f]
+ * \f[ \hat{f}_{\text USM} = U + \lambda \, \text{LoG} \f]
  */
 Mat DeWAFF::DeceivedGuidedFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
     // Pre process the USM image

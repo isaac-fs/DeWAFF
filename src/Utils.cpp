@@ -125,10 +125,10 @@ Mat Utils::LoGFilter(const Mat &image, int windowSize, double sigma) {
 
 /**
  * @brief Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter
- * \f[ \hat{f}_{\text USM} = U + \lambda \ \mathcal{L} \text{ where } \mathcal{L} = l * g \f]
+ * \f[ \hat{f}_{\text USM} = U + \lambda \ \text{LoG} \text{ where } \text{LoG} = l * g \f]
  * @param image Input image to filter
  * @param windowSize Size of the filter
- * @param lambda constan for the Laplacian deceive
+ * @param lambda constant for the Laplacian deceive
  * @param sigma standard distribution
  * @return Filtered image
  */
