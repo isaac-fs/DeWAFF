@@ -413,13 +413,13 @@ Public Member Functions</h2></td></tr>
 
 <p>Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter. </p>
 <p class="formulaDsp">
-\[ \hat{f}_{\text USM} = U + \lambda \ \mathcal{L} \text{ where } \mathcal{L} = l * g \]
+\[ \hat{f}_{\text USM} = U + \lambda \ \text{LoG} \text{ where } \text{LoG} = l * g \]
 </p>
  <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">image</td><td>Input image to filter </td></tr>
     <tr><td class="paramname">windowSize</td><td>Size of the filter </td></tr>
-    <tr><td class="paramname">lambda</td><td>constan for the Laplacian deceive </td></tr>
+    <tr><td class="paramname">lambda</td><td>constant for the Laplacian deceive </td></tr>
     <tr><td class="paramname">sigma</td><td>standard distribution </td></tr>
   </table>
   </dd>

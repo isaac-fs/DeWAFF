@@ -219,13 +219,13 @@ Protected Attributes</h2></td></tr>
 </p>
 <p> with the intensity (range) values from an image region \( \Omega \subseteq U \). The range kernel uses the \( m_i \subset \Omega \) pixels intensities as weighting values for the pixel \( p = (x, y) \) instead of their locations as in the spatial kernel computation. In this case a the input \( U \) is separated into the three CIELab weightChannels and each channel is processed as an individual input \( U_{\text channel} \).</p>
 <p>The two kernels are multiplied to obtain the Bilateral Filter kernel: </p><p class="formulaDsp">
-\[ \phi_{\text BF}(U, m, p) = G_{\text spatial}(U, m, p) \, G_{\text range}(U, m, p) \]
+\[ \psi_{\text BF}(U, m, p) = G_{\text spatial}(U, m, p) \, G_{\text range}(U, m, p) \]
 </p>
 <p>The Bilateral filter's norm corresponds to: </p><p class="formulaDsp">
-\[ \left( \sum_{m \subset \Omega} \phi_{\text{BF}}(U, m, p) \right)^{-1} \]
+\[ \left( \sum_{m \subset \Omega} \psi_{\text{BF}}(U, m, p) \right)^{-1} \]
 </p>
 <p>Finally the bilateral filter kernel can be convolved with the input as follows: </p><p class="formulaDsp">
-\[ Y_{\phi_{\text BF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, m, p) \right)^{-1} \left( \sum_{m \subset \Omega} \phi_{\text BF}(U, p, m) \, U(m) \right) \]
+\[ Y_{\psi_{\text BF}}(p) = \left( \sum_{m \subset \Omega} \psi_{\text BF}(U, m, p) \right)^{-1} \left( \sum_{m \subset \Omega} \psi_{\text BF}(U, p, m) \, U(m) \right) \]
 </p>
 
 <p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00014">14</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
@@ -361,14 +361,14 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat output image </dd></dl>
 <p>The discrete representation of the Non Local Means Filter is as follows: </p><p class="formulaDsp">
-\[ \phi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2}{h^2} \right)\]
+\[ \psi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2}{h^2} \right)\]
 </p>
 <p> where \(B(p)\) is a patch part of the window \(\Omega\) centered at pixel \(p\). \(B(m)\) represents all of the patches at \(\Omega\) centered in each \(m\) pixel. The Non Local Means Filter calculates the Euclidean distance between each patch \(B(m)\) and \(B(p)\) for each window \(\Omega \subseteq U\). This is why this algorithm is demanding in computational terms. Each Euclidean distance matrix obtained from each patch pair is the input for a Gaussian decreasing function with standard deviation \(h\) that generates the new pixel \(p\) value.</p>
 <p>The Non Local Means filter's norm is calculated with: </p><p class="formulaDsp">
-\[\left( \sum_{m \subset \Omega} \phi_{\text{NLM}}(U, m, p) \right)^{-1} \]
+\[\left( \sum_{m \subset \Omega} \psi_{\text{NLM}}(U, m, p) \right)^{-1} \]
 </p>
 <p>The NLM filter kernel is applied to the laplacian image: </p><p class="formulaDsp">
-\[ Y_{\phi_{\text NLM}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, m, p) \right)^{-1} \left( \sum_{m \subset \Omega} \phi_{\text NLM}(U, p, m) \, U(m) \right) \]
+\[ Y_{\psi_{\text NLM}}(p) = \left( \sum_{m \subset \Omega} \psi_{\text NLM}(U, m, p) \right)^{-1} \left( \sum_{m \subset \Omega} \psi_{\text NLM}(U, p, m) \, U(m) \right) \]
 </p>
 
 <p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00183">183</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
@@ -439,13 +439,13 @@ Protected Attributes</h2></td></tr>
 </p>
 <p> Notice the diferrence on the range kernel calculation where the scaled image is used.</p>
 <p>The two kernels are multiplied to obtain the Bilateral Filter kernel: </p><p class="formulaDsp">
-\[ \phi_{\text SBF}(U^s, U, m, p) = G_{\text spatial}(U^s, U, m, p) \, G_{\text range}(U^s, U, m, p) \]
+\[ \psi_{\text SBF}(U^s, U, m, p) = G_{\text spatial}(U^s, U, m, p) \, G_{\text range}(U^s, U, m, p) \]
 </p>
 <p>The Bilateral filter's norm corresponds to: </p><p class="formulaDsp">
-\[ \left( \sum_{m \subset \Omega} \phi_{\text{SBF}}(U^s, U, m, p) \right)^{-1} \]
+\[ \left( \sum_{m \subset \Omega} \psi_{\text{SBF}}(U^s, U, m, p) \right)^{-1} \]
 </p>
 <p>Finally the bilateral filter kernel can be convolved with the input as follows: </p><p class="formulaDsp">
-\[ Y_{\phi_{\text SBF}}(p) = \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \right)^{-1} \left( \sum_{m \subset \Omega} \phi_{\text SBF}(U^s, U, m, p) \, U(m) \right) \]
+\[ Y_{\psi_{\text SBF}}(p) = \left( \sum_{m \subset \Omega} \psi_{\text SBF}(U^s, U, m, p) \right)^{-1} \left( \sum_{m \subset \Omega} \psi_{\text SBF}(U^s, U, m, p) \, U(m) \right) \]
 </p>
 
 <p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00135">135</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
