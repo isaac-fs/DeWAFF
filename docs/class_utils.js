@@ -5,6 +5,6 @@ var class_utils =
     [ "LoGFilter", "class_utils.html#a27ea9fba4632480b0a2fb33e5157ecbb", null ],
     [ "MeshGrid", "class_utils.html#acebbcc4ea191555ab087d05145edd3cc", null ],
     [ "MinMax", "class_utils.html#a012b8177e7e05918d805620bf736ee9f", null ],
-    [ "NonAdaptiveUSMFilter", "class_utils.html#a65a7038fa77057d38cbb66e0c4f3d56b", null ],
+    [ "NonAdaptiveUSMFilter", "class_utils.html#af388b377107b9cc3bcebd13ba90e34e7", null ],
     [ "RegionDistancesMatrix", "class_utils.html#a79cc561482d31a4ba67eb9744a6da10b", null ]
 ];
