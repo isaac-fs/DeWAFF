@@ -115,12 +115,12 @@ $(document).ready(function(){initNavTree('_filters_8cpp_source.html',''); initRe
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="comment">// Pre compute the m - p = |m-p| factors</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    Mat X, Y;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    Range range = Range((-windowSize / 2), (windowSize / 2) + 1);</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    lib.<a class="code" href="class_utils.html#acebbcc4ea191555ab087d05145edd3cc">MeshGrid</a>(range, X, Y);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    utilsLib.<a class="code" href="class_utils.html#acebbcc4ea191555ab087d05145edd3cc">MeshGrid</a>(range, X, Y);</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    pow(X, 2.0, X);</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    pow(Y, 2.0, Y);</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    Mat euclideanDistances = X + Y;</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    Mat spatialGaussian = lib.<a class="code" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a>(euclideanDistances, spatialSigma);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    Mat spatialGaussian = utilsLib.<a class="code" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a>(euclideanDistances, spatialSigma);</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="comment">// Prepare variables for the bilateral filtering</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    Mat outputImage(inputImage.size(), inputImage.type());</div>
@@ -158,7 +158,7 @@ $(document).ready(function(){initNavTree('_filters_8cpp_source.html',''); initRe
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            cv::pow(weightingChannels[L] - pixel.val[L], 2.0, dL);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            cv::pow(weightingChannels[a] - pixel.val[a], 2.0, da);</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            cv::pow(weightingChannels[b] - pixel.val[b], 2.0, db);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            rangeGaussian = lib.<a class="code" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a>(dL + da + db, rangeSigma);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            rangeGaussian = utilsLib.<a class="code" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a>(dL + da + db, rangeSigma);</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            ;</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            bilateralFilter = spatialGaussian.mul(rangeGaussian);</div>
@@ -241,9 +241,9 @@ $(document).ready(function(){initNavTree('_filters_8cpp_source.html',''); initRe
 <div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            weightRegion = weightingImage(xRange, yRange);</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            cv::split(weightRegion, weightChannels);</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            nlmChannels[L] = lib.<a class="code" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a>(lib.<a class="code" href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">RegionDistancesMatrix</a>(weightChannels[L], neighborhoodSize), h);</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            nlmChannels[a] = lib.<a class="code" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a>(lib.<a class="code" href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">RegionDistancesMatrix</a>(weightChannels[a], neighborhoodSize), h);</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            nlmChannels[b] = lib.<a class="code" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a>(lib.<a class="code" href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">RegionDistancesMatrix</a>(weightChannels[b], neighborhoodSize), h);</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            nlmChannels[L] = utilsLib.<a class="code" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a>(utilsLib.<a class="code" href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">RegionDistancesMatrix</a>(weightChannels[L], neighborhoodSize), h);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            nlmChannels[a] = utilsLib.<a class="code" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a>(utilsLib.<a class="code" href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">RegionDistancesMatrix</a>(weightChannels[a], neighborhoodSize), h);</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            nlmChannels[b] = utilsLib.<a class="code" href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">GaussianFunction</a>(utilsLib.<a class="code" href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">RegionDistancesMatrix</a>(weightChannels[b], neighborhoodSize), h);</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            nonLocalMeansFilter = (nlmChannels[L] + nlmChannels[a] + nlmChannels[b]);</div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
 <div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            nonLocalMeansFilterNorm = sum(nonLocalMeansFilter).val[0];</div>
