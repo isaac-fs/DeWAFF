@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['logfilter_46',['LoGFilter',['../class_utils.html#a27ea9fba4632480b0a2fb33e5157ecbb',1,'Utils']]]
+  ['logfilter_48',['LoGFilter',['../class_utils.html#a27ea9fba4632480b0a2fb33e5157ecbb',1,'Utils']]]
 ];

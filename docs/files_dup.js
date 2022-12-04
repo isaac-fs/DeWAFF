@@ -30,10 +30,14 @@ var files_dup =
     [ "ProgramInterface.hpp", "_program_interface_8hpp.html", [
       [ "ProgramInterface", "class_program_interface.html", "class_program_interface" ]
     ] ],
+    [ "Timer.cpp", "_timer_8cpp_source.html", null ],
+    [ "Timer.cpp.o.d", "_timer_8cpp_8o_8d_source.html", null ],
+    [ "Timer.hpp", "_timer_8hpp.html", [
+      [ "Timer", "class_timer.html", "class_timer" ]
+    ] ],
     [ "Utils.cpp", "_utils_8cpp_source.html", null ],
     [ "Utils.cpp.o.d", "_utils_8cpp_8o_8d_source.html", null ],
     [ "Utils.hpp", "_utils_8hpp.html", [
-      [ "Utils", "class_utils.html", "class_utils" ],
-      [ "Timer", "class_timer.html", "class_timer" ]
+      [ "Utils", "class_utils.html", "class_utils" ]
     ] ]
 ];
