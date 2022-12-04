@@ -21,7 +21,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 	rangeSigma = 10.0;
 
 	// Libraries
-	lib = Utils();
+	utilsLib = Utils();
 	timer = Timer();
 
 	// Set the program name
@@ -219,7 +219,7 @@ Mat ProgramInterface::inputPreProcessor(const Mat &inputImage) {
     // Input checking
     int type = inputImage.type();
 	double minVal, maxVal;
-	lib.MinMax(inputImage, &minVal, &maxVal);
+	utilsLib.MinMax(inputImage, &minVal, &maxVal);
 	if(!(type == CV_8UC1 || type == CV_8UC3) || minVal < 0 || maxVal > 255)
 	   errorMessage("Input frame must be a Grayscale or RGB unsigned integer matrix of size NxMx1 or NxMx3 on the closed interval [0,255]");
 

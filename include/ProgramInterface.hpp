@@ -17,6 +17,7 @@
 #include <iostream>
 #include <getopt.h>
 #include "Utils.hpp"
+#include "Timer.hpp"
 #include "DeWAFF.hpp"
 
 /**
@@ -46,7 +47,7 @@ private:
 
 	// Framework configuration
 	DeWAFF framework;
-	Utils lib;
+	Utils utilsLib;
 	Timer timer;
 	int windowSize, neighborhoodSize;
 	double rangeSigma, spatialSigma;

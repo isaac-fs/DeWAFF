@@ -12,7 +12,6 @@
 
 #include <iostream>
 #include <algorithm>
-#include <sys/time.h>
 #include "opencv2/core/core.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/highgui/highgui.hpp"
@@ -34,18 +33,6 @@ class Utils {
         Mat LoGFilter(const Mat &image, int windowSize, double sigma);
         Mat NonAdaptiveUSMFilter(const Mat &image, int windowSize, double lambda, double sigma);
 		Mat RegionDistancesMatrix(const Mat& image, int neighborhoodSize);
-};
-
-/**
- * @brief Class containing the timer methods for the benchmarking of file processing
- *
- */
-class Timer : Utils {
-    private:
-        double startTime;
-    public:
-        void start(); // Starts timer and resets the elapsed time
-        double stop(); // Stops the timer and returns the elapsed time
 };
 
 #endif /* UTILS_HPP_ */

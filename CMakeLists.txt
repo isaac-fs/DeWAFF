@@ -10,7 +10,8 @@ add_executable(DeWAFF   src/Main.cpp
                         src/Filters.cpp
                         src/GuidedFilter.cpp
                         src/ProgramInterface.cpp
-                        src/Utils.cpp)
+                        src/Utils.cpp
+                        src/Timer.cpp)
 target_link_libraries(DeWAFF ${OpenCV_LIBS})
 
 # Parallel flags
