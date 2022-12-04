@@ -26,7 +26,7 @@ Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_,
     // Pre compute the m - p = |m-p| factors
     Mat X, Y;
     Range range = Range((-windowSize / 2), (windowSize / 2) + 1);
-    lib.MeshGrid(range, X, Y);
+    utilsLib.MeshGrid(range, X, Y);
     pow(X, 2.0, X);
     pow(Y, 2.0, Y);
     Mat euclideanDistances = X + Y;
@@ -37,7 +37,7 @@ Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_,
      * with the spatial values from an image region \f$ \Omega \subseteq U \f$.
      * The spatial kernel uses the \f$ m_i \subset \Omega \f$ pixels coordinates as weighting values for the pixel \f$ p = (x, y) \f$.
      */
-    Mat spatialGaussian = lib.GaussianFunction(euclideanDistances, spatialSigma);
+    Mat spatialGaussian = utilsLib.GaussianFunction(euclideanDistances, spatialSigma);
 
     // Prepare variables for the bilateral filtering
     Mat outputImage(inputImage.size(), inputImage.type());
@@ -83,7 +83,7 @@ Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_,
             cv::pow(weightingChannels[L] - pixel.val[L], 2.0, dL);
             cv::pow(weightingChannels[a] - pixel.val[a], 2.0, da);
             cv::pow(weightingChannels[b] - pixel.val[b], 2.0, db);
-            rangeGaussian = lib.GaussianFunction(dL + da + db, rangeSigma);
+            rangeGaussian = utilsLib.GaussianFunction(dL + da + db, rangeSigma);
 
             /**
              * The two kernels are multiplied to obtain the Bilateral Filter kernel:
@@ -237,9 +237,9 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
              * a Gaussian decreasing function with standard deviation \f$h\f$ that generates the new pixel \f$p\f$ value.
              */
             cv::split(weightRegion, weightChannels);
-            nlmChannels[L] = lib.GaussianFunction(lib.RegionDistancesMatrix(weightChannels[L], neighborhoodSize), h);
-            nlmChannels[a] = lib.GaussianFunction(lib.RegionDistancesMatrix(weightChannels[a], neighborhoodSize), h);
-            nlmChannels[b] = lib.GaussianFunction(lib.RegionDistancesMatrix(weightChannels[b], neighborhoodSize), h);
+            nlmChannels[L] = utilsLib.GaussianFunction(utilsLib.RegionDistancesMatrix(weightChannels[L], neighborhoodSize), h);
+            nlmChannels[a] = utilsLib.GaussianFunction(utilsLib.RegionDistancesMatrix(weightChannels[a], neighborhoodSize), h);
+            nlmChannels[b] = utilsLib.GaussianFunction(utilsLib.RegionDistancesMatrix(weightChannels[b], neighborhoodSize), h);
             nonLocalMeansFilter = (nlmChannels[L] + nlmChannels[a] + nlmChannels[b]);
 
             /**

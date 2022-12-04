@@ -30,9 +30,7 @@ using namespace cv;
 class Filters {
     private:
         enum CIELab : int {L, a, b}; // CIELab channels
-
-    protected:
-        Utils lib;
+        Utils utilsLib;
 
     public:
         Mat BilateralFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, double spatialSigma, double rangeSigma);

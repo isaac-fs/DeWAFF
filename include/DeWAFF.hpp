@@ -14,6 +14,9 @@
 #include "Utils.hpp"
 #include "Filters.hpp"
 
+#include "Filters.hpp"
+#include "Utils.hpp"
+
 using namespace cv;
 
 /**
@@ -22,7 +25,10 @@ using namespace cv;
  * so it is possible to deceive the filter with a manipulated input and to still use the original
  * input weighting values for the processing
  */
-class DeWAFF : protected Filters {
+class DeWAFF {
+	private:
+		Utils utilsLib;
+		Filters filtersLib;
 	public:
 		DeWAFF();
 		double usmLambda; /// Parameter for the Laplacian deceive
