@@ -111,8 +111,8 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 						case RANGE_SIGMA: {
 							if(value == NULL) abort();
 							double rs = atof(value);
-							if(rs < 0.0001) errorMessage("Range Sigma value must be greater than 0.0001");
-							else rangeSigma = rs;
+							if(rs < 0) errorMessage("Range sigma must be a positive number");
+							rangeSigma = rs;
 							break;
 						}
 						case SPATIAL_SIGMA: {
@@ -120,8 +120,8 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 								errorMessage("The Deceived Guided Filter uses only the range sigma (rs) to calculate its epsilon value");
 							if(value == NULL) abort();
 							double ss = atof(value);
-							if(ss < 0.0001) errorMessage("Spatial Sigma value must be greater than 0.0001");
-							else spatialSigma = ss;
+							if(ss < 0) errorMessage("Spatial sigma must be a positive number");
+							spatialSigma = ss;
 							break;
 						}
 						case LAMBDA: {

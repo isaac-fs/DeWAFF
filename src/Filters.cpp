@@ -193,7 +193,7 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
     copyMakeBorder(weightingImage_, weightingImage, padding, padding, padding, padding, BORDER_CONSTANT);
 
     // NML standard deviation h
-    double h = sqrt(2.0 * pow(rangeSigma, 2.0));
+    double h = rangeSigma;
 
     // Prepare variables for the bilateral filtering
     Mat outputImage(inputImage.size(), inputImage.type());
@@ -304,5 +304,6 @@ Mat Filters::GuidedFilter(const Mat &inputImage, const Mat &guidingImage, int wi
 
     int widowRadius = windowSize / 2;
     double epsilon = pow((rangeSigma), 2.0);
+
     return guidedFilter(guidingImage, inputImage, widowRadius, epsilon, -1);
 }
