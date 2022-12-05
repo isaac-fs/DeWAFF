@@ -206,7 +206,7 @@ $(document).ready(function(){initNavTree('_filters_8cpp_source.html',''); initRe
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    copyMakeBorder(weightingImage_, weightingImage, padding, padding, padding, padding, BORDER_CONSTANT);</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="comment">// NML standard deviation h</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="keywordtype">double</span> h = sqrt(2.0 * pow(rangeSigma, 2.0));</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="keywordtype">double</span> h = rangeSigma;</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="comment">// Prepare variables for the bilateral filtering</span></div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    Mat outputImage(inputImage.size(), inputImage.type());</div>
@@ -266,8 +266,9 @@ $(document).ready(function(){initNavTree('_filters_8cpp_source.html',''); initRe
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;{</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    <span class="keywordtype">int</span> widowRadius = windowSize / 2;</div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <span class="keywordtype">double</span> epsilon = pow((rangeSigma), 2.0);</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <span class="keywordflow">return</span> guidedFilter(guidingImage, inputImage, widowRadius, epsilon, -1);</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;}</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <span class="keywordflow">return</span> guidedFilter(guidingImage, inputImage, widowRadius, epsilon, -1);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;}</div>
 <div class="ttc" id="a_filters_8hpp_html"><div class="ttname"><a href="_filters_8hpp.html">Filters.hpp</a></div></div>
 <div class="ttc" id="aclass_filters_html_a02eafe8690dcd01dde0f81b1c5966b44"><div class="ttname"><a href="class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44">Filters::NonLocalMeansFilter</a></div><div class="ttdeci">Mat NonLocalMeansFilter(const Mat &amp;inputImage, const Mat &amp;weightingImage, int windowSize, int neighborhoodSize, double rangeSigma)</div><div class="ttdoc">Apply a Non Local Means Filter to an image. This is the decoupled version of this filter,...</div><div class="ttdef"><b>Definition:</b> <a href="_filters_8cpp_source.html#l00183">Filters.cpp:183</a></div></div>
 <div class="ttc" id="aclass_filters_html_a78a4c57fc753e6de4cca5c67a494afa6"><div class="ttname"><a href="class_filters.html#a78a4c57fc753e6de4cca5c67a494afa6">Filters::BilateralFilter</a></div><div class="ttdeci">Mat BilateralFilter(const Mat &amp;inputImage, const Mat &amp;weightingImage, int windowSize, double spatialSigma, double rangeSigma)</div><div class="ttdoc">Apply a Bilateral Filter to an image. This is the decoupled version of this filter,...</div><div class="ttdef"><b>Definition:</b> <a href="_filters_8cpp_source.html#l00014">Filters.cpp:14</a></div></div>
