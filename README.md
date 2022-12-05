@@ -61,9 +61,9 @@ usage: ./DeWAFF [-i | --image <file name>] | [-v | --video <file name>]
 	- Filter:            dbf (Deceived Bilateral Filter)
 	- Window size:       3
 	- Neighborhood size: 3
-	- Range Sigma:       10
-	- Spatial Sigma:     10
-	- USM Lambda:        1
+	- Range Sigma:       1.0
+	- Spatial Sigma:     1.0
+	- USM Lambda:        1.0
 
 	PROGRAM OPTIONS
 	-i, --image: Process an image given a file name. The file name goes
