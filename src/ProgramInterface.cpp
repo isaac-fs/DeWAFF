@@ -641,9 +641,7 @@ void ProgramInterface::setOutputFileName() {
 		break;
 	}
 
-	std::string extension;
-	if(mode & image) extension = ".png";
-	else if(mode & video) extension = ".avi";
+	std::string extension = inputFileName.substr(dotPos);
 
 	// Set the output file names
 	outputFileName = inputFileName.substr(0, dotPos) + "_" + filterAcronym + extension;
