@@ -116,8 +116,6 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 							break;
 						}
 						case SPATIAL_SIGMA: {
-							if(filterType == DGF)
-								errorMessage("The Deceived Guided Filter uses only the range sigma (rs) to calculate its epsilon value");
 							if(value == NULL) abort();
 							double ss = atof(value);
 							if(ss < 0) errorMessage("Spatial sigma must be a positive number");
