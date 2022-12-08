@@ -132,7 +132,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 						case NEIGHBORHOOD_SIZE: {
 							if(value == NULL) abort();
 							if(filterType != DNLMF)
-								errorMessage("Neighborhoodsize option only applies when the filter type is set to Deceived Non Local Means Filter");
+								std::cout << "BEWARE: Neighborhoodsize option only applies when the filter type is set to Deceived Non Local Means Filter" << std::endl;
 							int ns = atoi(value);
 							if(ns > windowSize) errorMessage("Neighborhood size must be smaller than the window size");
 							if(ns < 3 || ns % 2 == 0) errorMessage("Neighborhood size must be an odd number equal or greater than 3");
