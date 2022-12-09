@@ -28,15 +28,15 @@ using namespace cv;
  *
  */
 class Filters {
-    private:
-        enum CIELab : int {L, a, b}; // CIELab channels
-        Utils utilsLib;
+	private:
+		enum CIELab : int {L, a, b}; // CIELab channels
+		Utils utilsLib;
 
-    public:
-        Mat BilateralFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, double spatialSigma, double rangeSigma);
-        Mat ScaledBilateralFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, double spatialSigma, double rangeSigma);
-        Mat NonLocalMeansFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, int neighborhoodSize, double rangeSigma);
-        Mat GuidedFilter(const Mat &inputImage, const Mat &guidingImage, int windowSize, double rangeSigma);
+	public:
+		Mat BilateralFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, double spatialSigma, double rangeSigma);
+		Mat ScaledBilateralFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, double spatialSigma, double rangeSigma);
+		Mat NonLocalMeansFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, int neighborhoodSize, double rangeSigma);
+		Mat GuidedFilter(const Mat &inputImage, const Mat &guidingImage, int windowSize, double rangeSigma);
 };
 
 #endif /* FILTERS_HPP_ */

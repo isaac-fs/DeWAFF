@@ -14,9 +14,6 @@
 #include "Utils.hpp"
 #include "Filters.hpp"
 
-#include "Filters.hpp"
-#include "Utils.hpp"
-
 using namespace cv;
 
 /**

@@ -77,11 +77,11 @@ Mat Utils::GaussianFunction(Mat input, double sigma){
  */
 Mat Utils::GaussianKernel(int windowSize, double sigma) {
 	// Pre computation of meshgrid values
-    Mat1f X, Y;
-    Range range = Range(-(windowSize/2), (windowSize/2) + 1);
-    MeshGrid(range, X, Y);
-    pow(X, 2.0, X);
-    pow(Y, 2.0, Y);
+	Mat1f X, Y;
+	Range range = Range(-(windowSize/2), (windowSize/2) + 1);
+	MeshGrid(range, X, Y);
+	pow(X, 2.0, X);
+	pow(Y, 2.0, Y);
 
 	// Compute the Gaussian kernel
 	Mat gaussianKernel = GaussianFunction(X, sigma).mul(GaussianFunction(Y, sigma));
@@ -101,15 +101,15 @@ Mat Utils::LoGFilter(const Mat &image, int windowSize, double sigma) {
 	Mat gaussianKernel = GaussianKernel(windowSize, sigma);
 
 	// Pre computation of meshgrid values
-    Mat X, Y, S;
-    Range range = Range(-(windowSize/2), (windowSize/2) + 1);
-    MeshGrid(range, X, Y);
-    pow(X, 2.0, X);
-    pow(Y, 2.0, Y);
+	Mat X, Y, S;
+	Range range = Range(-(windowSize/2), (windowSize/2) + 1);
+	MeshGrid(range, X, Y);
+	pow(X, 2.0, X);
+	pow(Y, 2.0, Y);
 
 	// Variance
 	double variance = pow(sigma, 2.0);
-    Mat laplacianOfGaussianKernel = (1.0 / (2.0 * CV_PI * variance)) * (((X+Y)/variance) - 2.0).mul(gaussianKernel);
+	Mat laplacianOfGaussianKernel = (1.0 / (2.0 * CV_PI * variance)) * (((X+Y)/variance) - 2.0).mul(gaussianKernel);
 
 	// Normalization
 	laplacianOfGaussianKernel -= sum(laplacianOfGaussianKernel).val[0] / pow(windowSize, 2.0);
@@ -155,38 +155,37 @@ Mat Utils::NonAdaptiveUSMFilter(const Mat &image, int windowSize, double lambda,
  * @param neighborhoodSize size of the pixel neighborhood
  * @return Mat
  */
-Mat Utils::RegionDistancesMatrix(const Mat& inputImage_, int neighborhoodSize) {
+Mat Utils::EuclideanDistancesMatrix(const Mat& inputImage_, int windowSize, int neighborhoodSize) {
     // Fixed pixel sub region (must be a square region)
 	Mat inputImage;
-	int windowSize = inputImage_.rows;
-    int padding = (windowSize-1)/2;
+	int padding = (windowSize-1)/2;
 	copyMakeBorder(inputImage_, inputImage, padding, padding, padding, padding, BORDER_REPLICATE);
 
 	// Ranges
-    Range xRange, yRange;
+	Range xRange, yRange;
 	xRange = Range(windowSize/2, windowSize/2 + neighborhoodSize);
 	yRange = Range(windowSize/2, windowSize/2 + neighborhoodSize);
 
 	// Fixed patch at the center of the image
-    Mat fixedWindow = inputImage(xRange, yRange);
+	Mat fixedWindow = inputImage(xRange, yRange);
 
 	// Moving pixel sub region
-    Mat slidingWindow(fixedWindow.size(), fixedWindow.type());
+	Mat slidingWindow(fixedWindow.size(), fixedWindow.type());
 
-    // Initialize the output matrix
-    Mat distancesMatrix(inputImage_.size(), inputImage_.type());
+	// Initialize the output matrix
+	Mat distancesMatrix(inputImage_.size(), inputImage_.type());
 
-    // Visit each pixel in the image region
-    for(int i = 0; i < windowSize; i++) {
-        xRange = Range(i, i + neighborhoodSize);
-        for(int j = 0; j < windowSize; j++) {
-            yRange = Range(j, j + neighborhoodSize);
+	// Visit each pixel in the image region
+	for(int i = 0; i < windowSize; i++) {
+		xRange = Range(i, i + neighborhoodSize);
+		for(int j = 0; j < windowSize; j++) {
+			yRange = Range(j, j + neighborhoodSize);
 
-            //Extract pixel w neighborhood local region
-            slidingWindow = inputImage(xRange, yRange);
+			//Extract pixel w neighborhood local region
+			slidingWindow = inputImage(xRange, yRange);
 
-            // Calculate the euclidean distance between patches
-            distancesMatrix.at<float>(i, j) = norm(fixedWindow, slidingWindow, NORM_L2SQR);
+			// Calculate the euclidean distance between patches
+			distancesMatrix.at<float>(i, j) = (float) norm(fixedWindow, slidingWindow, NORM_L2SQR) / ((float)neighborhoodSize);
         }
     }
     return distancesMatrix;

@@ -11,6 +11,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 	mode = start;
 	benchmarkIterations = 0;
 	quietMode = false; // Print info
+	fileSet = false;
 
 	// Framework
 	framework = DeWAFF();
@@ -18,7 +19,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 	windowSize = 3;
 	neighborhoodSize = 3;
 	spatialSigma = 1.0;
-	rangeSigma = 1.0;
+	rangeSigma = 0.1;
 
 	// Libraries
 	utilsLib = Utils();
@@ -55,32 +56,34 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 	};
 
 	struct option long_options[] = {
-          {"image",     	required_argument, 0, 'i'},
-          {"video",  		required_argument, 0, 'v'},
-          {"filter",  		required_argument, 0, 'f'},
-          {"parameters",    required_argument, 0, 'p'},
-          {"benchmark",  	required_argument, 0, 'b'},
+		  {"image",     	required_argument, 0, 'i'},
+		  {"video",  		required_argument, 0, 'v'},
+		  {"filter",  		required_argument, 0, 'f'},
+		  {"parameters",    required_argument, 0, 'p'},
+		  {"benchmark",  	required_argument, 0, 'b'},
 		  {"quiet",  		no_argument		, 0, 'q'},
 		  {"help",  		no_argument		, 0, 'H'},
-          {0, 0, 0, 0}
-    };
+		  {0, 0, 0, 0}
+	};
 
 	// getopt and getsubopt vars
 	char *subopts, *value;
-    int opt, opt_index;
+	int opt, opt_index;
 
 	// Capture user input
-    while ((opt = getopt_long(argc, argv, "b:i:f:v:p:hq", long_options, &opt_index)) != -1) {
+	while ((opt = getopt_long(argc, argv, "b:i:f:v:p:hq", long_options, &opt_index)) != -1) {
 		switch(opt) {
 			case 'i': // Process an image
 				if(mode & video) errorMessage("Options -v and -i are mutually exclusive");
 				mode |= image;
 				inputFileName = optarg;
+				fileSet = true;
 				break;
 			case 'v': // Process a video
 				if(mode & image) errorMessage("Options -v and -i are mutually exclusive");
 				mode |= video;
 				inputFileName = optarg;
+				fileSet = true;
 				break;
 			case 'b': // Enable benchmark mode
 				mode |= benchmark;
@@ -98,9 +101,9 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 			}
 			case 'p': // Filter parameters
 				subopts = optarg;
-                while (*subopts != '\0') {
-                    char *saved = subopts;
-                    switch(getsubopt(&subopts, (char **)filterOpts, &value)) {
+				while (*subopts != '\0') {
+					char *saved = subopts;
+					switch(getsubopt(&subopts, (char **)filterOpts, &value)) {
 						case WINDOW_SIZE: {
 							if(value == NULL) abort();
 							int wS = atoi(value);
@@ -127,7 +130,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 							double l = atof(value);
 							if(l < 0) errorMessage("Lambda value must be equal or greater than zero");
 							else framework.usmLambda = l;
-                        	break;
+							break;
 						}
 						case NEIGHBORHOOD_SIZE: {
 							if(value == NULL) abort();
@@ -143,8 +146,8 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 							s+=*saved;
 							errorMessage(s);
 							abort();
-                   	}
-                }
+				   	}
+				}
 				break;
 			case 'q':
 				quietMode = true;
@@ -159,20 +162,26 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 				break;
 			case '?':
 				exit(-1);
-		        break;
+				break;
 			default:
 				abort();
 		}
-    }
+	}
+
+	// Catch empty file name
+	if(inputFileName.empty() || !fileSet) errorMessage("No file found, use --image <file> to pass an image or --video <file> to pass a video");
 
 	// Catch extra arguments in the terminal
 	if(argc-1 == optind) {
 		std::string error = "Unexpected argument \"" + (std::string) argv[argc-1] + "\"";
 		errorMessage(error);
 	}
-
 	// Get the las dot position in the file name
-	dotPos = inputFileName.find_last_of('.');
+	try {
+		dotPos = inputFileName.find_last_of('.');
+	} catch(std::out_of_range const&) {
+		errorMessage("File has no extension");
+	}
 
 	// Set the output file name
 	setOutputFileName();
@@ -214,16 +223,16 @@ int ProgramInterface::run() {
  * @return Mat
  */
 Mat ProgramInterface::inputPreProcessor(const Mat &inputImage) {
-    // Input checking
-    int type = inputImage.type();
+	// Input checking
+	int type = inputImage.type();
 	double minVal, maxVal;
 	utilsLib.MinMax(inputImage, &minVal, &maxVal);
 	if(!(type == CV_8UC1 || type == CV_8UC3) || minVal < 0 || maxVal > 255)
 	   errorMessage("Input frame must be a Grayscale or RGB unsigned integer matrix of size NxMx1 or NxMx3 on the closed interval [0,255]");
 
-    // Converto to CIELab color space
+	// Converto to CIELab color space
 	Mat input;
-    inputImage.convertTo(input, CV_32F, 1.0/255.0); // The image has to to have values from 0 to 1 before convertion to CIELab
+	inputImage.convertTo(input, CV_32F, 1.0/255.0); // The image has to to have values from 0 to 1 before convertion to CIELab
 	cvtColor(input, input, COLOR_BGR2Lab); // Convert normalized BGR image to CIELab color space.
 
 	return input;
@@ -237,10 +246,10 @@ Mat ProgramInterface::inputPreProcessor(const Mat &inputImage) {
  */
 Mat ProgramInterface::outputPosProcessor(const Mat &input) {
 	Mat output;
-    // Convert filtered image back to BGR color space
+	// Convert filtered image back to BGR color space
 	cvtColor(input, output, COLOR_Lab2BGR);
 	//Scale back to [0,255]
-    output.convertTo(output, CV_8U, 255);
+	output.convertTo(output, CV_8U, 255);
 
 	return output;
 }
@@ -320,7 +329,7 @@ void ProgramInterface::processVideo() {
 
 	// Open output video
 	VideoWriter outputVideo(outputFileName, codec, frameRate , frameSize, true);
-    if(!outputVideo.isOpened()) errorMessage("Could not open the output video for write: " + outputFileName);
+	if(!outputVideo.isOpened()) errorMessage("Could not open the output video for write: " + outputFileName);
 
 	// Read one frame at a time
 	Mat inputFrame, outputFrame;
@@ -429,16 +438,16 @@ void ProgramInterface::benchmarkVideo() {
  */
 void ProgramInterface::getVideoInfo(VideoCapture inputVideo) {
 	frameRate = static_cast<int>(inputVideo.get(cv::CAP_PROP_FPS));
-    frameCount = static_cast<int>(inputVideo.get(cv::CAP_PROP_FRAME_COUNT));
-    frameSize = Size((int) inputVideo.get(cv::CAP_PROP_FRAME_WIDTH),(int) inputVideo.get(cv::CAP_PROP_FRAME_HEIGHT));
+	frameCount = static_cast<int>(inputVideo.get(cv::CAP_PROP_FRAME_COUNT));
+	frameSize = Size((int) inputVideo.get(cv::CAP_PROP_FRAME_WIDTH),(int) inputVideo.get(cv::CAP_PROP_FRAME_HEIGHT));
 
-    // Transform from int to char via Bitwise operators
-    int codec = static_cast<int>(inputVideo.get(cv::CAP_PROP_FOURCC));
-    char EXT[] = {	static_cast<char> ((codec & 0XFF)),
+	// Transform from int to char via Bitwise operators
+	int codec = static_cast<int>(inputVideo.get(cv::CAP_PROP_FOURCC));
+	char EXT[] = {	static_cast<char> ((codec & 0XFF)),
 					static_cast<char> ((codec & 0XFF00) >> 8),
 					static_cast<char> ((codec & 0XFF0000) >> 16),
 					static_cast<char> ((codec & 0XFF00000) >> 24),0};
-    codecType = EXT;
+	codecType = EXT;
 }
 
 /**
@@ -538,7 +547,7 @@ void ProgramInterface::longHelp() {
 	<< "\n\t" << std::setw(21) << "- Filter:" << "dbf (Deceived Bilateral Filter)"
 	<< "\n\t" << std::setw(21) << "- Window size:" << 3
 	<< "\n\t" << std::setw(21) << "- Neighborhood size:" << 3
-	<< "\n\t" << std::setw(21) << "- Range Sigma:" << 1.0
+	<< "\n\t" << std::setw(21) << "- Range Sigma:" << 0.1
 	<< "\n\t" << std::setw(21) << "- Spatial Sigma:" << 1.0
 	<< "\n\t" << std::setw(21) << "- USM Lambda:" << 1.0
 	<< "\n" << std::endl
@@ -637,7 +646,12 @@ void ProgramInterface::setOutputFileName() {
 		break;
 	}
 
-	std::string extension = inputFileName.substr(dotPos);
+	std::string extension = "";
+	try {
+		extension = inputFileName.substr(dotPos);
+	} catch(std::out_of_range const&) {
+		errorMessage("File has no extension");
+	}
 
 	// Set the output file names
 	outputFileName = inputFileName.substr(0, dotPos) + "_" + filterAcronym + extension;

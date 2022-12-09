@@ -39,6 +39,7 @@ private:
 		benchmark = 4 	// 100
 	};
 	int benchmarkIterations;
+	bool fileSet;
 	std::string programName, inputFileName, outputFileName;
 	std::string::size_type dotPos;
 	Size frameSize;
@@ -85,12 +86,12 @@ private:
 
 	// Output spacing
 	enum spacing {
-        MAIN_LINE = 29,
-        DATA_SPACE = 11,
-        VALUE_SPACE = 10,
-        BENCHMARK_LINE = 20,
-        NUMBER_SPACE = 3,
-        TIME_SPACE = 9,
+		MAIN_LINE = 29,
+		DATA_SPACE = 11,
+		VALUE_SPACE = 10,
+		BENCHMARK_LINE = 20,
+		NUMBER_SPACE = 3,
+		TIME_SPACE = 9,
 		PARAMS_LINE = 57,
 		PARAM_DESC_SPACE = 17,
 		PARAM_VAL_SPACE = 32

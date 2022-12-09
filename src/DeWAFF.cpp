@@ -20,10 +20,10 @@ DeWAFF::DeWAFF(): usmLambda(1.0){}
  * \f[ \hat{f}_{\text USM} = U + \lambda \, \text{LoG} \f]
  */
 Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
-    // Pre process the USM image
-    Mat usmImage = utilsLib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
-    // Calculate the deceived filter
-    return filtersLib.BilateralFilter(usmImage, inputImage, windowSize, spatialSigma, rangeSigma);
+	// Pre process the USM image
+	Mat usmImage = utilsLib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
+	// Calculate the deceived filter
+	return filtersLib.BilateralFilter(usmImage, inputImage, windowSize, spatialSigma, rangeSigma);
 }
 
 /**
@@ -41,10 +41,10 @@ Mat DeWAFF::DeceivedBilateralFilter(const Mat &inputImage, int windowSize, doubl
  * \f[ \hat{f}_{\text USM} = U + \lambda \, \text{LoG} \f]
  */
 Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
-    // Pre process the USM image
-    Mat usmImage = utilsLib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
-    // Calculate the deceived filter
-    return filtersLib.ScaledBilateralFilter(usmImage, inputImage, windowSize, spatialSigma, rangeSigma);
+	// Pre process the USM image
+	Mat usmImage = utilsLib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
+	// Calculate the deceived filter
+	return filtersLib.ScaledBilateralFilter(usmImage, inputImage, windowSize, spatialSigma, rangeSigma);
 }
 
 /**
@@ -64,10 +64,10 @@ Mat DeWAFF::DeceivedScaledBilateralFilter(const Mat &inputImage, int windowSize,
  * \f[ \hat{f}_{\text USM} = U + \lambda \, \text{LoG} \f]
  */
 Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, int neighborhoodSize, double spatialSigma, double rangeSigma) {
-    // Pre process the USM image
-    Mat usmImage = utilsLib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
-    // Calculate the deceived filter
-    return filtersLib.NonLocalMeansFilter(usmImage, inputImage, windowSize, neighborhoodSize, rangeSigma);
+	// Pre process the USM image
+	Mat usmImage = utilsLib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
+	// Calculate the deceived filter
+	return filtersLib.NonLocalMeansFilter(usmImage, inputImage, windowSize, neighborhoodSize, rangeSigma);
 }
 
 /**
@@ -84,8 +84,8 @@ Mat DeWAFF::DeceivedNonLocalMeansFilter(const Mat &inputImage, int windowSize, i
  * \f[ \hat{f}_{\text USM} = U + \lambda \, \text{LoG} \f]
  */
 Mat DeWAFF::DeceivedGuidedFilter(const Mat &inputImage, int windowSize, double spatialSigma, double rangeSigma) {
-    // Pre process the USM image
-    Mat usmImage = utilsLib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
-    // Calculate the deceived filter
-    return filtersLib.GuidedFilter(usmImage, inputImage, windowSize, rangeSigma);
+	// Pre process the USM image
+	Mat usmImage = utilsLib.NonAdaptiveUSMFilter(inputImage, windowSize, usmLambda, spatialSigma);
+	// Calculate the deceived filter
+	return filtersLib.GuidedFilter(usmImage, inputImage, windowSize, rangeSigma);
 }

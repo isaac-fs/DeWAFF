@@ -17,11 +17,11 @@
  *
  */
 class Timer {
-    private:
-        double startTime;
-    public:
-        void start(); // Starts timer and resets the elapsed time
-        double stop(); // Stops the timer and returns the elapsed time
+	private:
+		double startTime;
+	public:
+		void start(); // Starts timer and resets the elapsed time
+		double stop(); // Stops the timer and returns the elapsed time
 };
 
 #endif /* TIMER_HPP_ */

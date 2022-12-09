@@ -25,14 +25,14 @@ using namespace cv;
  *
  */
 class Utils {
-    public:
-        void MeshGrid(const Range &range, Mat &X, Mat &Y);
-        void MinMax(const Mat& A, double* minA, double* maxA);
-        Mat GaussianFunction(Mat input, double sigma);
-        Mat GaussianKernel(int windowSize, double sigma);
-        Mat LoGFilter(const Mat &image, int windowSize, double sigma);
-        Mat NonAdaptiveUSMFilter(const Mat &image, int windowSize, double lambda, double sigma);
-		Mat RegionDistancesMatrix(const Mat& image, int neighborhoodSize);
+	public:
+		void MeshGrid(const Range &range, Mat &X, Mat &Y);
+		void MinMax(const Mat& A, double* minA, double* maxA);
+		Mat GaussianFunction(Mat input, double sigma);
+		Mat GaussianKernel(int windowSize, double sigma);
+		Mat LoGFilter(const Mat &image, int windowSize, double sigma);
+		Mat NonAdaptiveUSMFilter(const Mat &image, int windowSize, double lambda, double sigma);
+		Mat EuclideanDistancesMatrix(const Mat& image, int windowSize, int neighborhoodSize);
 };
 
 #endif /* UTILS_HPP_ */
