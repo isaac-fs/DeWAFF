@@ -125,15 +125,61 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af388b377107b9cc3bcebd13ba90e34e7"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#af388b377107b9cc3bcebd13ba90e34e7">NonAdaptiveUSMFilter</a> (const Mat &amp;image, int windowSize, double lambda, double sigma)</td></tr>
 <tr class="memdesc:af388b377107b9cc3bcebd13ba90e34e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter.  <a href="class_utils.html#af388b377107b9cc3bcebd13ba90e34e7">More...</a><br /></td></tr>
 <tr class="separator:af388b377107b9cc3bcebd13ba90e34e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79cc561482d31a4ba67eb9744a6da10b"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">RegionDistancesMatrix</a> (const Mat &amp;image, int neighborhoodSize)</td></tr>
-<tr class="memdesc:a79cc561482d31a4ba67eb9744a6da10b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the Euclidean distance between a fixed patch at the center of the input image and a patch centered in every other pixel in the input image, mathematically, for an input matrix \(A = (a_{ij})\) every element will take the corresponding Euclidean distance value \(a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\).  <a href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">More...</a><br /></td></tr>
-<tr class="separator:a79cc561482d31a4ba67eb9744a6da10b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9904f9fc1bd5dca4ea0c3742492dffea"><td class="memItemLeft" align="right" valign="top">Mat&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_utils.html#a9904f9fc1bd5dca4ea0c3742492dffea">EuclideanDistancesMatrix</a> (const Mat &amp;image, int windowSize, int neighborhoodSize)</td></tr>
+<tr class="memdesc:a9904f9fc1bd5dca4ea0c3742492dffea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the Euclidean distance between a fixed patch at the center of the input image and a patch centered in every other pixel in the input image, mathematically, for an input matrix \(A = (a_{ij})\) every element will take the corresponding Euclidean distance value \(a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\).  <a href="class_utils.html#a9904f9fc1bd5dca4ea0c3742492dffea">More...</a><br /></td></tr>
+<tr class="separator:a9904f9fc1bd5dca4ea0c3742492dffea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Useful tools for image processing These tools are statics objects to use them in the lifetime of the program without the need of constinuous instantiation. </p>
 
 <p class="definition">Definition at line <a class="el" href="_utils_8hpp_source.html#l00027">27</a> of file <a class="el" href="_utils_8hpp_source.html">Utils.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a9904f9fc1bd5dca4ea0c3742492dffea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9904f9fc1bd5dca4ea0c3742492dffea">&#9670;&nbsp;</a></span>EuclideanDistancesMatrix()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Mat Utils::EuclideanDistancesMatrix </td>
+          <td>(</td>
+          <td class="paramtype">const Mat &amp;&#160;</td>
+          <td class="paramname"><em>inputImage_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>windowSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>neighborhoodSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the Euclidean distance between a fixed patch at the center of the input image and a patch centered in every other pixel in the input image, mathematically, for an input matrix \(A = (a_{ij})\) every element will take the corresponding Euclidean distance value \(a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\). </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">inputImage_</td><td>input image </td></tr>
+    <tr><td class="paramname">neighborhoodSize</td><td>size of the pixel neighborhood </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Mat </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00158">158</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
+
+</div>
+</div>
 <a id="aaed701e60ee9310481dcf1c5758aed77"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaed701e60ee9310481dcf1c5758aed77">&#9670;&nbsp;</a></span>GaussianFunction()</h2>
 
@@ -416,46 +462,6 @@ Public Member Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>Filtered image </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00135">135</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
-
-</div>
-</div>
-<a id="a79cc561482d31a4ba67eb9744a6da10b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79cc561482d31a4ba67eb9744a6da10b">&#9670;&nbsp;</a></span>RegionDistancesMatrix()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Mat Utils::RegionDistancesMatrix </td>
-          <td>(</td>
-          <td class="paramtype">const Mat &amp;&#160;</td>
-          <td class="paramname"><em>inputImage_</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>neighborhoodSize</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes the Euclidean distance between a fixed patch at the center of the input image and a patch centered in every other pixel in the input image, mathematically, for an input matrix \(A = (a_{ij})\) every element will take the corresponding Euclidean distance value \(a_{ij} = d_{ij}^{2} = || x_{i}-x_{j} ||^{2}\). </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">inputImage_</td><td>input image </td></tr>
-    <tr><td class="paramname">neighborhoodSize</td><td>size of the pixel neighborhood </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>Mat </dd></dl>
-
-<p class="definition">Definition at line <a class="el" href="_utils_8cpp_source.html#l00158">158</a> of file <a class="el" href="_utils_8cpp_source.html">Utils.cpp</a>.</p>
 
 </div>
 </div>

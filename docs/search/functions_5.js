@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['nonadaptiveusmfilter_51',['NonAdaptiveUSMFilter',['../class_utils.html#af388b377107b9cc3bcebd13ba90e34e7',1,'Utils']]],
-  ['nonlocalmeansfilter_52',['NonLocalMeansFilter',['../class_filters.html#a02eafe8690dcd01dde0f81b1c5966b44',1,'Filters']]]
+  ['meshgrid_50',['MeshGrid',['../class_utils.html#acebbcc4ea191555ab087d05145edd3cc',1,'Utils']]],
+  ['minmax_51',['MinMax',['../class_utils.html#a012b8177e7e05918d805620bf736ee9f',1,'Utils']]]
 ];

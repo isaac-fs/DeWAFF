@@ -188,47 +188,46 @@ $(document).ready(function(){initNavTree('_utils_8cpp_source.html',''); initResi
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keywordflow">return</span> (image - lambda * LoGFilteredImage);</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;}</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno"><a class="line" href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">  158</a></span>&#160;Mat <a class="code" href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">Utils::RegionDistancesMatrix</a>(<span class="keyword">const</span> Mat&amp; inputImage_, <span class="keywordtype">int</span> neighborhoodSize) {</div>
+<div class="line"><a name="l00158"></a><span class="lineno"><a class="line" href="class_utils.html#a9904f9fc1bd5dca4ea0c3742492dffea">  158</a></span>&#160;Mat <a class="code" href="class_utils.html#a9904f9fc1bd5dca4ea0c3742492dffea">Utils::EuclideanDistancesMatrix</a>(<span class="keyword">const</span> Mat&amp; inputImage_, <span class="keywordtype">int</span> windowSize, <span class="keywordtype">int</span> neighborhoodSize) {</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="comment">// Fixed pixel sub region (must be a square region)</span></div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    Mat inputImage;</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordtype">int</span> windowSize = inputImage_.rows;</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <span class="keywordtype">int</span> padding = (windowSize-1)/2;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    copyMakeBorder(inputImage_, inputImage, padding, padding, padding, padding, BORDER_REPLICATE);</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <span class="comment">// Ranges</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    Range xRange, yRange;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    xRange = Range(windowSize/2, windowSize/2 + neighborhoodSize);</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    yRange = Range(windowSize/2, windowSize/2 + neighborhoodSize);</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="comment">// Fixed patch at the center of the image</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    Mat fixedWindow = inputImage(xRange, yRange);</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="comment">// Moving pixel sub region</span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    Mat slidingWindow(fixedWindow.size(), fixedWindow.type());</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="comment">// Initialize the output matrix</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    Mat distancesMatrix(inputImage_.size(), inputImage_.type());</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="comment">// Visit each pixel in the image region</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; windowSize; i++) {</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        xRange = Range(i, i + neighborhoodSize);</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j = 0; j &lt; windowSize; j++) {</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            yRange = Range(j, j + neighborhoodSize);</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <span class="comment">//Extract pixel w neighborhood local region</span></div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            slidingWindow = inputImage(xRange, yRange);</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            <span class="comment">// Calculate the euclidean distance between patches</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            distancesMatrix.at&lt;<span class="keywordtype">float</span>&gt;(i, j) = norm(fixedWindow, slidingWindow, NORM_L2SQR);</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        }</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    }</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="keywordflow">return</span> distancesMatrix;</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;}</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordtype">int</span> padding = (windowSize-1)/2;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    copyMakeBorder(inputImage_, inputImage, padding, padding, padding, padding, BORDER_REPLICATE);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="comment">// Ranges</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    Range xRange, yRange;</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    xRange = Range(windowSize/2, windowSize/2 + neighborhoodSize);</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    yRange = Range(windowSize/2, windowSize/2 + neighborhoodSize);</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="comment">// Fixed patch at the center of the image</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    Mat fixedWindow = inputImage(xRange, yRange);</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <span class="comment">// Moving pixel sub region</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    Mat slidingWindow(fixedWindow.size(), fixedWindow.type());</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    <span class="comment">// Initialize the output matrix</span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    Mat distancesMatrix(inputImage_.size(), inputImage_.type());</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    <span class="comment">// Visit each pixel in the image region</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; windowSize; i++) {</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        xRange = Range(i, i + neighborhoodSize);</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordflow">for</span>(<span class="keywordtype">int</span> j = 0; j &lt; windowSize; j++) {</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            yRange = Range(j, j + neighborhoodSize);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <span class="comment">//Extract pixel w neighborhood local region</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            slidingWindow = inputImage(xRange, yRange);</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            <span class="comment">// Calculate the euclidean distance between patches</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            distancesMatrix.at&lt;<span class="keywordtype">float</span>&gt;(i, j) = (<span class="keywordtype">float</span>) norm(fixedWindow, slidingWindow, NORM_L2SQR) / ((float)neighborhoodSize);</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        }</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    }</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    <span class="keywordflow">return</span> distancesMatrix;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;}</div>
 <div class="ttc" id="a_utils_8hpp_html"><div class="ttname"><a href="_utils_8hpp.html">Utils.hpp</a></div></div>
 <div class="ttc" id="aclass_utils_html_a012b8177e7e05918d805620bf736ee9f"><div class="ttname"><a href="class_utils.html#a012b8177e7e05918d805620bf736ee9f">Utils::MinMax</a></div><div class="ttdeci">void MinMax(const Mat &amp;A, double *minA, double *maxA)</div><div class="ttdoc">Gets the global min and max values of a 3 channel Matrix.</div><div class="ttdef"><b>Definition:</b> <a href="_utils_8cpp_source.html#l00042">Utils.cpp:42</a></div></div>
 <div class="ttc" id="aclass_utils_html_a27ea9fba4632480b0a2fb33e5157ecbb"><div class="ttname"><a href="class_utils.html#a27ea9fba4632480b0a2fb33e5157ecbb">Utils::LoGFilter</a></div><div class="ttdeci">Mat LoGFilter(const Mat &amp;image, int windowSize, double sigma)</div><div class="ttdoc">Filters an image through a Laplacian of Gaussian filter.</div><div class="ttdef"><b>Definition:</b> <a href="_utils_8cpp_source.html#l00099">Utils.cpp:99</a></div></div>
-<div class="ttc" id="aclass_utils_html_a79cc561482d31a4ba67eb9744a6da10b"><div class="ttname"><a href="class_utils.html#a79cc561482d31a4ba67eb9744a6da10b">Utils::RegionDistancesMatrix</a></div><div class="ttdeci">Mat RegionDistancesMatrix(const Mat &amp;image, int neighborhoodSize)</div><div class="ttdoc">Computes the Euclidean distance between a fixed patch at the center of the input image and a patch ce...</div><div class="ttdef"><b>Definition:</b> <a href="_utils_8cpp_source.html#l00158">Utils.cpp:158</a></div></div>
 <div class="ttc" id="aclass_utils_html_a94be617a9fa88444e5be1a0da341669f"><div class="ttname"><a href="class_utils.html#a94be617a9fa88444e5be1a0da341669f">Utils::GaussianKernel</a></div><div class="ttdeci">Mat GaussianKernel(int windowSize, double sigma)</div><div class="ttdoc">Computes a normalized Gaussian kernel.</div><div class="ttdef"><b>Definition:</b> <a href="_utils_8cpp_source.html#l00078">Utils.cpp:78</a></div></div>
+<div class="ttc" id="aclass_utils_html_a9904f9fc1bd5dca4ea0c3742492dffea"><div class="ttname"><a href="class_utils.html#a9904f9fc1bd5dca4ea0c3742492dffea">Utils::EuclideanDistancesMatrix</a></div><div class="ttdeci">Mat EuclideanDistancesMatrix(const Mat &amp;image, int windowSize, int neighborhoodSize)</div><div class="ttdoc">Computes the Euclidean distance between a fixed patch at the center of the input image and a patch ce...</div><div class="ttdef"><b>Definition:</b> <a href="_utils_8cpp_source.html#l00158">Utils.cpp:158</a></div></div>
 <div class="ttc" id="aclass_utils_html_aaed701e60ee9310481dcf1c5758aed77"><div class="ttname"><a href="class_utils.html#aaed701e60ee9310481dcf1c5758aed77">Utils::GaussianFunction</a></div><div class="ttdeci">Mat GaussianFunction(Mat input, double sigma)</div><div class="ttdoc">Computes the Gaussian function of an input .</div><div class="ttdef"><b>Definition:</b> <a href="_utils_8cpp_source.html#l00062">Utils.cpp:62</a></div></div>
 <div class="ttc" id="aclass_utils_html_acebbcc4ea191555ab087d05145edd3cc"><div class="ttname"><a href="class_utils.html#acebbcc4ea191555ab087d05145edd3cc">Utils::MeshGrid</a></div><div class="ttdeci">void MeshGrid(const Range &amp;range, Mat &amp;X, Mat &amp;Y)</div><div class="ttdoc">Generates a meshgrid from  and  unidimensional coordinates. Example: xRange = [0,3[ and yRange = [0,...</div><div class="ttdef"><b>Definition:</b> <a href="_utils_8cpp_source.html#l00026">Utils.cpp:26</a></div></div>
 <div class="ttc" id="aclass_utils_html_af388b377107b9cc3bcebd13ba90e34e7"><div class="ttname"><a href="class_utils.html#af388b377107b9cc3bcebd13ba90e34e7">Utils::NonAdaptiveUSMFilter</a></div><div class="ttdeci">Mat NonAdaptiveUSMFilter(const Mat &amp;image, int windowSize, double lambda, double sigma)</div><div class="ttdoc">Applies a regular non adaptive UnSharp mask (USM) filter with a Laplacian of Gaussian filter.</div><div class="ttdef"><b>Definition:</b> <a href="_utils_8cpp_source.html#l00135">Utils.cpp:135</a></div></div>
