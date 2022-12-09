@@ -11,20 +11,13 @@
  * @param rangeSigma range or radiometric standard deviation
  * @return Mat output image
  */
-Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_, int windowSize, double spatialSigma, double rangeSigma) {
-	// Set the padding value
-	int padding = (windowSize - 1) / 2;
-
-	// Working images
-	Mat inputImage, weightingImage;
-
-	// Add padding to the input for kernel consistency
-	copyMakeBorder(inputImage_, inputImage, padding, padding, padding, padding, BORDER_CONSTANT);
-	copyMakeBorder(weightingImage_, weightingImage, padding, padding, padding, padding, BORDER_CONSTANT);
+Mat Filters::BilateralFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, double spatialSigma, double rangeSigma) {
+	// Window Radius
+	int windowRadius = windowSize/2;
 
 	// Pre compute the m - p = |m-p| factors
 	Mat X, Y;
-	Range range = Range((-windowSize / 2), (windowSize / 2) + 1);
+	Range range = Range(-windowRadius, windowRadius + 1);
 	utilsLib.MeshGrid(range, X, Y);
 	pow(X, 2.0, X);
 	pow(Y, 2.0, Y);
@@ -44,25 +37,27 @@ Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_,
 	Mat dL, da, db, bilateralFilter, rangeGaussian;
 	double bilateralFilterNorm;
 	int iMin, iMax, jMin, jMax;
-	Range xRange, yRange;
+	Range xRange, yRange, xKernelRange, yKernelRange;
 	Vec3f pixel;
 	Mat weightingChannels[3], inputChannels[3];
 
 // Set the parallelization pragma for OpenMP
-#pragma omp parallel for private(iMin, iMax, jMin, jMax, xRange, yRange,                         \
-								 weightingRegion, weightingChannels, inputRegion, inputChannels, \
-								 pixel, dL, da, db, rangeGaussian,                               \
-								 bilateralFilter, bilateralFilterNorm)                           \
-	shared(inputImage, weightingImage, outputImage,                                              \
-		   windowSize, spatialSigma, rangeSigma)
-	for (int i = padding; i < inputImage.rows - padding; i++) {
-		iMin = i - padding;
-		iMax = iMin + windowSize;
+#pragma omp parallel for private(iMin, iMax, jMin, jMax, xRange, yRange, xKernelRange, yKernelRange,\
+								weightingRegion, weightingChannels, inputRegion, inputChannels, 	\
+								pixel, dL, da, db, rangeGaussian,                               	\
+								bilateralFilter, bilateralFilterNorm)                           	\
+						 shared(inputImage, weightingImage, outputImage,							\
+								windowSize, spatialSigma, rangeSigma)
+	for (int i = 0; i < inputImage.rows; i++) {
+		iMin = max(i - windowRadius, 0);
+        iMax = min(i + windowRadius, inputImage.rows - 1);
 		xRange = Range(iMin, iMax);
-		for (int j = padding; j < inputImage.cols - padding; j++) {
-			jMin = j - padding;
-			jMax = jMin + windowSize;
+		xKernelRange = Range(iMin-i+windowRadius, iMax-i+windowRadius);
+		for (int j = 0; j < inputImage.cols; j++) {
+            jMin = max(j - windowRadius, 0);
+            jMax = min(j + windowRadius, inputImage.cols - 1);
 			yRange = Range(jMin, jMax);
+			yKernelRange = Range(jMin-j+windowRadius, jMax-j+windowRadius);
 
 			// Extract local weightRegion based on the window size
 			weightingRegion = weightingImage(xRange, yRange);
@@ -88,7 +83,7 @@ Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_,
 			 *
 			 */
 			;
-			bilateralFilter = spatialGaussian.mul(rangeGaussian);
+			bilateralFilter = spatialGaussian(xKernelRange, yKernelRange).mul(rangeGaussian);
 
 			/**
 			 * The Bilateral filter's norm corresponds to:
@@ -109,11 +104,7 @@ Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_,
 		}
 	}
 
-	// Discard the padding
-	xRange = Range(padding, inputImage.rows - padding);
-	yRange = Range(padding, inputImage.cols - padding);
-
-	return outputImage(xRange, yRange);
+	return outputImage;
 }
 
 /**
@@ -202,12 +193,12 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
 	int iMin, iMax, jMin, jMax;
 
 // Set the parallelization pragma for OpenMP
-#pragma omp parallel for private(iMin, iMax, jMin, jMax, xRange, yRange,                    \
-								 pixel, dL, da, db, euclideanDistance,                      \
-								 nlmChannels, nonLocalMeansFilter, nonLocalMeansFilterNorm, \
-								 weightRegion, weightChannels, inputRegion, inputChannels)  \
-	shared(inputImage, weightingImage, outputImage,                                         \
-		   windowSize, neighborhoodSize, rangeSigma)
+#pragma omp parallel for private(iMin, iMax, jMin, jMax, xRange, yRange,					\
+								pixel, dL, da, db, euclideanDistance,						\
+								nlmChannels, nonLocalMeansFilter, nonLocalMeansFilterNorm,	\
+								weightRegion, weightChannels, inputRegion, inputChannels) 	\
+						 shared(inputImage, weightingImage, outputImage,					\
+		   						windowSize, neighborhoodSize, rangeSigma)
 	for (int i = padding; i < inputImage.rows - padding; i++) {
 		iMin = i - padding;
 		iMax = iMin + windowSize;
@@ -222,7 +213,7 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
 
 			/**
 			 * The discrete representation of the Non Local Means Filter is as follows:
-			 * \f[ \psi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2}{h^2} \right)\f]
+			 * \f[ \psi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2 - 2 \sigma_r^2}{h^2} \right)\f]
 			 * where  \f$B(p)\f$ is a patch part of the window \f$\Omega\f$ centered at pixel \f$p\f$. \f$B(m)\f$ represents all of the
 			 * patches at \f$\Omega\f$ centered in each \f$m\f$ pixel. The Non Local Means Filter calculates the Euclidean distance
 			 * between  each patch \f$B(m)\f$ and \f$B(p)\f$ for each window \f$\Omega \subseteq U\f$. This is why this algorithm is
@@ -230,10 +221,10 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
 			 * a Gaussian decreasing function with standard deviation \f$h\f$ that generates the new pixel \f$p\f$ value.
 			 */
 			cv::split(weightRegion, weightChannels);
-			euclideanDistance =     utilsLib.EuclideanDistancesMatrix(weightChannels[L], windowSize, neighborhoodSize)
+			euclideanDistance	=	utilsLib.EuclideanDistancesMatrix(weightChannels[L], windowSize, neighborhoodSize)
 								+   utilsLib.EuclideanDistancesMatrix(weightChannels[a], windowSize, neighborhoodSize)
 								+   utilsLib.EuclideanDistancesMatrix(weightChannels[b], windowSize, neighborhoodSize);
-			nonLocalMeansFilter = utilsLib.GaussianFunction(euclideanDistance - 2.0 * rangeSigma, h);
+			nonLocalMeansFilter = utilsLib.GaussianFunction(euclideanDistance - 2.0 * pow(rangeSigma, 2.0), h);
 
 			/**
 			 * The Non Local Means filter's norm is calculated with:

@@ -156,7 +156,7 @@ Mat Utils::NonAdaptiveUSMFilter(const Mat &image, int windowSize, double lambda,
  * @return Mat
  */
 Mat Utils::EuclideanDistancesMatrix(const Mat& inputImage_, int windowSize, int neighborhoodSize) {
-    // Fixed pixel sub region (must be a square region)
+	// Fixed pixel sub region (must be a square region)
 	Mat inputImage;
 	int padding = (windowSize-1)/2;
 	copyMakeBorder(inputImage_, inputImage, padding, padding, padding, padding, BORDER_REPLICATE);
@@ -173,7 +173,7 @@ Mat Utils::EuclideanDistancesMatrix(const Mat& inputImage_, int windowSize, int 
 	Mat slidingWindow(fixedWindow.size(), fixedWindow.type());
 
 	// Initialize the output matrix
-	Mat distancesMatrix(inputImage_.size(), inputImage_.type());
+	Mat euclideanDistancesMatrix(inputImage_.size(), inputImage_.type());
 
 	// Visit each pixel in the image region
 	for(int i = 0; i < windowSize; i++) {
@@ -185,8 +185,8 @@ Mat Utils::EuclideanDistancesMatrix(const Mat& inputImage_, int windowSize, int 
 			slidingWindow = inputImage(xRange, yRange);
 
 			// Calculate the euclidean distance between patches
-			distancesMatrix.at<float>(i, j) = (float) norm(fixedWindow, slidingWindow, NORM_L2SQR) / ((float)neighborhoodSize);
+			euclideanDistancesMatrix.at<float>(i, j) = (float) norm(fixedWindow, slidingWindow, NORM_L2SQR) / ((float)neighborhoodSize);
         }
     }
-    return distancesMatrix;
+    return euclideanDistancesMatrix;
 }
