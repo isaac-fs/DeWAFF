@@ -20,8 +20,6 @@ using namespace cv;
 
 /**
  * @brief Useful tools for image processing
- * These tools are statics objects to use them in the lifetime of the program
- * without the need of constinuous instantiation
  *
  */
 class Utils {
