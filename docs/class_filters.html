@@ -135,13 +135,13 @@ Public Member Functions</h2></td></tr>
           <td class="memname">Mat Filters::BilateralFilter </td>
           <td>(</td>
           <td class="paramtype">const Mat &amp;&#160;</td>
-          <td class="paramname"><em>inputImage_</em>, </td>
+          <td class="paramname"><em>inputImage</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const Mat &amp;&#160;</td>
-          <td class="paramname"><em>weightingImage_</em>, </td>
+          <td class="paramname"><em>weightingImage</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -271,7 +271,7 @@ Public Member Functions</h2></td></tr>
 \[ q_i = \frac{1}{|\omega|} \sum_{k:i \in \omega_k} (a_k I_i + b_k )\]
 </p>
 
-<p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00274">274</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00265">265</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
 
 </div>
 </div>
@@ -332,7 +332,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Mat output image </dd></dl>
 <p>The discrete representation of the Non Local Means Filter is as follows: </p><p class="formulaDsp">
-\[ \psi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2}{h^2} \right)\]
+\[ \psi_{\text {NLM}}(U, m, p) = \sum_{B(m) \subseteq U} \exp\left( \frac{||B(m) - B(p)||^2 - 2 \sigma_r^2}{h^2} \right)\]
 </p>
 <p> where \(B(p)\) is a patch part of the window \(\Omega\) centered at pixel \(p\). \(B(m)\) represents all of the patches at \(\Omega\) centered in each \(m\) pixel. The Non Local Means Filter calculates the Euclidean distance between each patch \(B(m)\) and \(B(p)\) for each window \(\Omega \subseteq U\). This is why this algorithm is demanding in computational terms. Each Euclidean distance matrix obtained from each patch pair is the input for a Gaussian decreasing function with standard deviation \(h\) that generates the new pixel \(p\) value.</p>
 <p>The Non Local Means filter's norm is calculated with: </p><p class="formulaDsp">
@@ -342,7 +342,7 @@ Public Member Functions</h2></td></tr>
 \[ Y_{\psi_{\text NLM}}(p) = \left( \sum_{m \subset \Omega} \psi_{\text NLM}(U, m, p) \right)^{-1} \left( \sum_{m \subset \Omega} \psi_{\text NLM}(U, p, m) \, U(m) \right) \]
 </p>
 
-<p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00179">179</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00170">170</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
 
 </div>
 </div>
@@ -419,7 +419,7 @@ Public Member Functions</h2></td></tr>
 \[ Y_{\psi_{\text SBF}}(p) = \left( \sum_{m \subset \Omega} \psi_{\text SBF}(U^s, U, m, p) \right)^{-1} \left( \sum_{m \subset \Omega} \psi_{\text SBF}(U^s, U, m, p) \, U(m) \right) \]
 </p>
 
-<p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00132">132</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_filters_8cpp_source.html#l00123">123</a> of file <a class="el" href="_filters_8cpp_source.html">Filters.cpp</a>.</p>
 
 </div>
 </div>
