@@ -11,13 +11,20 @@
  * @param rangeSigma range or radiometric standard deviation
  * @return Mat output image
  */
-Mat Filters::BilateralFilter(const Mat &inputImage, const Mat &weightingImage, int windowSize, double spatialSigma, double rangeSigma) {
-	// Window Radius
-	int windowRadius = windowSize/2;
+Mat Filters::BilateralFilter(const Mat &inputImage_, const Mat &weightingImage_, int windowSize, double spatialSigma, double rangeSigma) {
+	// Set the padding value
+	int padding = (windowSize - 1) / 2;
+
+	// Working images
+	Mat inputImage, weightingImage;
+
+	// Add padding to the input for kernel consistency
+	copyMakeBorder(inputImage_, inputImage, padding, padding, padding, padding, BORDER_CONSTANT);
+	copyMakeBorder(weightingImage_, weightingImage, padding, padding, padding, padding, BORDER_CONSTANT);
 
 	// Pre compute the m - p = |m-p| factors
 	Mat X, Y;
-	Range range = Range(-windowRadius, windowRadius + 1);
+	Range range = Range((-windowSize / 2), (windowSize / 2) + 1);
 	utilsLib.MeshGrid(range, X, Y);
 	pow(X, 2.0, X);
 	pow(Y, 2.0, Y);
@@ -37,27 +44,23 @@ Mat Filters::BilateralFilter(const Mat &inputImage, const Mat &weightingImage, i
 	Mat dL, da, db, bilateralFilter, rangeGaussian;
 	double bilateralFilterNorm;
 	int iMin, iMax, jMin, jMax;
-	Range xRange, yRange, xKernelRange, yKernelRange;
+	Range xRange, yRange;
 	Vec3f pixel;
 	Mat weightingChannels[3], inputChannels[3];
 
-// Set the parallelization pragma for OpenMP
-#pragma omp parallel for private(iMin, iMax, jMin, jMax, xRange, yRange, xKernelRange, yKernelRange,\
-								weightingRegion, weightingChannels, inputRegion, inputChannels, 	\
-								pixel, dL, da, db, rangeGaussian,                               	\
-								bilateralFilter, bilateralFilterNorm)                           	\
-						 shared(inputImage, weightingImage, outputImage,							\
-								windowSize, spatialSigma, rangeSigma)
-	for (int i = 0; i < inputImage.rows; i++) {
-		iMin = max(i - windowRadius, 0);
-        iMax = min(i + windowRadius, inputImage.rows - 1);
+	// Set the parallelization pragma for OpenMP
+	#pragma omp parallel for\
+	private(iMin, iMax, jMin, jMax, xRange, yRange,weightingRegion, weightingChannels, inputRegion, inputChannels,\
+	pixel, dL, da, db, rangeGaussian, bilateralFilter, bilateralFilterNorm)\
+	shared(inputImage, weightingImage, outputImage, windowSize, spatialSigma, rangeSigma)
+	for (int i = padding; i < inputImage.rows - padding; i++) {
+		iMin = i - padding;
+		iMax = iMin + windowSize;
 		xRange = Range(iMin, iMax);
-		xKernelRange = Range(iMin-i+windowRadius, iMax-i+windowRadius);
-		for (int j = 0; j < inputImage.cols; j++) {
-            jMin = max(j - windowRadius, 0);
-            jMax = min(j + windowRadius, inputImage.cols - 1);
+		for (int j = padding; j < inputImage.cols - padding; j++) {
+			jMin = j - padding;
+			jMax = jMin + windowSize;
 			yRange = Range(jMin, jMax);
-			yKernelRange = Range(jMin-j+windowRadius, jMax-j+windowRadius);
 
 			// Extract local weightRegion based on the window size
 			weightingRegion = weightingImage(xRange, yRange);
@@ -82,8 +85,8 @@ Mat Filters::BilateralFilter(const Mat &inputImage, const Mat &weightingImage, i
 			 * \f[ \psi_{\text BF}(U, m, p) = G_{\text spatial}(U, m, p) \, G_{\text range}(U, m, p) \f]
 			 *
 			 */
-			;
-			bilateralFilter = spatialGaussian(xKernelRange, yKernelRange).mul(rangeGaussian);
+
+			bilateralFilter = spatialGaussian.mul(rangeGaussian);
 
 			/**
 			 * The Bilateral filter's norm corresponds to:
@@ -104,7 +107,11 @@ Mat Filters::BilateralFilter(const Mat &inputImage, const Mat &weightingImage, i
 		}
 	}
 
-	return outputImage;
+	// Discard the padding
+	xRange = Range(padding, inputImage.rows - padding);
+	yRange = Range(padding, inputImage.cols - padding);
+
+	return outputImage(xRange, yRange);
 }
 
 /**
@@ -151,7 +158,7 @@ Mat Filters::ScaledBilateralFilter(const Mat &inputImage, const Mat &weightingIm
 	 * \left( \sum_{m \subset \Omega} \psi_{\text SBF}(U^s, U, m, p) \, U(m) \right) \f]
 	 */
 	Mat scaledImage(weightingImage.size(), weightingImage.type());
-	GaussianBlur(weightingImage, scaledImage, Size(windowSize, windowSize), spatialSigma, 0.0, BORDER_CONSTANT);
+	cv::GaussianBlur(weightingImage, scaledImage, Size(windowSize, windowSize), spatialSigma, 0.0, BORDER_CONSTANT);
 	return Filters::BilateralFilter(inputImage, scaledImage, windowSize, spatialSigma, rangeSigma);
 }
 
@@ -192,13 +199,11 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
 	Mat inputChannels[3], weightChannels[3], nlmChannels[3];
 	int iMin, iMax, jMin, jMax;
 
-// Set the parallelization pragma for OpenMP
-#pragma omp parallel for private(iMin, iMax, jMin, jMax, xRange, yRange,					\
-								pixel, dL, da, db, euclideanDistance,						\
-								nlmChannels, nonLocalMeansFilter, nonLocalMeansFilterNorm,	\
-								weightRegion, weightChannels, inputRegion, inputChannels) 	\
-						 shared(inputImage, weightingImage, outputImage,					\
-		   						windowSize, neighborhoodSize, rangeSigma)
+	// Set the parallelization pragma for OpenMP
+	#pragma omp parallel for\
+	private(iMin, iMax, jMin, jMax, xRange, yRange, pixel, dL, da, db, euclideanDistance,\
+	nlmChannels, nonLocalMeansFilter, nonLocalMeansFilterNorm, weightRegion, weightChannels, inputRegion, inputChannels)\
+	shared(inputImage, weightingImage, outputImage, windowSize, neighborhoodSize, rangeSigma)
 	for (int i = padding; i < inputImage.rows - padding; i++) {
 		iMin = i - padding;
 		iMax = iMin + windowSize;

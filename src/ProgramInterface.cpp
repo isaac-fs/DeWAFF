@@ -19,7 +19,7 @@ ProgramInterface::ProgramInterface(int argc, char** argv) {
 	windowSize = 3;
 	neighborhoodSize = 3;
 	spatialSigma = 1.0;
-	rangeSigma = 0.1;
+	rangeSigma = 1.0;
 
 	// Libraries
 	utilsLib = Utils();
@@ -547,7 +547,7 @@ void ProgramInterface::longHelp() {
 	<< "\n\t" << std::setw(21) << "- Filter:" << "dbf (Deceived Bilateral Filter)"
 	<< "\n\t" << std::setw(21) << "- Window size:" << 3
 	<< "\n\t" << std::setw(21) << "- Neighborhood size:" << 3
-	<< "\n\t" << std::setw(21) << "- Range Sigma:" << 0.1
+	<< "\n\t" << std::setw(21) << "- Range Sigma:" << 1.0
 	<< "\n\t" << std::setw(21) << "- Spatial Sigma:" << 1.0
 	<< "\n\t" << std::setw(21) << "- USM Lambda:" << 1.0
 	<< "\n" << std::endl
