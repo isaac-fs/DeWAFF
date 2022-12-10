@@ -226,9 +226,10 @@ Mat Filters::NonLocalMeansFilter(const Mat &inputImage_, const Mat &weightingIma
 			 * a Gaussian decreasing function with standard deviation \f$h\f$ that generates the new pixel \f$p\f$ value.
 			 */
 			cv::split(weightRegion, weightChannels);
-			euclideanDistance	=	utilsLib.EuclideanDistancesMatrix(weightChannels[L], windowSize, neighborhoodSize)
-								+   utilsLib.EuclideanDistancesMatrix(weightChannels[a], windowSize, neighborhoodSize)
-								+   utilsLib.EuclideanDistancesMatrix(weightChannels[b], windowSize, neighborhoodSize);
+			euclideanDistance =
+				utilsLib.EuclideanDistancesMatrix(weightChannels[L], windowSize, neighborhoodSize)
+			+ 	utilsLib.EuclideanDistancesMatrix(weightChannels[a], windowSize, neighborhoodSize)
+			+ 	utilsLib.EuclideanDistancesMatrix(weightChannels[b], windowSize, neighborhoodSize);
 			nonLocalMeansFilter = utilsLib.GaussianFunction(euclideanDistance - 2.0 * pow(rangeSigma, 2.0), h);
 
 			/**
