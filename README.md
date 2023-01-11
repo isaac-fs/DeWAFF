@@ -125,3 +125,5 @@ To benchmark a video just change the flag from `-i` to `-v` as follows
     ./DeWAFF -v /path/to/video/file -b 3
 ```
 Take into consideration that videos take a long time to benchmark as *each frame* has to be processed!
+
+This project was made in collaboration with the PRIS Lab (https://pris.eie.ucr.ac.cr/) from the University of Costa Rica for my graduation project.
