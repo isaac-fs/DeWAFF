@@ -18,6 +18,10 @@ The *DeWAFF* is aimed at improving patter recognition tasks providing the follow
 - Border emphasis of Regions Of Interest
 - Enhanced separation of ROIs from the background
 
+Before DeWAFF             |  After DeWAFF
+:-------------------------:|:-------------------------:
+![Original image of a cancer cell using DeWAFF](/include/original.jpg "Original").  |  ![Processed image of a cancer cell using DeWAFF](/include/original_DBF_2.jpg "DBF").
+
 ## Documentation
 The documentation for this project is hosted at https://isaac-fs.github.io/DeWAFF/. Most of the mathematical formulations for framework filters are found in the **Classes** section.
 
