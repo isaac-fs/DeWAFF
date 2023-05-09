@@ -20,7 +20,8 @@ The *DeWAFF* is aimed at improving patter recognition tasks providing the follow
 
 Before DeWAFF             |  After DeWAFF
 :-------------------------:|:-------------------------:
-![Original image of a cancer cell using DeWAFF](/include/original.jpg "Original").  |  ![Processed image of a cancer cell using DeWAFF](/include/original_DBF_2.jpg "DBF").
+![Original image of a cancer cell using DeWAFF](/include/original.jpg "Original")  |  ![Processed image of a cancer cell using DeWAFF](/include/original_DBF_2.jpg "DBF")
+[Images retrieved from S. S. Martin, Microtentacles and Metastasis, National Cancer Institute Univ. of Maryland Greenebaum Cancer Center, july 2009.](https://visualsonline.cancer.gov/details.cfm?imageid=10597)
 
 ## Documentation
 The documentation for this project is hosted at https://isaac-fs.github.io/DeWAFF/. Most of the mathematical formulations for framework filters are found in the **Classes** section.
